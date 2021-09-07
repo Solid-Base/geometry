@@ -1,0 +1,35 @@
+{
+    "name": "solidbase/geometria",
+    "description": "M\u0000dulo de Geometria do SolidBase",
+    "type": "packpage",
+    "autoload": {
+        "psr-4": {
+            "Solidbase\\Geometria\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Guilherme Luiz",
+            "email": "guilherme@solidbase.com.br"
+        }
+    ],
+    "require": {
+        "php": "8.0.8"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "config": {
+        "process-timeout": 0,
+        "sort-packages": true
+    },
+    "scripts": {
+        "start": "php -S api.solidbase:8080 -t public",
+        "test": "phpunit"
+    }
+}
