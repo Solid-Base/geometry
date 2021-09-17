@@ -11,10 +11,8 @@ use InvalidArgumentException;
  * @property-read float $y
  * @property-read float $z
  */
-class Ponto
+class Ponto implements PrecisaoInterface
 {
-    public const PRECISAO = 1E-10;
-
     public function __construct(
         protected float $x = 0,
         protected float $y = 0,

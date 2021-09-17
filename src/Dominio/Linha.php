@@ -13,10 +13,8 @@ use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
  * @property-read Vetor $direcao
  * @property-read float $comprimento
  */
-class Linha
+class Linha implements PrecisaoInterface
 {
-    public const PRECISAO = 1E-10;
-
     public function __construct(
         private Ponto $origem,
         private Vetor $direcao,

@@ -14,10 +14,8 @@ use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
  * @property-read Vetor $normal
  * @property-read Ponto $origem
  */
-class Plano
+class Plano implements PrecisaoInterface
 {
-    public const PRECISAO = 1E-10;
-
     private Vetor $u;
     private Vetor $v;
 
@@ -30,7 +28,7 @@ class Plano
         }
         $this->normal = $normal->vetorUnitario();
         $this->u = VetorFabrica::Perpendicular($normal)->vetorUnitario();
-        $this->v = $this->u->produtoVetorial($this->normal)->vetorUnitario();
+        $this->v = $this->normal->produtoVetorial($this->u)->vetorUnitario();
     }
 
     public function __get($name)
@@ -54,5 +52,57 @@ class Plano
     public function pontoPertenceAoPlano(Ponto $ponto): bool
     {
         return abs($this->distanciaPontoAoPlano($ponto)) <= $this::PRECISAO;
+    }
+
+    public function projecaoPontoPlano(Ponto $ponto): Ponto
+    {
+        $distancia = $this->distanciaPontoAoPlano($ponto);
+
+        return $ponto->subtrair($this->normal->escalar($distancia));
+    }
+
+    public function projecaoPontoPlanoZ(Ponto $ponto): Ponto
+    {
+        if (abs($this->normal->z) <= self::PRECISAO) {
+            throw new DomainException('Não é possível calcular a projeção do ponto no plano Z');
+        }
+        $p = VetorFabrica::apartirPonto($this->origem);
+        $normal = $this->normal;
+        $comprimento = $normal->produtoInterno($p);
+        $z = ($comprimento - ($normal->x * $ponto->x + $normal->y * $ponto->y)) / $normal->z;
+        $pontoRetorno = clone $ponto;
+        $pontoRetorno->z = $z;
+
+        return $pontoRetorno;
+    }
+
+    public function projecaoPontoPlanoX(Ponto $ponto): Ponto
+    {
+        if (abs($this->normal->x) <= self::PRECISAO) {
+            throw new DomainException('Não é possível calcular a projeção do ponto no plano X');
+        }
+        $p = VetorFabrica::apartirPonto($this->origem);
+        $normal = $this->normal;
+        $comprimento = $normal->produtoInterno($p);
+        $x = ($comprimento - ($normal->y * $ponto->y + $normal->z * $ponto->z)) / $normal->x;
+        $pontoRetorno = clone $ponto;
+        $pontoRetorno->x = $x;
+
+        return $pontoRetorno;
+    }
+
+    public function projecaoPontoPlanoY(Ponto $ponto): Ponto
+    {
+        if (abs($this->normal->y) <= self::PRECISAO) {
+            throw new DomainException('Não é possível calcular a projeção do ponto no plano Y');
+        }
+        $p = VetorFabrica::apartirPonto($this->origem);
+        $normal = $this->normal;
+        $comprimento = $normal->produtoInterno($p);
+        $y = ($comprimento - ($normal->x * $ponto->x + $normal->z * $ponto->z)) / $normal->y;
+        $pontoRetorno = clone $ponto;
+        $pontoRetorno->y = $y;
+
+        return $pontoRetorno;
     }
 }
