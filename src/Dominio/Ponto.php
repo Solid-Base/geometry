@@ -41,6 +41,7 @@ class Ponto implements PrecisaoInterface
         $y = $this->y + $ponto->y;
         $z = $this->z + $ponto->z;
 
+
         return new self($x, $y, $z);
     }
 

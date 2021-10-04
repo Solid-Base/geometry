@@ -68,8 +68,16 @@ class Linha implements PrecisaoInterface
         return true;
     }
 
+    public function pontoRetaComprimento(float $comprimento): Ponto
+    {
+        $origem = $this->origem;
+        $diretor = $this->direcao;
+
+        return $origem->somar($diretor->escalar($comprimento));
+    }
+
     protected function pontoFinal(): Ponto
     {
-        return $this->origem->somar($this->direcao->escalar($this->comprimento));
+        return $this->pontoRetaComprimento($this->comprimento);
     }
 }

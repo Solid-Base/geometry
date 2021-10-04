@@ -10,21 +10,21 @@ use Solidbase\Geometria\Dominio\Vetor;
 
 class PlanoFabrica
 {
-    public static function CriarPlanoNormalOrigem(Ponto $origem, Vetor $normal): Plano
+    public static function criarPlanoNormalOrigem(Ponto $origem, Vetor $normal): Plano
     {
         return new Plano($origem, $normal);
     }
 
-    public static function CriarPlanoOrigemBases(Ponto $origem, Vetor $baseX, Vetor $baseY): Plano
+    public static function criarPlanoOrigemBases(Ponto $origem, Vetor $baseX, Vetor $baseY): Plano
     {
         return new Plano($origem, $baseX->produtoVetorial($baseY));
     }
 
-    public static function CriarPlanoTresPontos(Ponto $ponto1, Ponto $ponto2, Ponto $ponto3): Plano
+    public static function criarPlanoTresPontos(Ponto $ponto1, Ponto $ponto2, Ponto $ponto3): Plano
     {
         $vetor1 = VetorFabrica::apartirDoisPonto($ponto1, $ponto2);
         $vetor2 = VetorFabrica::apartirDoisPonto($ponto1, $ponto3);
 
-        return self::CriarPlanoOrigemBases($ponto1, $vetor1, $vetor2);
+        return self::criarPlanoOrigemBases($ponto1, $vetor1, $vetor2);
     }
 }

@@ -16,9 +16,10 @@ final class Vetor extends Ponto
         if ($this->vetorUnitario()->eIgual($vetor->vetorUnitario())) {
             return true;
         }
-        $angulo = $this->angulo($vetor);
+        $angulo = round($this->angulo($vetor), 6);
+        $pi = round(M_PI, 6);
 
-        return (abs($angulo) <= $this::PRECISAO) || abs(abs($angulo) - M_PI) <= $this::PRECISAO;
+        return (abs($angulo) <= $this::PRECISAO) || (abs(abs($angulo) - $pi) <= $this::PRECISAO);
     }
 
     public function temMesmoSentido(self $vetor): bool

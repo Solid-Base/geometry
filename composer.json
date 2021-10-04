@@ -2,6 +2,8 @@
     "name": "solidbase/geometria",
     "description": "M\u0000dulo de Geometria do SolidBase",
     "type": "packpage",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Solidbase\\Geometria\\": "src/"
