@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Solidbase\Geometria\Aplicacao\Poligono;
 
 use InvalidArgumentException;
-use Solidbase\Geometria\Dominio\Fabrica\PolilinhaFabrica;
 use Solidbase\Geometria\Dominio\Polilinha;
 use Solidbase\Geometria\Dominio\Ponto;
 
@@ -43,7 +42,7 @@ class PropriedadePoligono
             'segundoMomentoInerciaY' => $this->momentoInerciaY,
             'momentoInerciaPrincipalX' => $this->momentoInerciaPrincipalX,
             'momentoInerciaPrincipalY' => $this->momentoInerciaPrincipalY,
-            default => throw new InvalidArgumentException("Propriedade inexistente: $name"),
+            default => throw new InvalidArgumentException("Propriedade inexistente: {$name}"),
         };
     }
 
@@ -61,8 +60,16 @@ class PropriedadePoligono
         $this->momentoInerciaX = $ix * $this->sentido;
         $this->momentoInerciaY = $iy * $this->sentido;
 
-        $pontos = array_map(fn (Ponto $ponto) => $ponto->subtrair($this->centro), $this->poligono->pontos());
-        $calculoMomentoInercia = new SegundoMomentoInercia(PolilinhaFabrica::criarPolilinhaPontos($pontos));
+        if ($this->centro->eIgual(new Ponto())) {
+            $this->momentoInerciaPrincipalX = $ix * $this->sentido;
+            $this->momentoInerciaPrincipalY = $iy * $this->sentido;
+
+            return;
+        }
+        $poligono = clone $this->poligono;
+        $poligono->mover(-$this->centro->x, $this->centro->y);
+
+        $calculoMomentoInercia = new SegundoMomentoInercia($poligono);
         [$ix,$iy] = $calculoMomentoInercia->executar();
         $this->momentoInerciaPrincipalX = $ix * $this->sentido;
         $this->momentoInerciaPrincipalY = $iy * $this->sentido;

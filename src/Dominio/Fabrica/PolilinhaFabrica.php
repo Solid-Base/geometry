@@ -30,9 +30,9 @@ class PolilinhaFabrica
         $centro = $p1->pontoMedio($p2);
 
         $retangulo = self::criarPoligonoRetangular($comprimento, $largura);
-        $pontos = array_map(fn (Ponto $p) => $p->somar($centro), $retangulo->pontos());
+        $retangulo->mover($centro->x, $centro->y, $centro->z);
 
-        return self::criarPolilinhaPontos($pontos);
+        return $retangulo;
     }
 
     public static function criarPoligonoRetangular(float $comprimento, float $largura): Polilinha
@@ -59,9 +59,9 @@ class PolilinhaFabrica
         $propriedades = new PropriedadePoligono($poligono);
         $propriedades->executar();
         $centro = $propriedades->centro;
-        $pontos = array_map(fn (Ponto $ponto) => $ponto->subtrair($centro), $poligono->pontos());
+        $poligono->mover(-$centro->x, -$centro->y, -$centro->z);
 
-        return self::criarPolilinhaPontos($pontos);
+        return $poligono;
     }
 
     public static function criarPoligonoU(float $comprimento, float $largura, float $deslocamento): Polilinha
@@ -78,8 +78,8 @@ class PolilinhaFabrica
         $propriedades = new PropriedadePoligono($poligono);
         $propriedades->executar();
         $centro = $propriedades->centro;
-        $pontos = array_map(fn (Ponto $ponto) => $ponto->subtrair($centro), $poligono->pontos());
+        $poligono->mover(-$centro->x, -$centro->y, -$centro->z);
 
-        return self::criarPolilinhaPontos($pontos);
+        return $poligono;
     }
 }

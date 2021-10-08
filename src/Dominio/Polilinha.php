@@ -6,6 +6,8 @@ namespace Solidbase\Geometria\Dominio;
 
 use Countable;
 use DomainException;
+use Solidbase\Geometria\Aplicacao\Modificadores\Transformacao;
+use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
 
 class Polilinha implements PrecisaoInterface, Countable
 {
@@ -13,7 +15,6 @@ class Polilinha implements PrecisaoInterface, Countable
      * @var PontoPoligono[]
      */
     private array $pontos;
-    
 
     public function __construct()
     {
@@ -66,5 +67,23 @@ class Polilinha implements PrecisaoInterface, Countable
     public function pontos(): array
     {
         return $this->pontos;
+    }
+
+    public function mover(float $dx = 0, float $dy = 0, float $dz = 0): void
+    {
+        $transformacao = Transformacao::criarTranslacao(new Ponto($dx, $dy, $dz));
+        $pontos = array_map(fn (Ponto $p) => $transformacao->dePonto($p), $this->pontos);
+        $this->pontos = $pontos;
+    }
+
+    public function rotacionar(float $angulo, ?Ponto $ponto = null): void
+    {
+        if (null === $ponto) {
+            $transformacao = Transformacao::criarRotacao(VetorFabrica::BaseZ(), $angulo);
+        } else {
+            $transformacao = Transformacao::criarRotacaoPonto(VetorFabrica::BaseZ(), $angulo, $ponto);
+        }
+        $pontos = array_map(fn (Ponto $p) => $transformacao->dePonto($p), $this->pontos);
+        $this->pontos = $pontos;
     }
 }
