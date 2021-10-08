@@ -67,7 +67,7 @@ class PropriedadePoligono
             return;
         }
         $poligono = clone $this->poligono;
-        $poligono->mover(-$this->centro->x, $this->centro->y);
+        $poligono->mover(-$this->centro->x, -$this->centro->y);
 
         $calculoMomentoInercia = new SegundoMomentoInercia($poligono);
         [$ix,$iy] = $calculoMomentoInercia->executar();
