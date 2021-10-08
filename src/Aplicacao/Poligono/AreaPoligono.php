@@ -9,7 +9,6 @@ use Solidbase\Geometria\Dominio\Polilinha;
 
 class AreaPoligono
 {
-    
     public function __construct(private Polilinha $poligono)
     {
         $poligono->fecharPolilinha();
@@ -18,7 +17,7 @@ class AreaPoligono
     public function executar(): float
     {
         $soma = 0;
-        if (count($this->poligono) < 3) {
+        if (\count($this->poligono) < 3) {
             throw new DomainException('É necessário ter pelo menos três pontos');
         }
         $pontos = $this->poligono->pontos();
@@ -30,6 +29,6 @@ class AreaPoligono
             $soma += ($ponto->x + $proximo->x) * ($proximo->y - $ponto->y);
         }
 
-        return abs($soma) / 2;
+        return $soma / 2;
     }
 }

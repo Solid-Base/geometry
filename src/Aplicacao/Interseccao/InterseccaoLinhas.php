@@ -37,10 +37,17 @@ class InterseccaoLinhas
 
     private function calcularTS(): array
     {
-        $diretorS = $this->linha1->direcao;
-        $diretorR = $this->linha2->direcao;
+        $k = $this->linha1->origem;
+        $l = $this->linha1->pontoRetaComprimento(1);
+        $m = $this->linha2->origem;
+        $n = $this->linha2->pontoRetaComprimento(1);
+
+        $diretorS = VetorFabrica::apartirDoisPonto($k, $l);
+        $diretorR = VetorFabrica::apartirDoisPonto($n, $m);
+
         $determinante = $diretorR->produtoVetorial($diretorS);
-        $diretorMk = VetorFabrica::apartirDoisPonto($this->linha2->origem, $this->linha1->origem);
+
+        $diretorMk = VetorFabrica::apartirDoisPonto($k, $m);
         $vetorialRMk = $diretorR->produtoVetorial($diretorMk);
         $vetorialSMk = $diretorS->produtoVetorial($diretorMk);
         if ((!$this->retaPertenceOx($this->linha1) || !$this->retaPertenceOx($this->linha2))

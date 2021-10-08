@@ -41,15 +41,14 @@ class Ponto implements PrecisaoInterface
         $y = $this->y + $ponto->y;
         $z = $this->z + $ponto->z;
 
-
         return new self($x, $y, $z);
     }
 
     public function subtrair(self $ponto): self
     {
-        $x = $ponto->x - $this->x;
-        $y = $ponto->y - $this->y;
-        $z = $ponto->z - $this->z;
+        $x = $this->x - $ponto->x;
+        $y = $this->y - $ponto->y;
+        $z = $this->z - $ponto->z;
 
         return new self($x, $y, $z);
     }

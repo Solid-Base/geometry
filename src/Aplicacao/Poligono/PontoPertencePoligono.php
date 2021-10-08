@@ -14,14 +14,14 @@ use Solidbase\Geometria\Dominio\PrecisaoInterface;
 
 class PontoPertencePoligono
 {
-    public function __construct(private Polilinha $poligono, private Ponto $ponto)
+    public function __construct(private Polilinha $poligono)
     {
         $poligono->fecharPolilinha();
     }
 
-    public function executar(): bool
+    public function executar(Ponto $ponto): bool
     {
-        $linhaComparacao = new Linha($this->ponto, VetorFabrica::BaseX(), 1);
+        $linhaComparacao = new Linha($ponto, VetorFabrica::BaseX(), 1);
         $numeroPontos = \count($this->poligono);
         $contagem = 0;
         $pontos = $this->poligono->pontos();
@@ -29,7 +29,7 @@ class PontoPertencePoligono
             $p1 = $pontos[$i];
             $p2 = $pontos[$i + 1];
             $linha = LinhaFabrica::apartirDoisPonto($p1, $p2);
-            if ($linha->pontoPertenceLinha($this->ponto)) {
+            if ($linha->pontoPertenceLinha($ponto)) {
                 continue;
             }
             if ($linha->eParelo($linhaComparacao)) {
@@ -37,7 +37,7 @@ class PontoPertencePoligono
             }
             $intersecao = new InterseccaoLinhas($linha, $linhaComparacao);
             $pontoIntersecao = $intersecao->executar();
-            if ($pontoIntersecao->x < $this->ponto->x) {
+            if ($pontoIntersecao->x < $ponto->x) {
                 continue;
             }
             if ($this->eZero($pontoIntersecao->distanciaParaPonto($p1))
@@ -51,9 +51,7 @@ class PontoPertencePoligono
 
                 continue;
             }
-            $distanciaP1P2 = $p1->distanciaParaPonto($p2);
-            if ($pontoIntersecao->distanciaParaPonto($p1) > $distanciaP1P2
-            || $pontoIntersecao->distanciaParaPonto($p2) > $distanciaP1P2) {
+            if (!$linha->pontoPertenceSegmento($pontoIntersecao)) {
                 continue;
             }
             ++$contagem;

@@ -13,6 +13,7 @@ class Polilinha implements PrecisaoInterface, Countable
      * @var PontoPoligono[]
      */
     private array $pontos;
+    
 
     public function __construct()
     {

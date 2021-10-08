@@ -37,8 +37,8 @@ final class PontoTest extends TestCase
         $ponto = new Ponto();
         $ponto2 = new Ponto(3, 4);
         $ponto3 = new Ponto(0, 0, 1);
-        static::assertTrue($ponto->subtrair($ponto2)->eIgual(new Ponto(3, 4), $ponto->subtrair($ponto2)));
-        static::assertTrue($ponto2->subtrair($ponto3)->eIgual(new Ponto(-3, -4, 1)));
+        static::assertTrue($ponto->subtrair($ponto2)->eIgual(new Ponto(-3, -4), $ponto->subtrair($ponto2)));
+        static::assertTrue($ponto2->subtrair($ponto3)->eIgual(new Ponto(3, 4, -1)));
     }
 
     public function testPontoMedio(): void

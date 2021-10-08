@@ -68,6 +68,17 @@ class Linha implements PrecisaoInterface
         return true;
     }
 
+    public function pontoPertenceSegmento(Ponto $ponto): bool
+    {
+        if (!$this->pontoPertenceLinha($ponto)) {
+            return false;
+        }
+        $distOrigem = $ponto->distanciaParaPonto($this->origem);
+        $distFinal = $ponto->distanciaParaPonto($this->final);
+
+        return $distOrigem <= $this->comprimento && $distFinal <= $this->comprimento;
+    }
+
     public function pontoRetaComprimento(float $comprimento): Ponto
     {
         $origem = $this->origem;
