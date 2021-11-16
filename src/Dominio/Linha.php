@@ -60,7 +60,7 @@ class Linha implements PrecisaoInterface
         if ($ponto->eIgual($this->origem) || $ponto->eIgual($this->final)) {
             return true;
         }
-        $vetor = VetorFabrica::apartirDoisPonto($ponto, $this->origem);
+        $vetor = VetorFabrica::apartirDoisPonto($ponto, $this->origem)->vetorUnitario();
         if (!$vetor->temMesmaDirecao($this->direcao)) {
             return false;
         }

@@ -82,4 +82,67 @@ class PolilinhaFabrica
 
         return $poligono;
     }
+
+    public static function criarPoligonoRegularLado(Ponto $origem, int $numeroLados, float $lado): Polilinha
+    {
+        $raio = self::RaioLado($lado, $numeroLados);
+
+        return self::criarPoligonoRegular($origem, $numeroLados, true, $raio);
+    }
+
+    public static function criarPoligonoRegular(Ponto $origem, int $numeroLados, bool $inscrito, float $raioCirculo): Polilinha
+    {
+        $anguloInterno = self::anguloExternoRegular($numeroLados);
+        $anguloInicial = self::anguloInicial($numeroLados);
+        if (!$inscrito) {
+            $raioCirculo = self::raioPoligonoRegular($raioCirculo, $numeroLados);
+        }
+        $pontos = [];
+        for ($i = 0; $i < $numeroLados; ++$i) {
+            $anguloCalculo = $anguloInterno * $i + $anguloInicial;
+            $x = $raioCirculo * cos($anguloCalculo);
+            $y = $raioCirculo * sin($anguloCalculo);
+            $pontos[] = new Ponto($x, $y);
+        }
+        $poligono = self::criarPolilinhaPontos($pontos);
+        $poligono->fecharPolilinha();
+        $poligono->mover($origem->x, $origem->y, $origem->z);
+
+        return $poligono;
+    }
+
+    private static function anguloInicial(int $numeroLados): float
+    {
+        if (0 === $numeroLados % 2) {
+            return 0;
+        }
+        $anguloExterno = self::anguloExternoRegular($numeroLados);
+
+        return fmod(1.5 * (M_PI + $anguloExterno), 2 * M_PI);
+    }
+
+    private static function anguloInternoRegular(int $numeroLados): float
+    {
+        return M_PI - 2 * M_PI / $numeroLados;
+    }
+
+    private static function anguloExternoRegular(int $numeroLados): float
+    {
+        return M_PI * 2 / $numeroLados;
+    }
+
+    private static function apotemaPoligonoRegular(float $raio, int $numeroLados): float
+    {
+        return $raio * cos(M_PI / $numeroLados);
+    }
+
+    private static function raioPoligonoRegular(float $apotema, int $numeroLados): float
+    {
+        return $apotema / cos(M_PI / $numeroLados);
+    }
+
+    private static function RaioLado(float $lado, int $numeroLados): float
+    {
+        return $lado / (2 * sin(M_PI / $numeroLados));
+    }
 }

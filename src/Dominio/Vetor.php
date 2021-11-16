@@ -64,8 +64,9 @@ final class Vetor extends Ponto
     public function angulo(self $vetor): float
     {
         $angulo = $this->produtoInterno($vetor) / ($this->modulo() * $vetor->modulo());
+        $valor = round($angulo, 6);
 
-        return acos($angulo);
+        return acos((float) $valor);
     }
 
     public function anguloAbsoluto(): float

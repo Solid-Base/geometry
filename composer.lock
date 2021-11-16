@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "D:/Desenvolvimento/Projetos/matematica",
-                "reference": "744c98482591e58106462ab9981117a0053e57d6"
+                "reference": "9850c2cc72801d7d89491972af5c073605164f4c"
             },
             "require": {
                 "solidbase/geometria": "dev-master"

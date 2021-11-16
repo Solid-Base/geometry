@@ -9,10 +9,13 @@ use Solidbase\Geometria\Dominio\Circulo;
 use Solidbase\Geometria\Dominio\Fabrica\LinhaFabrica;
 use Solidbase\Geometria\Dominio\Polilinha;
 
-class CirculoInterceptaPoligono
+class AreaCirculoContidoPoligono
 {
+    private PontoPertencePoligono $pontoPertente;
+
     public function __construct(private Polilinha $poligono)
     {
+        $this->pontoPertente = new PontoPertencePoligono($poligono);
     }
 
     public function executar(Circulo $circulo): bool
@@ -28,8 +31,10 @@ class CirculoInterceptaPoligono
                 continue;
             }
             $linhaIntersecao = $intersecaoCirculo->executar();
-            if ($linha->pontoPertenceSegmento($linhaIntersecao->origem) || $linha->pontoPertenceSegmento($linhaIntersecao->final)) {
-                return true;
+            if (!$this->pontoPertente->executar($linhaIntersecao->origem)) {
+                if ($linha->pontoPertenceSegmento($linhaIntersecao->origem) || $linha->pontoPertenceSegmento($linhaIntersecao->final)) {
+                    return true;
+                }
             }
         }
 

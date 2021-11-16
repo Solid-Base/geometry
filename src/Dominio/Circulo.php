@@ -37,4 +37,14 @@ class Circulo
     {
         return 2 * M_PI * $this->raio;
     }
+
+    public function pontoInternoCirculo(Ponto $ponto): bool
+    {
+        return $this->centro->distanciaParaPonto($ponto) < $this->raio;
+    }
+
+    public function pontoFronteiraCirculo(Ponto $ponto): bool
+    {
+        return $this->centro->distanciaParaPonto($ponto) === $this->raio;
+    }
 }
