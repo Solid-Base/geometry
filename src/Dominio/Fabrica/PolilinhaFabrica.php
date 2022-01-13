@@ -83,14 +83,14 @@ class PolilinhaFabrica
         return $poligono;
     }
 
-    public static function criarPoligonoRegularLado(Ponto $origem, int $numeroLados, float $lado): Polilinha
+    public static function criarPoligonoRegularLado(Ponto $origem, int $numeroLados, float $lado, float $angulo = 0): Polilinha
     {
         $raio = self::RaioLado($lado, $numeroLados);
 
-        return self::criarPoligonoRegular($origem, $numeroLados, true, $raio);
+        return self::criarPoligonoRegular($origem, $numeroLados, true, $raio, $angulo);
     }
 
-    public static function criarPoligonoRegular(Ponto $origem, int $numeroLados, bool $inscrito, float $raioCirculo): Polilinha
+    public static function criarPoligonoRegular(Ponto $origem, int $numeroLados, bool $inscrito, float $raioCirculo, float $angulo = 0): Polilinha
     {
         $anguloInterno = self::anguloExternoRegular($numeroLados);
         $anguloInicial = self::anguloInicial($numeroLados);
@@ -107,6 +107,7 @@ class PolilinhaFabrica
         $poligono = self::criarPolilinhaPontos($pontos);
         $poligono->fecharPolilinha();
         $poligono->mover($origem->x, $origem->y, $origem->z);
+        $poligono->rotacionar($angulo);
 
         return $poligono;
     }

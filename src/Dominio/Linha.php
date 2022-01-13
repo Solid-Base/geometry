@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Solidbase\Geometria\Dominio;
 
 use InvalidArgumentException;
+use JsonSerializable;
 use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
 
 /**
@@ -13,7 +14,7 @@ use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
  * @property-read Vetor $direcao
  * @property-read float $comprimento
  */
-class Linha implements PrecisaoInterface
+class Linha implements PrecisaoInterface, JsonSerializable
 {
     public function __construct(
         private Ponto $origem,
@@ -31,6 +32,15 @@ class Linha implements PrecisaoInterface
             'comprimento' => $this->comprimento,
             default => throw new InvalidArgumentException('Prorpriedade solicitada não existe')
         };
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'origem' => $this->origem,
+            'direcao' => $this->direcao,
+            'comprimento' => $this->comprimento,
+        ];
     }
 
     public function eParelo(self $linha): bool

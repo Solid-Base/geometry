@@ -5,19 +5,36 @@ declare(strict_types=1);
 namespace Solidbase\Geometria\Dominio;
 
 use InvalidArgumentException;
+use JsonSerializable;
 
 /**
  * @property-read float $x
  * @property-read float $y
  * @property-read float $z
  */
-class Ponto implements PrecisaoInterface
+class Ponto implements PrecisaoInterface, JsonSerializable
 {
     public function __construct(
         protected float $x = 0,
         protected float $y = 0,
         protected float $z = 0
     ) {
+    }
+
+    public function __serialize(): array
+    {
+        return [
+            'x' => $this->x,
+            'y' => $this->y,
+            'z' => $this->z,
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->x = $data['x'];
+        $this->y = $data['y'];
+        $this->z = $data['z'];
     }
 
     public function __get($name): float
@@ -28,6 +45,11 @@ class Ponto implements PrecisaoInterface
             'z' => $this->z,
             default => throw new InvalidArgumentException('Prorpriedade solicitada não existe')
         };
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return $this->__serialize();
     }
 
     public function distanciaParaPonto(self $ponto): float
@@ -67,6 +89,11 @@ class Ponto implements PrecisaoInterface
         $distancia = $this->distanciaParaPonto($ponto);
 
         return $distancia <= $this::PRECISAO;
+    }
+
+    public function toArray(): array
+    {
+        return $this->__serialize();
     }
 
     protected function quadrante(): int

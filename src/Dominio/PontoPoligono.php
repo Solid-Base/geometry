@@ -19,6 +19,20 @@ class PontoPoligono extends Ponto
         };
     }
 
+    public function __serialize(): array
+    {
+        $retorno = parent::__serialize();
+        $retorno['concordancia'] = $this->concordancia;
+
+        return $retorno;
+    }
+
+    public function __unserialize(array $data): void
+    {
+        parent::__unserialize($data);
+        $this->concordancia = $data['concordancia'];
+    }
+
     /**
      * Informar o valor concordancia.
      */

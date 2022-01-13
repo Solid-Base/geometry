@@ -70,10 +70,8 @@ class Plano implements PrecisaoInterface
         $normal = $this->normal;
         $comprimento = $normal->produtoInterno($p);
         $z = ($comprimento - ($normal->x * $ponto->x + $normal->y * $ponto->y)) / $normal->z;
-        $pontoRetorno = clone $ponto;
-        $pontoRetorno->z = $z;
 
-        return $pontoRetorno;
+        return new Ponto($ponto->x, $ponto->y, $z);
     }
 
     public function projecaoPontoPlanoX(Ponto $ponto): Ponto
@@ -104,5 +102,16 @@ class Plano implements PrecisaoInterface
         $pontoRetorno->y = $y;
 
         return $pontoRetorno;
+    }
+
+    public function equacaoPlano(): array
+    {
+        $origem = $this->origem;
+        $a = $this->normal->x;
+        $b = $this->normal->y;
+        $c = $this->normal->z;
+        $d = -($a * $origem->x + $b * $origem->y + $c * $origem->z);
+
+        return [$a, $b, $c, $d];
     }
 }

@@ -6,10 +6,11 @@ namespace Solidbase\Geometria\Dominio;
 
 use Countable;
 use DomainException;
+use JsonSerializable;
 use Solidbase\Geometria\Aplicacao\Modificadores\Transformacao;
 use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
 
-class Polilinha implements PrecisaoInterface, Countable
+class Polilinha implements PrecisaoInterface, Countable, JsonSerializable
 {
     /**
      * @var PontoPoligono[]
@@ -21,7 +22,25 @@ class Polilinha implements PrecisaoInterface, Countable
         $this->pontos = [];
     }
 
-    public function count()
+    public function __serialize(): array
+    {
+        $pontos = array_map(fn (Ponto $p) => serialize($p), $this->pontos);
+
+        return ['pontos' => $pontos];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $pontos = $data['pontos'];
+        $this->pontos = array_map(fn (string $p) => unserialize($p), $pontos);
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return $this->pontos;
+    }
+
+    public function count(): int
     {
         return \count($this->pontos);
     }
@@ -78,6 +97,9 @@ class Polilinha implements PrecisaoInterface, Countable
 
     public function rotacionar(float $angulo, ?Ponto $ponto = null): void
     {
+        if (eZero($angulo)) {
+            return;
+        }
         if (null === $ponto) {
             $transformacao = Transformacao::criarRotacao(VetorFabrica::BaseZ(), $angulo);
         } else {
