@@ -51,14 +51,14 @@ class InterseccaoLinhas
         $vetorialRMk = $diretorR->produtoVetorial($diretorMk);
         $vetorialSMk = $diretorS->produtoVetorial($diretorMk);
         if ((!$this->retaPertenceOx($this->linha1) || !$this->retaPertenceOx($this->linha2))
-        && (!$this->retaPertenceOy($this->linha1) || !$this->retaPertenceOy($this->linha2))) {
+        && (!$this->retaPertenceOy($this->linha1) || !$this->retaPertenceOy($this->linha2)) && !eZero($determinante->z)) {
             $s = $vetorialRMk->z / $determinante->z;
             $t = $vetorialSMk->z / $determinante->z;
 
             return [$s, $t];
         }
         if ((!$this->retaPertenceOx($this->linha1) || !$this->retaPertenceOx($this->linha2))
-        && (!$this->retaPertenceOz($this->linha1) || !$this->retaPertenceOz($this->linha2))) {
+        && (!$this->retaPertenceOz($this->linha1) || !$this->retaPertenceOz($this->linha2)) && !eZero($determinante->y)) {
             $s = $vetorialRMk->y / $determinante->y;
             $t = $vetorialSMk->y / $determinante->y;
 
@@ -74,21 +74,21 @@ class InterseccaoLinhas
     {
         $direcao = $linha->direcao->vetorUnitario();
 
-        return $this->eZero(abs($direcao->x) - 1);
+        return 0 === comparar(abs($direcao->x), 1);
     }
 
     private function retaPertenceOy(Linha $linha): bool
     {
         $direcao = $linha->direcao->vetorUnitario();
 
-        return $this->eZero(abs($direcao->y) - 1);
+        return 0 === comparar(abs($direcao->y), 1);
     }
 
     private function retaPertenceOz(Linha $linha): bool
     {
         $direcao = $linha->direcao->vetorUnitario();
 
-        return $this->eZero(abs($direcao->z) - 1);
+        return 0 === comparar(abs($direcao->z), 1);
     }
 
     private function eZero(float $numero): bool

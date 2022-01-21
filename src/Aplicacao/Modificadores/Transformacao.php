@@ -82,7 +82,7 @@ class Transformacao
         $matriz->adicionarLinha([0, 0, 0]);
         $matriz->adicionarColuna([$this->origem->x, $this->origem->y, $this->origem->z, 1]);
         $pontoM = new Matriz([[$ponto->x], [$ponto->y], [$ponto->z], [1]]);
-        $pontoT = $matriz->Multiplicar($pontoM);
+        $pontoT = $matriz->Multiplicar($pontoM)->obtenhaMatriz();
         $pontoR = new Vetor($pontoT[0][0], $pontoT[1][0], $pontoT[2][0]);
         $pontoR = $pontoR->escalar($this->escala);
 
@@ -93,7 +93,7 @@ class Transformacao
     {
         $matriz = clone $this->matriz;
         $pontoM = new Matriz([[$vetor->x], [$vetor->y], [$vetor->z]]);
-        $pontoT = $matriz->Multiplicar($pontoM);
+        $pontoT = $matriz->Multiplicar($pontoM)->obtenhaMatriz();
 
         return new Vetor($pontoT[0][0], $pontoT[1][0], $pontoT[2][0]);
     }
