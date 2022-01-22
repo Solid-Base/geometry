@@ -92,17 +92,17 @@ class PolilinhaFabrica
 
     public static function criarPoligonoRegular(Ponto $origem, int $numeroLados, bool $inscrito, float $raioCirculo, float $angulo = 0): Polilinha
     {
-        $anguloInterno = self::anguloExternoRegular($numeroLados);
+        $anguloInterno = numero(self::anguloExternoRegular($numeroLados));
         $anguloInicial = self::anguloInicial($numeroLados);
         if (!$inscrito) {
             $raioCirculo = self::raioPoligonoRegular($raioCirculo, $numeroLados);
         }
         $pontos = [];
         for ($i = 0; $i < $numeroLados; ++$i) {
-            $anguloCalculo = $anguloInterno * $i + $anguloInicial;
-            $x = $raioCirculo * cos($anguloCalculo);
-            $y = $raioCirculo * sin($anguloCalculo);
-            $pontos[] = new Ponto($x, $y);
+            $anguloCalculo = multiplicar($anguloInterno, $i)->somar($anguloInicial);
+            $x = multiplicar($raioCirculo, cosseno($anguloCalculo->valor()));
+            $y = multiplicar($raioCirculo, seno($anguloCalculo->valor()));
+            $pontos[] = new Ponto($x->valor(), $y->valor());
         }
         $poligono = self::criarPolilinhaPontos($pontos);
         $poligono->fecharPolilinha();

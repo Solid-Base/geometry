@@ -85,7 +85,7 @@ class Polilinha implements PrecisaoInterface, Countable, JsonSerializable
      */
     public function pontos(): array
     {
-        return $this->pontos;
+        return array_map(fn (Ponto $p) => $p, $this->pontos);
     }
 
     public function mover(float $dx = 0, float $dy = 0, float $dz = 0): void

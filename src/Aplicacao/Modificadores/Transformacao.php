@@ -167,8 +167,7 @@ class Transformacao
     {
         $ponto = VetorFabrica::BaseX();
         $pontoA = $this->deVetor($ponto);
-        $origem = $this->dePonto(new Vetor());
 
-        return rad2deg(acos($pontoA->x));
+        return acos($pontoA->x);
     }
 }
