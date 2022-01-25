@@ -51,7 +51,7 @@ class Plano implements PrecisaoInterface
 
     public function pontoPertenceAoPlano(Ponto $ponto): bool
     {
-        return abs($this->distanciaPontoAoPlano($ponto)) <= $this::PRECISAO;
+        return eMenor(abs($this->distanciaPontoAoPlano($ponto)), $this::PRECISAO);
     }
 
     public function projecaoPontoPlano(Ponto $ponto): Ponto

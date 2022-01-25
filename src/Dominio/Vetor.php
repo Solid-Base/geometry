@@ -16,10 +16,10 @@ final class Vetor extends Ponto
         if ($this->vetorUnitario()->eIgual($vetor->vetorUnitario())) {
             return true;
         }
-        $angulo = round($this->angulo($vetor), 6);
-        $pi = round(M_PI, 6);
+        $angulo = numero($this->angulo($vetor));
+        $pi = numero(M_PI);
 
-        return (abs($angulo) <= $this::PRECISAO) || (abs(abs($angulo) - $pi) <= $this::PRECISAO);
+        return eZero($angulo) || eZero(subtrair($angulo->modulo(), $pi));
     }
 
     public function temMesmoSentido(self $vetor): bool
@@ -27,19 +27,29 @@ final class Vetor extends Ponto
         if (!$this->temMesmaDirecao($vetor)) {
             return false;
         }
-        $angulo = $this->angulo($vetor);
+        $angulo = numero($this->angulo($vetor));
 
-        return abs($angulo) <= $this::PRECISAO;
+        return eZero($angulo);
     }
 
     public function produtoInterno(self $vetor): float
     {
-        return $vetor->x * $this->x + $vetor->y * $this->y + $vetor->z * $this->z;
+        $x = multiplicar($vetor->x, $this->x);
+        $y = multiplicar($vetor->y, $this->y);
+        $z = multiplicar($vetor->z, $this->z);
+        $soma = somar(somar($x, $y), $z);
+
+        return $soma->valor();
     }
 
     public function modulo(): float
     {
-        return sqrt($this->x ** 2 + $this->y ** 2 + $this->z ** 2);
+        $x = potencia($this->x, 2);
+        $y = potencia($this->y, 2);
+        $z = potencia($this->z, 2);
+        $modulo = somar(somar($x, $y), $z)->raiz();
+
+        return $modulo->valor();
     }
 
     public function escalar(float $fator): self
