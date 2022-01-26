@@ -15,10 +15,10 @@ class AreaPoligono
     public static function executar(Polilinha $poligono): ?float
     {
         $soma = 0;
-        $poligono->fecharPolilinha();
         if (\count($poligono) < 3) {
             return null;
         }
+        $poligono->fecharPolilinha();
         $pontos = $poligono->pontos();
         foreach ($pontos as $i => $ponto) {
             if (!isset($pontos[$i + 1])) {
