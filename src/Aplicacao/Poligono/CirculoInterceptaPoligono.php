@@ -23,11 +23,10 @@ class CirculoInterceptaPoligono
             $p1 = $pontos[$i - 1];
             $p2 = $pontos[$i];
             $linha = LinhaFabrica::apartirDoisPonto($p1, $p2);
-            $intersecaoCirculo = new InterseccaoLinhaCirculo($linha, $circulo);
-            if (!$intersecaoCirculo->possuiInterseccao()) {
+            if (!InterseccaoLinhaCirculo::possuiInterseccao($linha, $circulo)) {
                 continue;
             }
-            $linhaIntersecao = $intersecaoCirculo->executar();
+            $linhaIntersecao = InterseccaoLinhaCirculo::executar($linha, $circulo);
             if ($linha->pontoPertenceSegmento($linhaIntersecao->origem) || $linha->pontoPertenceSegmento($linhaIntersecao->final)) {
                 return true;
             }

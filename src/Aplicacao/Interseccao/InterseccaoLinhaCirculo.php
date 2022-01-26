@@ -16,37 +16,53 @@ class InterseccaoLinhaCirculo
     {
     }
 
-    public function possuiInterseccao(): bool
+    public static function executar(Linha $linha, Circulo $circulo): ?Linha
     {
-        return $this->distanciaCentroLinha() <= $this->circulo->raio;
-    }
-
-    public function executar(): ?Linha
-    {
-        if (!$this->possuiInterseccao()) {
+        if (!self::possuiInterseccao($linha, $circulo)) {
             return null;
         }
-        $distancia = $this->distanciaCentroLinha();
-        $comprimento = sqrt($this->circulo->raio ** 2 - $distancia ** 2);
-        $pontoIntersecao = $this->pontoIntersecao();
-        $direcaoLinha = $this->linha->direcao;
+        $distancia = self::distanciaCentroLinha($linha, $circulo->centro);
+        $comprimento = sqrt($circulo->raio ** 2 - $distancia ** 2);
+        $pontoIntersecao = self::pontoIntersecao($linha, $circulo);
+        $direcaoLinha = $linha->direcao;
         $ponto1 = $pontoIntersecao->somar($direcaoLinha->escalar($comprimento));
         $ponto2 = $pontoIntersecao->somar($direcaoLinha->escalar(-$comprimento));
 
         return LinhaFabrica::apartirDoisPonto($ponto1, $ponto2);
     }
 
-    private function pontoIntersecao(): Ponto
+    public static function possuiInterseccao(Linha $linha, Circulo $circulo): bool
     {
-        $perpendicular = VetorFabrica::Perpendicular($this->linha->direcao);
-        $linhaPerpendicular = new Linha($this->circulo->centro, $perpendicular, 1);
-        $intersecao = new InterseccaoLinhas($this->linha, $linhaPerpendicular);
+        $distancia = self::distanciaCentroLinha($linha, $circulo->centro);
 
-        return $intersecao->executar();
+        return eMenor(self::distanciaCentroLinha($linha, $circulo->centro), $circulo->raio);
     }
 
-    private function distanciaCentroLinha(): float
+    // public function executarOld(): ?Linha
+    // {
+    //     if (!$this->possuiInterseccao()) {
+    //         return null;
+    //     }
+    //     $distancia = $this->distanciaCentroLinha();
+    //     $comprimento = sqrt($this->circulo->raio ** 2 - $distancia ** 2);
+    //     $pontoIntersecao = $this->pontoIntersecao();
+    //     $direcaoLinha = $this->linha->direcao;
+    //     $ponto1 = $pontoIntersecao->somar($direcaoLinha->escalar($comprimento));
+    //     $ponto2 = $pontoIntersecao->somar($direcaoLinha->escalar(-$comprimento));
+
+    //     return LinhaFabrica::apartirDoisPonto($ponto1, $ponto2);
+    // }
+
+    private static function pontoIntersecao(Linha $linha, Circulo $circulo): Ponto
     {
-        return $this->linha->distanciaPontoLinha($this->circulo->centro);
+        $perpendicular = VetorFabrica::Perpendicular($linha->direcao);
+        $linhaPerpendicular = new Linha($circulo->centro, $perpendicular, 1);
+
+        return InterseccaoLinhas::executar($linha, $linhaPerpendicular);
+    }
+
+    private static function distanciaCentroLinha(Linha $linha, Ponto $ponto): float
+    {
+        return $linha->distanciaPontoLinha($ponto);
     }
 }

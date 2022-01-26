@@ -62,8 +62,8 @@ class TriangulacaoPoligono
             if ($linhaL->eParelo($linha)) {
                 continue;
             }
-            $intersecao = new InterseccaoLinhas($linha, $linhaL);
-            $pontoIntersecao = $intersecao->executar();
+
+            $pontoIntersecao = InterseccaoLinhas::executar($linha, $linhaL);
             if ($pontoIntersecao->eIgual($p1) || $pontoIntersecao->eIgual($p3)) {
                 continue;
             }

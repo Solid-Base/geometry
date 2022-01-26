@@ -19,8 +19,7 @@ class OffsetLinha
     {
         $perpendicular = VetorFabrica::Perpendicular($this->linha->direcao);
         $linhaPerpendicular = new Linha($pontoRef, $perpendicular, 1);
-        $intersecao = new InterseccaoLinhas($this->linha, $linhaPerpendicular);
-        $ponto = $intersecao->executar();
+        $ponto = InterseccaoLinhas::executar($this->linha, $linhaPerpendicular);
         $direcao = VetorFabrica::apartirDoisPonto($ponto, $pontoRef)->vetorUnitario();
         $linhaPerpendicular = new Linha($this->linha->origem, $direcao, $offset);
 

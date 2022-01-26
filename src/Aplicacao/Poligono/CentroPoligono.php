@@ -4,31 +4,25 @@ declare(strict_types=1);
 
 namespace Solidbase\Geometria\Aplicacao\Poligono;
 
-use DomainException;
-use Solidbase\Geometria\Aplicacao\Poligono\AreaPoligono as PoligonoAreaPoligono;
 use Solidbase\Geometria\Dominio\Polilinha;
 use Solidbase\Geometria\Dominio\Ponto;
 
 class CentroPoligono
 {
-    private float $area;
-
-    public function __construct(private Polilinha $poligono)
+    private function __construct()
     {
-        $poligono->fecharPolilinha();
-        $area = new PoligonoAreaPoligono($poligono);
-        $this->area = $area->executar();
     }
 
-    public function executar(): Ponto
+    public static function executar(Polilinha $poligono): ?Ponto
     {
-        if (\count($this->poligono) < 3) {
-            throw new DomainException('É necessário ter pelo menos três pontos');
+        $area = AreaPoligono::executar($poligono);
+        if (null === $area) {
+            return null;
         }
         $somaX = 0;
         $somaY = 0;
-        $pontos = $this->poligono->pontos();
-        $numPontos = \count($this->poligono);
+        $pontos = $poligono->pontos();
+        $numPontos = \count($poligono);
 
         for ($i = 0; $i < $numPontos - 1; ++$i) {
             $ponto = $pontos[$i];
@@ -38,8 +32,8 @@ class CentroPoligono
             $somaY += ($proximo->y + $ponto->y) * $comum;
         }
 
-        $x = ($somaX / (6 * $this->area));
-        $y = ($somaY / (6 * $this->area));
+        $x = ($somaX / (6 * $area));
+        $y = ($somaY / (6 * $area));
 
         return new Ponto($x, $y);
     }

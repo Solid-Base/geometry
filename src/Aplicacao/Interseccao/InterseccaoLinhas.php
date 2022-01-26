@@ -4,43 +4,41 @@ declare(strict_types=1);
 
 namespace Solidbase\Geometria\Aplicacao\Interseccao;
 
-use DomainException;
 use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
 use Solidbase\Geometria\Dominio\Linha;
 use Solidbase\Geometria\Dominio\Ponto;
-use Solidbase\Geometria\Dominio\PrecisaoInterface;
 
 class InterseccaoLinhas
 {
-    public function __construct(private Linha $linha1, private Linha $linha2)
+    private function __construct()
     {
     }
 
-    public function executar(): Ponto
+    public static function executar(Linha $linha1, Linha $linha2): ?Ponto
     {
-        if ($this->linha1->eParelo($this->linha2)) {
-            throw new DomainException('Retas parelas não se interseptam');
+        if ($linha1->eParelo($linha2)) {
+            return null;
         }
-        if (!$this->linha1->eCoplanar($this->linha2)) {
-            throw new DomainException('Somente retas coplanares possuem intersecção');
+        if (!$linha1->eCoplanar($linha2)) {
+            return null;
         }
-        if ($this->linha1->origem->eIgual($this->linha2->origem)) {
-            return $this->linha1->origem;
+        if ($linha1->origem->eIgual($linha2->origem)) {
+            return $linha1->origem;
         }
-        if ($this->linha1->final->eIgual($this->linha2->final)) {
-            return $this->linha1->final;
+        if ($linha1->final->eIgual($linha2->final)) {
+            return $linha1->final;
         }
-        [$s,] = $this->calcularTS();
+        [$s,] = self::calcularTS($linha1, $linha2);
 
-        return $this->linha1->origem->somar($this->linha1->direcao->escalar($s));
+        return $linha1->origem->somar($linha1->direcao->escalar($s));
     }
 
-    private function calcularTS(): array
+    private static function calcularTS(Linha $linha1, Linha $linha2): array
     {
-        $k = $this->linha1->origem;
-        $l = $this->linha1->pontoRetaComprimento(1);
-        $m = $this->linha2->origem;
-        $n = $this->linha2->pontoRetaComprimento(1);
+        $k = $linha1->origem;
+        $l = $linha1->pontoRetaComprimento(1);
+        $m = $linha2->origem;
+        $n = $linha2->pontoRetaComprimento(1);
 
         $diretorS = VetorFabrica::apartirDoisPonto($k, $l);
         $diretorR = VetorFabrica::apartirDoisPonto($n, $m);
@@ -50,15 +48,15 @@ class InterseccaoLinhas
         $diretorMk = VetorFabrica::apartirDoisPonto($k, $m);
         $vetorialRMk = $diretorR->produtoVetorial($diretorMk);
         $vetorialSMk = $diretorS->produtoVetorial($diretorMk);
-        if ((!$this->retaPertenceOx($this->linha1) || !$this->retaPertenceOx($this->linha2))
-        && (!$this->retaPertenceOy($this->linha1) || !$this->retaPertenceOy($this->linha2)) && !eZero($determinante->z)) {
+        if ((!self::retaPertenceOx($linha1) || !self::retaPertenceOx($linha2))
+        && (!self::retaPertenceOy($linha1) || !self::retaPertenceOy($linha2)) && !eZero($determinante->z)) {
             $s = $vetorialRMk->z / $determinante->z;
             $t = $vetorialSMk->z / $determinante->z;
 
             return [$s, $t];
         }
-        if ((!$this->retaPertenceOx($this->linha1) || !$this->retaPertenceOx($this->linha2))
-        && (!$this->retaPertenceOz($this->linha1) || !$this->retaPertenceOz($this->linha2)) && !eZero($determinante->y)) {
+        if ((!self::retaPertenceOx($linha1) || !self::retaPertenceOx($linha2))
+        && (!self::retaPertenceOz($linha1) || !self::retaPertenceOz($linha2)) && !eZero($determinante->y)) {
             $s = $vetorialRMk->y / $determinante->y;
             $t = $vetorialSMk->y / $determinante->y;
 
@@ -70,29 +68,24 @@ class InterseccaoLinhas
         return [$s, $t];
     }
 
-    private function retaPertenceOx(Linha $linha): bool
+    private static function retaPertenceOx(Linha $linha): bool
     {
         $direcao = $linha->direcao->vetorUnitario();
 
         return 0 === comparar(abs($direcao->x), 1);
     }
 
-    private function retaPertenceOy(Linha $linha): bool
+    private static function retaPertenceOy(Linha $linha): bool
     {
         $direcao = $linha->direcao->vetorUnitario();
 
         return 0 === comparar(abs($direcao->y), 1);
     }
 
-    private function retaPertenceOz(Linha $linha): bool
+    private static function retaPertenceOz(Linha $linha): bool
     {
         $direcao = $linha->direcao->vetorUnitario();
 
         return 0 === comparar(abs($direcao->z), 1);
-    }
-
-    private function eZero(float $numero): bool
-    {
-        return abs($numero) <= PrecisaoInterface::PRECISAO;
     }
 }

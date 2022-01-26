@@ -46,32 +46,70 @@ class PropriedadePoligono
         };
     }
 
-    public function executar(): void
+    public static function executar(Polilinha $poligono): ?DadosPoligono
     {
-        $calculoArea = new AreaPoligono($this->poligono);
-        $area = $calculoArea->executar();
-        $this->sentido = $area > 0 ? 1 : -1;
-        $this->area = abs($area);
-        $calculoCentro = new CentroPoligono($this->poligono);
-        $this->centro = $calculoCentro->executar();
-
-        $calculoMomentoInercia = new SegundoMomentoInercia($this->poligono);
-        [$ix,$iy] = $calculoMomentoInercia->executar();
-        $this->momentoInerciaX = $ix * $this->sentido;
-        $this->momentoInerciaY = $iy * $this->sentido;
-
-        if ($this->centro->eIgual(new Ponto())) {
-            $this->momentoInerciaPrincipalX = $ix * $this->sentido;
-            $this->momentoInerciaPrincipalY = $iy * $this->sentido;
-
-            return;
+        $area = AreaPoligono::executar($poligono);
+        if (null === $area) {
+            return null;
         }
-        $poligono = clone $this->poligono;
-        $poligono->mover(-$this->centro->x, -$this->centro->y);
+        $sentido = $area > 0 ? 1 : -1;
+        $area = abs($area);
+        $centro = CentroPoligono::executar($poligono);
 
-        $calculoMomentoInercia = new SegundoMomentoInercia($poligono);
-        [$ix,$iy] = $calculoMomentoInercia->executar();
-        $this->momentoInerciaPrincipalX = $ix * $this->sentido;
-        $this->momentoInerciaPrincipalY = $iy * $this->sentido;
+        [$ix,$iy] = SegundoMomentoInercia::executar($poligono);
+
+        $momentoInerciaX = $ix * $sentido;
+        $momentoInerciaY = $iy * $sentido;
+
+        if ($centro->eIgual(new Ponto())) {
+            $momentoInerciaPrincipalX = $ix * $sentido;
+            $momentoInerciaPrincipalY = $iy * $sentido;
+
+            return self::montarRetorno(
+                $area,
+                (int) $sentido,
+                $centro,
+                $momentoInerciaX,
+                $momentoInerciaY,
+                $momentoInerciaPrincipalX,
+                $momentoInerciaPrincipalY
+            );
+        }
+        $poligono = clone $poligono;
+        $poligono->mover(-$centro->x, -$centro->y);
+
+        [$ix,$iy] = SegundoMomentoInercia::executar($poligono);
+        $momentoInerciaPrincipalX = $ix * $sentido;
+        $momentoInerciaPrincipalY = $iy * $sentido;
+
+        return self::montarRetorno(
+            $area,
+            (int) $sentido,
+            $centro,
+            $momentoInerciaX,
+            $momentoInerciaY,
+            $momentoInerciaPrincipalX,
+            $momentoInerciaPrincipalY
+        );
+    }
+
+    private static function montarRetorno(
+        float $area,
+        int $sentido,
+        Ponto $centro,
+        float $momentoInerciaX,
+        float $momentoInerciay,
+        float $momentoInerciaPrincipalX,
+        float $momentoInerciaPrincipalY
+    ): DadosPoligono {
+        return new DadosPoligono(
+            $area,
+            $sentido,
+            $centro,
+            $momentoInerciaX,
+            $momentoInerciay,
+            $momentoInerciaPrincipalX,
+            $momentoInerciaPrincipalY
+        );
     }
 }

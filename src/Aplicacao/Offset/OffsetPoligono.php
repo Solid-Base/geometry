@@ -34,15 +34,13 @@ class OffsetPoligono
         for ($i = 1; $i < $numeroLinha; ++$i) {
             $linha1 = $linhas[$i - 1];
             $linha2 = $linhas[$i];
-            $intersecao = new InterseccaoLinhas($linha1, $linha2);
-            $ponto = $intersecao->executar();
+            $ponto = InterseccaoLinhas::executar($linha1, $linha2);
             $pontos[] = $ponto;
         }
         if ($this->polilinha->ePoligono()) {
             $linha1 = reset($linhas);
             $linha2 = end($linhas);
-            $intersecao = new InterseccaoLinhas($linha1, $linha2);
-            $ponto = $intersecao->executar();
+            $ponto = InterseccaoLinhas::executar($linha1, $linha2);
             $pontos[] = $ponto;
         }
 

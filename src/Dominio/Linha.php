@@ -21,6 +21,7 @@ class Linha implements PrecisaoInterface, JsonSerializable
         private Vetor $direcao,
         private float $comprimento
     ) {
+        $this->direcao = $direcao->vetorUnitario();
     }
 
     public function __get($name)

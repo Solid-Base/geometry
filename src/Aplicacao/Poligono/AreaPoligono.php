@@ -4,23 +4,22 @@ declare(strict_types=1);
 
 namespace Solidbase\Geometria\Aplicacao\Poligono;
 
-use DomainException;
 use Solidbase\Geometria\Dominio\Polilinha;
 
 class AreaPoligono
 {
-    public function __construct(private Polilinha $poligono)
+    private function __construct()
     {
-        $poligono->fecharPolilinha();
     }
 
-    public function executar(): float
+    public static function executar(Polilinha $poligono): ?float
     {
         $soma = 0;
-        if (\count($this->poligono) < 3) {
-            throw new DomainException('É necessário ter pelo menos três pontos');
+        $poligono->fecharPolilinha();
+        if (\count($poligono) < 3) {
+            return null;
         }
-        $pontos = $this->poligono->pontos();
+        $pontos = $poligono->pontos();
         foreach ($pontos as $i => $ponto) {
             if (!isset($pontos[$i + 1])) {
                 break;

@@ -10,18 +10,17 @@ use Solidbase\Geometria\Dominio\Polilinha;
 
 class CirculoPertencePoligono
 {
-    public function __construct(private Polilinha $poligono)
+    private function __construct()
     {
     }
 
-    public function executar(Circulo $circulo): bool
+    public static function executar(Polilinha $poligono, Circulo $circulo): bool
     {
         $centro = $circulo->centro;
-        $pontoPertence = new PontoPertencePoligono($this->poligono, $centro);
-        if (!$pontoPertence->executar($centro)) {
+        if (!PontoPertencePoligono::executar($poligono, $circulo->centro)) {
             return false;
         }
-        $pontos = $this->poligono->pontos();
+        $pontos = $poligono->pontos();
         $quantidade = \count($pontos);
         for ($i = 1; $i < $quantidade; ++$i) {
             $p1 = $pontos[$i - 1];

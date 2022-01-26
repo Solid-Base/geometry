@@ -10,21 +10,20 @@ use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
 use Solidbase\Geometria\Dominio\Linha;
 use Solidbase\Geometria\Dominio\Polilinha;
 use Solidbase\Geometria\Dominio\Ponto;
-use Solidbase\Geometria\Dominio\PrecisaoInterface;
 
 class PontoPertencePoligono
 {
-    public function __construct(private Polilinha $poligono)
+    private function __construct()
     {
-        $poligono->fecharPolilinha();
     }
 
-    public function executar(Ponto $ponto): bool
+    public static function executar(Polilinha $poligono, Ponto $ponto): bool
     {
+        $poligono->fecharPolilinha();
         $linhaComparacao = new Linha($ponto, VetorFabrica::BaseX(), 1);
-        $numeroPontos = \count($this->poligono);
+        $numeroPontos = \count($poligono);
         $contagem = 0;
-        $pontos = $this->poligono->pontos();
+        $pontos = $poligono->pontos();
         for ($i = 0; $i < $numeroPontos - 1; ++$i) {
             $p1 = $pontos[$i];
             $p2 = $pontos[$i + 1];
@@ -35,17 +34,16 @@ class PontoPertencePoligono
             if ($linha->eParelo($linhaComparacao)) {
                 continue;
             }
-            $intersecao = new InterseccaoLinhas($linha, $linhaComparacao);
-            $pontoIntersecao = $intersecao->executar();
+            $pontoIntersecao = InterseccaoLinhas::executar($linha, $linhaComparacao);
             if ($pontoIntersecao->x < $ponto->x) {
                 continue;
             }
-            if ($this->eZero($pontoIntersecao->distanciaParaPonto($p1))
-            || $this->eZero($pontoIntersecao->distanciaParaPonto($p2))) {
-                if (($this->eZero($pontoIntersecao->y - $p1->y)) && $pontoIntersecao->y > $p2->y) {
+            if (eZero($pontoIntersecao->distanciaParaPonto($p1))
+            || eZero($pontoIntersecao->distanciaParaPonto($p2))) {
+                if ((eZero($pontoIntersecao->y - $p1->y)) && $pontoIntersecao->y > $p2->y) {
                     ++$contagem;
                 }
-                if (($this->eZero($pontoIntersecao->y - $p2->y)) && $pontoIntersecao->y > $p1->y) {
+                if ((eZero($pontoIntersecao->y - $p2->y)) && $pontoIntersecao->y > $p1->y) {
                     ++$contagem;
                 }
 
@@ -58,10 +56,5 @@ class PontoPertencePoligono
         }
 
         return 1 === $contagem % 2;
-    }
-
-    private function eZero(float $numero): bool
-    {
-        return abs($numero) <= PrecisaoInterface::PRECISAO;
     }
 }

@@ -36,10 +36,10 @@ class AreaCirculoContidoPoligono
             $p2 = $pontos[$i];
             $linha = LinhaFabrica::apartirDoisPonto($p1, $p2);
             $intersecaoCirculo = new InterseccaoLinhaCirculo($linha, $circulo);
-            if (!$intersecaoCirculo->possuiInterseccao()) {
+            if (InterseccaoLinhaCirculo::possuiInterseccao($linha, $circulo)) {
                 continue;
             }
-            $linhaIntersecao = $intersecaoCirculo->executar();
+            $linhaIntersecao = InterseccaoLinhaCirculo::executar($linha, $circulo);
             if (null === $linhaIntersecao) {
                 continue;
             }
@@ -59,9 +59,7 @@ class AreaCirculoContidoPoligono
 
     private function centroPertenceAoCirculo(Circulo $circulo): bool
     {
-        $pontoPertence = new PontoPertencePoligono($this->poligono);
-
-        return $pontoPertence->executar($circulo->centro);
+        return PontoPertencePoligono::executar($this->poligono, $circulo->centro);
     }
 
     private function gerarArco(Linha $linha, Circulo $circulo, bool $centroPertence): Arco

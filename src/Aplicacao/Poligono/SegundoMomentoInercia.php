@@ -4,25 +4,23 @@ declare(strict_types=1);
 
 namespace Solidbase\Geometria\Aplicacao\Poligono;
 
-use DomainException;
 use Solidbase\Geometria\Dominio\Polilinha;
 
 class SegundoMomentoInercia
 {
-    public function __construct(private Polilinha $poligono)
+    private function __construct()
     {
-        $poligono->fecharPolilinha();
     }
 
-    public function executar(): array
+    public static function executar(Polilinha $poligono): ?array
     {
-        if (\count($this->poligono) < 3) {
-            throw new DomainException('É necessário ter pelo menos três pontos');
+        if (\count($poligono) < 3) {
+            return null;
         }
         $somaX = 0;
         $somaY = 0;
-        $pontos = $this->poligono->pontos();
-        $numPontos = \count($this->poligono);
+        $pontos = $poligono->pontos();
+        $numPontos = \count($poligono);
 
         for ($i = 0; $i < $numPontos - 1; ++$i) {
             $ponto = $pontos[$i];
