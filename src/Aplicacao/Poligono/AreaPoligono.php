@@ -28,6 +28,12 @@ class AreaPoligono
             $soma += ($ponto->x + $proximo->x) * ($proximo->y - $ponto->y);
         }
 
-        return $soma / 2;
+        $area = $soma / 2;
+
+        if (eZero($area)) {
+            return null;
+        }
+
+        return $area;
     }
 }
