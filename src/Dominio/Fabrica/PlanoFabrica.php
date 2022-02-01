@@ -27,4 +27,19 @@ class PlanoFabrica
 
         return self::criarPlanoOrigemBases($ponto1, $vetor1, $vetor2);
     }
+
+    public static function planoX(): Plano
+    {
+        return self::criarPlanoOrigemBases(new Ponto(), VetorFabrica::BaseY(), VetorFabrica::BaseZ());
+    }
+
+    public static function planoY(): Plano
+    {
+        return self::criarPlanoOrigemBases(new Ponto(), VetorFabrica::BaseX(), VetorFabrica::BaseZ());
+    }
+
+    public static function planoZ(): Plano
+    {
+        return self::criarPlanoOrigemBases(new Ponto(), VetorFabrica::BaseX(), VetorFabrica::BaseY());
+    }
 }

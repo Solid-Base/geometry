@@ -56,8 +56,7 @@ class PolilinhaFabrica
         $p5 = $p4->subtrair(new Ponto(0, -$largura1 + $largura));
         $p6 = $p5->somar(new Ponto($comprimento1 - $comprimento, 0));
         $poligono = self::criarPolilinhaPontos([$p1, $p2, $p3, $p4, $p5, $p6]);
-        $propriedades = new PropriedadePoligono($poligono);
-        $propriedades->executar();
+        $propriedades = PropriedadePoligono::executar($poligono);
         $centro = $propriedades->centro;
         $poligono->mover(-$centro->x, -$centro->y, -$centro->z);
 
@@ -75,8 +74,7 @@ class PolilinhaFabrica
         $p7 = $p6->subtrair(new Ponto($comprimento - 2 * $deslocamento, 0));
         $p8 = $p7->somar(new Ponto(0, $largura - $deslocamento));
         $poligono = self::criarPolilinhaPontos([$p1, $p2, $p3, $p4, $p5, $p6, $p7, $p8]);
-        $propriedades = new PropriedadePoligono($poligono);
-        $propriedades->executar();
+        $propriedades = PropriedadePoligono::executar($poligono);
         $centro = $propriedades->centro;
         $poligono->mover(-$centro->x, -$centro->y, -$centro->z);
 

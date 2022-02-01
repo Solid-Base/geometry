@@ -56,9 +56,7 @@ class ArcoCirculoFabrica
 
     private static function InterseccaoLinha(Linha $linha1, Linha $linha2): Ponto
     {
-        $intersecao = new InterseccaoLinhas($linha1, $linha2);
-
-        return $intersecao->executar();
+        return InterseccaoLinhas::executar($linha1, $linha2);
     }
 
     private static function centroTresPonto(Ponto $ponto1, Ponto $ponto2, Ponto $ponto3): Ponto
