@@ -19,4 +19,12 @@ class LinhaFabrica
 
         return new Linha($ponto1, $vetor->vetorUnitario(), $comprimento);
     }
+
+    public static function equacaoReta(float $coeficienteAngular, float $coeficienteLinear): Linha
+    {
+        $p1 = new Ponto(0, $coeficienteLinear);
+        $p2 = new Ponto(-$coeficienteLinear / $coeficienteAngular, 0);
+
+        return self::apartirDoisPonto($p1, $p2);
+    }
 }
