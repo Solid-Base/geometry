@@ -88,7 +88,7 @@ class Ponto implements PrecisaoInterface, JsonSerializable
     {
         $distancia = $this->distanciaParaPonto($ponto);
 
-        return $distancia <= $this::PRECISAO;
+        return eZero($distancia);
     }
 
     public function toArray(): array

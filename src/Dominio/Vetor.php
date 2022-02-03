@@ -17,7 +17,7 @@ final class Vetor extends Ponto
             return true;
         }
         $angulo = numero($this->angulo($vetor));
-        $pi = numero(M_PI);
+        $pi = numero(S_PI);
 
         return eZero($angulo) || eZero(subtrair($angulo->modulo(), $pi));
     }

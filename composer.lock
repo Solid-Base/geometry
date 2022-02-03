@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:solidbase30/matematica.git",
-                "reference": "f5573216d263c0480b716627a71e99f1efd05627"
+                "reference": "cb59b2d6d61602ce0c6bba2cd5999ba850fe1741"
             },
             "type": "library",
             "autoload": {
@@ -30,7 +30,7 @@
                 }
             ],
             "description": "Modulo de matemática do SolidBase",
-            "time": "2022-02-03T11:57:50+00:00"
+            "time": "2022-02-03T16:08:21+00:00"
         }
     ],
     "packages-dev": [
@@ -130,12 +130,12 @@
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "DeepCopy\\": "src/DeepCopy/"
-                },
                 "files": [
                     "src/DeepCopy/deep_copy.php"
-                ]
+                ],
+                "psr-4": {
+                    "DeepCopy\\": "src/DeepCopy/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
