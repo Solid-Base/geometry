@@ -47,7 +47,7 @@ final class VetorTest extends TestCase
         $ponto = new Vetor(3, 4, 0);
         $ponto2 = new Vetor(-12, -16, 5);
         static::assertSame(5.0, $ponto->modulo());
-        static::assertSame(20.61552812808830274910704927987, $ponto2->modulo());
+        static::assertSame(20.615528128088, $ponto2->modulo());
     }
 
     public function testEscalar(): void
@@ -80,9 +80,9 @@ final class VetorTest extends TestCase
         $vetor3 = new Vetor(4, 4, 0);
         $vetor4 = new Vetor(-4, 4, 0);
 
-        static::assertSame(M_PI, $vetor->angulo($vetor2));
-        static::assertSame(M_PI / 4, $vetor->angulo($vetor3));
-        static::assertSame(M_PI / 4 + M_PI / 2, $vetor->angulo($vetor4));
+        static::assertSame(arredondar(M_PI, 5), arredondar($vetor->angulo($vetor2), 5));
+        static::assertSame(arredondar(M_PI / 4, 5), arredondar($vetor->angulo($vetor3), 5));
+        static::assertSame(arredondar(M_PI / 4 + M_PI / 2, 5), arredondar($vetor->angulo($vetor4), 5));
     }
 
     public function testAnguloAbsoluto(): void

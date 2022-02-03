@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Solidbase\Geometria\Aplicacao\Modificadores;
 
+use Solidbase\Geometria\Aplicacao\Modificadores\Fabrica\FabricaMatrizTransformacao;
 use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
 use Solidbase\Geometria\Dominio\Plano;
 use Solidbase\Geometria\Dominio\Ponto;
@@ -32,12 +33,12 @@ class Transformacao
 
     public static function criarRotacao(Vetor $eixo, float $angulo): self
     {
-        return new self(FabricaMatriz::MatrizRotacao($eixo, $angulo), new Ponto());
+        return new self(FabricaMatrizTransformacao::MatrizRotacao($eixo, $angulo), new Ponto());
     }
 
     public static function criarRotacaoPonto(Vetor $eixo, float $angulo, Ponto $origem): self
     {
-        $matriz = FabricaMatriz::MatrizRotacao($eixo, $angulo);
+        $matriz = FabricaMatrizTransformacao::MatrizRotacao($eixo, $angulo);
         $matrizRotacao = new self($matriz, new Ponto());
         if ($origem->eIgual(new Ponto())) {
             return $matrizRotacao;
@@ -66,7 +67,7 @@ class Transformacao
         $y = -(2 * $normal->y * $d);
         $z = -(2 * $normal->z * $d);
         $origem = new Ponto($x, $y, $z);
-        $matriz = FabricaMatriz::Reflexao($plano);
+        $matriz = FabricaMatrizTransformacao::Reflexao($plano);
 
         return new self($matriz, $origem);
     }
