@@ -20,10 +20,16 @@ class LinhaFabrica
         return new Linha($ponto1, $vetor->vetorUnitario(), $comprimento);
     }
 
-    public static function equacaoReta(float $coeficienteAngular, float $coeficienteLinear): Linha
+    public static function equacaoReta(?float $coeficienteAngular, float $coeficienteLinear): Linha
     {
+        if (null === $coeficienteAngular) {
+            return new Linha(new Ponto($coeficienteLinear, 0), VetorFabrica::BaseY(), 1);
+        }
+        if (eZero($coeficienteAngular)) {
+            return new Linha(new Ponto(0, $coeficienteLinear), VetorFabrica::BaseX(), 1);
+        }
         $p1 = new Ponto(0, $coeficienteLinear);
-        $p2 = new Ponto(-$coeficienteLinear / $coeficienteAngular, 0);
+        $p2 = new Ponto(1, ($coeficienteAngular + $coeficienteLinear));
 
         return self::apartirDoisPonto($p1, $p2);
     }
