@@ -57,31 +57,31 @@ class Ponto implements PrecisaoInterface, JsonSerializable
         return sqrt(($ponto->x - $this->x) ** 2 + ($ponto->y - $this->y) ** 2 + ($ponto->z - $this->z) ** 2);
     }
 
-    public function somar(self $ponto): self
+    public function somar(self $ponto): static
     {
         $x = $this->x + $ponto->x;
         $y = $this->y + $ponto->y;
         $z = $this->z + $ponto->z;
 
-        return new self($x, $y, $z);
+        return new static($x, $y, $z);
     }
 
-    public function subtrair(self $ponto): self
+    public function subtrair(self $ponto): static
     {
         $x = $this->x - $ponto->x;
         $y = $this->y - $ponto->y;
         $z = $this->z - $ponto->z;
 
-        return new self($x, $y, $z);
+        return new static($x, $y, $z);
     }
 
-    public function pontoMedio(self $ponto): self
+    public function pontoMedio(self $ponto): static
     {
         $x = ($this->x + $ponto->x) / 2;
         $y = ($this->y + $ponto->y) / 2;
         $z = ($this->z + $ponto->z) / 2;
 
-        return new self($x, $y, $z);
+        return new static($x, $y, $z);
     }
 
     public function eIgual(self $ponto): bool

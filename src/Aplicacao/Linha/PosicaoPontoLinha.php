@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Solidbase\Geometria\Aplicacao\Linha;
 
-use Solidbase\Geometria\Dominio\Fabrica\PlanoFabrica;
 use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
 use Solidbase\Geometria\Dominio\Linha;
 use Solidbase\Geometria\Dominio\Ponto;
@@ -16,7 +15,6 @@ class PosicaoPontoLinha
         if ($linha->pontoPertenceLinha($ponto)) {
             return PosicaoPontoEnum::SOBRE;
         }
-        $plano = PlanoFabrica::criarPlanoOrigemBases(new Ponto(), VetorFabrica::BaseX(), VetorFabrica::BaseY());
 
         $origem = $linha->origem;
         $direcao = $linha->direcao;

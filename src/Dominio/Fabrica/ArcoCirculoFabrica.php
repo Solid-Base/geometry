@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Solidbase\Geometria\Dominio\Fabrica;
 
+use DomainException;
 use Solidbase\Geometria\Aplicacao\Interseccao\InterseccaoLinhas;
+use Solidbase\Geometria\Aplicacao\Pontos\PontosAlinhados;
+use Solidbase\Geometria\Aplicacao\Pontos\RotacaoPontoEnum;
+use Solidbase\Geometria\Aplicacao\Pontos\SentidoRotacaoTresPontos;
 use Solidbase\Geometria\Dominio\Arco;
 use Solidbase\Geometria\Dominio\Circulo;
 use Solidbase\Geometria\Dominio\Linha;
@@ -19,18 +23,13 @@ class ArcoCirculoFabrica
 
         $vetorP1 = VetorFabrica::apartirDoisPonto($centro, $ponto1);
         $anguloP1 = $vetorP1->anguloAbsoluto();
-        $vetorP2 = VetorFabrica::apartirDoisPonto($centro, $ponto2);
-        $anguloP2 = $vetorP2->anguloAbsoluto();
         $vetorP3 = VetorFabrica::apartirDoisPonto($centro, $ponto3);
         $anguloP3 = $vetorP3->anguloAbsoluto();
 
-        if (min($anguloP1, $anguloP2, $anguloP3) === $anguloP2) {
-            $anguloInicial = max($anguloP1, $anguloP3);
-            $anguloFinal = min($anguloP1, $anguloP3);
-        } else {
-            $anguloInicial = min($anguloP1, $anguloP3);
-            $anguloFinal = max($anguloP1, $anguloP3);
-        }
+        $rotacao = SentidoRotacaoTresPontos::executar($ponto1, $ponto2, $ponto3);
+
+        $anguloInicial = RotacaoPontoEnum::ANTI_HORARIO == $rotacao ? $anguloP1 : $anguloP3;
+        $anguloFinal = RotacaoPontoEnum::ANTI_HORARIO == $rotacao ? $anguloP3 : $anguloP1;
 
         return new Arco($centro, $raio, $anguloInicial, $anguloFinal);
     }
@@ -61,6 +60,9 @@ class ArcoCirculoFabrica
 
     private static function centroTresPonto(Ponto $ponto1, Ponto $ponto2, Ponto $ponto3): Ponto
     {
+        if (PontosAlinhados::executar($ponto1, $ponto2, $ponto3)) {
+            throw new DomainException('Para fazer um arco ou circulo apartir de três pontos, é necessario que os mesmos não seja alinhado.');
+        }
         $v1 = VetorFabrica::apartirDoisPonto($ponto1, $ponto2)->produtoVetorial(VetorFabrica::BaseZ());
         $v2 = VetorFabrica::apartirDoisPonto($ponto1, $ponto3)->produtoVetorial(VetorFabrica::BaseZ());
         $pontoMedioP1P2 = $ponto1->pontoMedio($ponto2);

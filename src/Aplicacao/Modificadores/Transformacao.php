@@ -135,7 +135,7 @@ class Transformacao
         $x = $nova[0][3];
         $y = $nova[1][3];
         $z = $nova[2][3];
-        $origem = new Ponto($x, $y, $z);
+        $origem = new Ponto($x->valor(), $y->valor(), $z->valor());
 
         $matrizNova = [$nova[0], $nova[1], $nova[2]];
         unset($matrizNova[0][3], $matrizNova[1][3], $matrizNova[2][3]);

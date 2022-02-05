@@ -15,9 +15,9 @@ class CirculoInterceptaPoligono
     {
     }
 
-    public function executar(Circulo $circulo): bool
+    public static function executar(Polilinha $poligono, Circulo $circulo): bool
     {
-        $pontos = $this->poligono->pontos();
+        $pontos = $poligono->pontos();
         $quantidade = \count($pontos);
         for ($i = 1; $i < $quantidade; ++$i) {
             $p1 = $pontos[$i - 1];

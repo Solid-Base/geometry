@@ -52,16 +52,16 @@ final class Vetor extends Ponto
         return $modulo->valor();
     }
 
-    public function escalar(float $fator): self
+    public function escalar(float $fator): static
     {
         $x = $this->x * $fator;
         $y = $this->y * $fator;
         $z = $this->z * $fator;
 
-        return new self($x, $y, $z);
+        return new static($x, $y, $z);
     }
 
-    public function vetorUnitario(): self
+    public function vetorUnitario(): static
     {
         if ($this->eNulo()) {
             throw new Exception('Vetores nulos não possui vetor unitário');
@@ -90,13 +90,13 @@ final class Vetor extends Ponto
         return $angulo;
     }
 
-    public function produtoVetorial(self $vetor): self
+    public function produtoVetorial(self $vetor): static
     {
         $x = $this->y * $vetor->z - $this->z * $vetor->y;
         $y = $this->z * $vetor->x - $this->x * $vetor->z;
         $z = $this->x * $vetor->y - $this->y * $vetor->x;
 
-        return new self($x, $y, $z);
+        return new static($x, $y, $z);
     }
 
     public function produtoMisto(self $vetorV, self $vetorW): float
@@ -104,13 +104,13 @@ final class Vetor extends Ponto
         return ($this->produtoVetorial($vetorV))->produtoInterno($vetorW);
     }
 
-    public function projecao(self $vetorU): self
+    public function projecao(self $vetorU): static
     {
         if ($this->eNulo()) {
             throw new Exception('Não é possível encontrar projeção em vetores nulos');
         }
         if ($vetorU->eNulo()) {
-            return new self();
+            return new static();
         }
         $modulo = $this->modulo();
         $escalar = $this->produtoInterno($vetorU) / ($modulo ** 2);

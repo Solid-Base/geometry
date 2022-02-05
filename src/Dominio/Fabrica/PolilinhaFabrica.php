@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Solidbase\Geometria\Dominio\Fabrica;
 
 use Solidbase\Geometria\Aplicacao\Poligono\PropriedadePoligono;
+use Solidbase\Geometria\Aplicacao\Pontos\PontosAlinhados;
 use Solidbase\Geometria\Dominio\Polilinha;
 use Solidbase\Geometria\Dominio\Ponto;
 
@@ -16,6 +17,7 @@ class PolilinhaFabrica
     public static function criarPolilinhaPontos(array $pontos): Polilinha
     {
         $polilinha = new Polilinha();
+        $pontos = self::limparPontosPoligono($pontos);
         foreach ($pontos as $ponto) {
             $polilinha->adicionarPonto($ponto);
         }
@@ -143,5 +145,25 @@ class PolilinhaFabrica
     private static function RaioLado(float $lado, int $numeroLados): float
     {
         return $lado / (2 * sin(M_PI / $numeroLados));
+    }
+
+    private static function limparPontosPoligono(array $pontos): array
+    {
+        if (count($pontos) < 3) {
+            return $pontos;
+        }
+        $quantidade = count($pontos);
+        for ($i = 2; $i < $quantidade; ++$i) {
+            $p1 = $pontos[$i - 2];
+            $p2 = $pontos[$i - 1];
+            $p3 = $pontos[$i];
+            if (PontosAlinhados::executar($p1, $p2, $p3)) {
+                unset($pontos[$i - 1]);
+
+                return self::limparPontosPoligono(array_values($pontos));
+            }
+        }
+
+        return $pontos;
     }
 }
