@@ -53,7 +53,7 @@ class AreaCirculoContidoPoligono
         $pontoArco = PontoPertencePoligono::executar($polilinha, $linhaIntersecao->origem) ? $linhaIntersecao->origem : $linhaIntersecao->final;
         $arco = ArcoCirculoFabrica::arcoTresPontos($primeiro, $pontoArco, $ultimo);
         $areaArco = $arco->area();
-        $poligonoNovo = PolilinhaFabrica::criarPolilinhaPontos($pontosIntersecao);
+        $poligonoNovo = PolilinhaFabrica::criarPolilinhaPontos($pontosIntersecao, true);
         if (count($poligonoNovo) < 3) {
             return $areaArco;
         }
