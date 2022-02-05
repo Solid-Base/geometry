@@ -14,10 +14,12 @@ class PolilinhaFabrica
     /**
      * @param Ponto[] $pontos
      */
-    public static function criarPolilinhaPontos(array $pontos): Polilinha
+    public static function criarPolilinhaPontos(array $pontos, bool $limpar = false): Polilinha
     {
         $polilinha = new Polilinha();
-        $pontos = self::limparPontosPoligono($pontos);
+        if ($limpar) {
+            $pontos = self::limparPontosPoligono($pontos);
+        }
         foreach ($pontos as $ponto) {
             $polilinha->adicionarPonto($ponto);
         }
