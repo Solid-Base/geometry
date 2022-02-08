@@ -29,14 +29,16 @@ class AreaCirculoContidoPoligono
                 continue;
             }
             $linhaIntersecao = InterseccaoLinhaCirculo::executar($linha, $circulo);
+            $origem = $linhaIntersecao[0];
+            $final = $linhaIntersecao[1] ?? $origem;
             if ($circulo->pontoInternoCirculo($p1) || $circulo->pontoFronteiraCirculo($p1)) {
                 $pontosIntersecao[] = $p1;
             }
-            if ($linha->pontoPertenceSegmento($linhaIntersecao->origem)) {
-                $pontosIntersecao[] = $linhaIntersecao->origem;
+            if ($linha->pontoPertenceSegmento($origem)) {
+                $pontosIntersecao[] = $origem;
             }
-            if ($linha->pontoPertenceSegmento($linhaIntersecao->final)) {
-                $pontosIntersecao[] = $linhaIntersecao->final;
+            if ($linha->pontoPertenceSegmento($final)) {
+                $pontosIntersecao[] = $final;
             }
             if ($circulo->pontoInternoCirculo($p2) || $circulo->pontoFronteiraCirculo($p2)) {
                 $pontosIntersecao[] = $p2;
@@ -50,7 +52,9 @@ class AreaCirculoContidoPoligono
         $direcao = (VetorFabrica::apartirDoisPonto($primeiro, $ultimo))->produtoVetorial(VetorFabrica::BaseZ());
         $linha = new Linha($primeiro->pontoMedio($ultimo), $direcao, 1);
         $linhaIntersecao = InterseccaoLinhaCirculo::executar($linha, $circulo);
-        $pontoArco = PontoPertencePoligono::executar($polilinha, $linhaIntersecao->origem) ? $linhaIntersecao->origem : $linhaIntersecao->final;
+        $origem = $linhaIntersecao[0];
+        $final = $linhaIntersecao[1] ?? $origem;
+        $pontoArco = PontoPertencePoligono::executar($polilinha, $origem) ? $origem : $final;
         $arco = ArcoCirculoFabrica::arcoTresPontos($primeiro, $pontoArco, $ultimo);
         $areaArco = $arco->area();
         $poligonoNovo = PolilinhaFabrica::criarPolilinhaPontos($pontosIntersecao, true);

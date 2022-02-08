@@ -27,7 +27,12 @@ class CirculoInterceptaPoligono
                 continue;
             }
             $linhaIntersecao = InterseccaoLinhaCirculo::executar($linha, $circulo);
-            if ($linha->pontoPertenceSegmento($linhaIntersecao->origem) || $linha->pontoPertenceSegmento($linhaIntersecao->final)) {
+            if (null === $linhaIntersecao) {
+                return false;
+            }
+            $origem = $linhaIntersecao[0];
+            $final = $linhaIntersecao[1] ?? $origem;
+            if ($linha->pontoPertenceSegmento($origem) || $linha->pontoPertenceSegmento($final)) {
                 return true;
             }
         }
