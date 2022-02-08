@@ -11,6 +11,7 @@ class DadosPoligono
     public function __construct(
         public readonly float $area,
         public readonly int $sentido,
+        public readonly TipoPoligonoEnum $tipo,
         public readonly Ponto $centro,
         public readonly float $segundoMomentoInerciaX,
         public readonly float $segundoMomentoInerciaY,

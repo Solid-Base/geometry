@@ -4,27 +4,23 @@ declare(strict_types=1);
 
 namespace Solidbase\Geometria\Aplicacao\Offset;
 
-use Solidbase\Geometria\Aplicacao\Interseccao\InterseccaoLinhas;
+use Solidbase\Geometria\Aplicacao\Offset\Enum\DirecaoOffsetReta;
+use Solidbase\Geometria\Dominio\Fabrica\LinhaFabrica;
 use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
 use Solidbase\Geometria\Dominio\Linha;
-use Solidbase\Geometria\Dominio\Ponto;
 
 class OffsetLinha
 {
-    public function __construct(private Linha $linha)
+    private function __construct()
     {
     }
 
-    public function executar(float $offset, Ponto $pontoRef): Linha
+    public static function executar(float $offset, Linha $linha, DirecaoOffsetReta $direcao): Linha
     {
-        $perpendicular = VetorFabrica::Perpendicular($this->linha->direcao);
-        $linhaPerpendicular = new Linha($pontoRef, $perpendicular, 1);
-        $ponto = InterseccaoLinhas::executar($this->linha, $linhaPerpendicular);
-        $direcao = VetorFabrica::apartirDoisPonto($ponto, $pontoRef)->vetorUnitario();
-        $linhaPerpendicular = new Linha($this->linha->origem, $direcao, $offset);
+        $perpendicular = VetorFabrica::Perpendicular($linha->direcao)->vetorUnitario();
+        $origem = $linha->origem->somar($perpendicular->escalar($offset * $direcao->value));
+        $final = $linha->final->somar($perpendicular->escalar($offset * $direcao->value));
 
-        $final = $linhaPerpendicular->final;
-
-        return new Linha($final, $this->linha->direcao, $this->linha->comprimento);
+        return LinhaFabrica::apartirDoisPonto($origem, $final);
     }
 }

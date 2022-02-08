@@ -15,6 +15,7 @@ use SolidBase\Matematica\Algebra\MatrizInversa;
 
 class Transformacao
 {
+    private bool $mirror = false;
     private Matriz $matriz;
     private Ponto $origem;
     private float $escala = 1;
@@ -69,7 +70,10 @@ class Transformacao
         $origem = new Ponto($x, $y, $z);
         $matriz = FabricaMatrizTransformacao::Reflexao($plano);
 
-        return new self($matriz, $origem);
+        $retorno = new self($matriz, $origem);
+        $retorno->mirror = true;
+
+        return $retorno;
     }
 
     public static function criarTranslacao(Ponto $vetor): self
@@ -142,6 +146,8 @@ class Transformacao
 
         $retorno = new self(new Matriz($matrizNova), $origem);
         $retorno->escalar($transformacao->escala * $this->escala);
+        $mirror = ($this->mirror ? -1 : 1) * ($transformacao->mirror ? -1 : 1) * -1;
+        $retorno->mirror = -1 == $mirror ? false : true;
 
         return $retorno;
     }

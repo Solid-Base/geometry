@@ -4,50 +4,19 @@ declare(strict_types=1);
 
 namespace Solidbase\Geometria\Aplicacao\Poligono;
 
-use InvalidArgumentException;
 use Solidbase\Geometria\Dominio\Polilinha;
 use Solidbase\Geometria\Dominio\Ponto;
 
-/**
- * @property-read float $area
- * @property-read int   $sentido
- * @property-read Ponto $centro
- * @property-read float $segundoMomentoInerciaX
- * @property-read float $segundoMomentoInerciaY
- * @property-read float $momentoInerciaPrincipalX
- * @property-read float $momentoInerciaPrincipalY
- */
 class PropriedadePoligono
 {
-    private float $area;
-    private float $sentido;
-    private Ponto $centro;
-    private float $momentoInerciaX;
-    private float $momentoInerciaY;
-    private float $momentoInerciaPrincipalX;
-    private float $momentoInerciaPrincipalY;
-
-    public function __construct(private Polilinha $poligono)
+    private function __construct(private Polilinha $poligono)
     {
-        $poligono->fecharPolilinha();
-    }
-
-    public function __get($name)
-    {
-        return match ($name) {
-            'area' => $this->area,
-            'sentido' => $this->sentido,
-            'centro' => $this->centro,
-            'segundoMomentoInerciaX' => $this->momentoInerciaX,
-            'segundoMomentoInerciaY' => $this->momentoInerciaY,
-            'momentoInerciaPrincipalX' => $this->momentoInerciaPrincipalX,
-            'momentoInerciaPrincipalY' => $this->momentoInerciaPrincipalY,
-            default => throw new InvalidArgumentException("Propriedade inexistente: {$name}"),
-        };
     }
 
     public static function executar(Polilinha $poligono): ?DadosPoligono
     {
+        $poligono = clone $poligono;
+        $tipo = TipoPoligono::executar($poligono);
         $area = AreaPoligono::executar($poligono);
         if (null === $area) {
             return null;
@@ -69,6 +38,7 @@ class PropriedadePoligono
                 $area,
                 (int) $sentido,
                 $centro,
+                $tipo,
                 $momentoInerciaX,
                 $momentoInerciaY,
                 $momentoInerciaPrincipalX,
@@ -86,6 +56,7 @@ class PropriedadePoligono
             $area,
             (int) $sentido,
             $centro,
+            $tipo,
             $momentoInerciaX,
             $momentoInerciaY,
             $momentoInerciaPrincipalX,
@@ -97,6 +68,7 @@ class PropriedadePoligono
         float $area,
         int $sentido,
         Ponto $centro,
+        TipoPoligonoEnum $tipo,
         float $momentoInerciaX,
         float $momentoInerciay,
         float $momentoInerciaPrincipalX,
@@ -105,6 +77,7 @@ class PropriedadePoligono
         return new DadosPoligono(
             $area,
             $sentido,
+            $tipo,
             $centro,
             $momentoInerciaX,
             $momentoInerciay,

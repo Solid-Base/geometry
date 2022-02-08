@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Solidbase\Geometria\Dominio;
 
 use InvalidArgumentException;
+use Solidbase\Geometria\Aplicacao\Modificadores\Transformacao;
+use Solidbase\Geometria\Dominio\Fabrica\ArcoCirculoFabrica;
+use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
 
 /**
  * @property-read Ponto $centro
@@ -19,7 +22,7 @@ class Arco
 {
     public function __construct(private Ponto $centro, private float $raio, private float $anguloInicial, private float $anguloFinal)
     {
-        if ($raio <= 0) {
+        if ($raio < 0) {
             throw new InvalidArgumentException('O raio do arco deve ser um numero positivo maior que zero');
         }
     }
@@ -58,5 +61,33 @@ class Arco
         $anguloTotal = $this->anguloTotal();
 
         return ($this->raio ** 2) * ($anguloTotal - sin($anguloTotal)) / 2;
+    }
+
+    public function pontoInicial(): Ponto
+    {
+        $transformaca = Transformacao::criarRotacaoPonto(VetorFabrica::BaseZ(), $this->anguloInicial, $this->centro);
+        $ponto = $this->centro->somar(VetorFabrica::BaseX()->escalar($this->raio));
+
+        return $transformaca->dePonto($ponto);
+    }
+
+    public function pontoFinal(): Ponto
+    {
+        $transformaca = Transformacao::criarRotacaoPonto(VetorFabrica::BaseZ(), $this->anguloFinal, $this->centro);
+        $ponto = $this->centro->somar(VetorFabrica::BaseX()->escalar($this->raio));
+
+        return $transformaca->dePonto($ponto);
+    }
+
+    public function pontoPertenceArco(Ponto $ponto): bool
+    {
+        if (!eZero($this->centro->distanciaParaPonto($ponto) - $this->raio)) {
+            return false;
+        }
+        $pInicial = $this->pontoInicial();
+        $pFinal = $this->pontoFinal();
+        $arco = ArcoCirculoFabrica::arcoTresPontos($pInicial, $ponto, $pFinal);
+
+        return eZero($arco->anguloInicial - $this->anguloInicial) && eZero($arco->anguloFinal - $this->anguloFinal);
     }
 }

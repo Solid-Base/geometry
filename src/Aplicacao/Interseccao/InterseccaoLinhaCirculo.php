@@ -12,30 +12,34 @@ use Solidbase\Geometria\Dominio\Ponto;
 
 class InterseccaoLinhaCirculo
 {
-    public function __construct(private Linha $linha, private Circulo $circulo)
+    private function __construct()
     {
     }
 
-    public static function executar(Linha $linha, Circulo $circulo): ?Linha
+    public static function executar(Linha $linha, Circulo $circulo): ?array
     {
         if (!self::possuiInterseccao($linha, $circulo)) {
             return null;
         }
         $distancia = self::distanciaCentroLinha($linha, $circulo->centro);
-        $comprimento = sqrt($circulo->raio ** 2 - $distancia ** 2);
+        $comprimento = eZero($circulo->raio - $distancia) ? 0 : sqrt($circulo->raio ** 2 - $distancia ** 2);
         $pontoIntersecao = self::pontoIntersecao($linha, $circulo);
         $direcaoLinha = $linha->direcao;
         $ponto1 = $pontoIntersecao->somar($direcaoLinha->escalar($comprimento));
+        if (eZero($comprimento)) {
+            return [$ponto1];
+        }
         $ponto2 = $pontoIntersecao->somar($direcaoLinha->escalar(-$comprimento));
 
-        return LinhaFabrica::apartirDoisPonto($ponto1, $ponto2);
+        return [$ponto1, $ponto2];
     }
 
     public static function possuiInterseccao(Linha $linha, Circulo $circulo): bool
     {
-        $distancia = self::distanciaCentroLinha($linha, $circulo->centro);
+        $distancia = $linha->distanciaPontoLinha($circulo->centro);
+        $igual = eZero(subtrair($distancia, $circulo->raio));
 
-        return eMenor(self::distanciaCentroLinha($linha, $circulo->centro), $circulo->raio);
+        return eMenor($distancia, $circulo->raio) || $igual;
     }
 
     // public function executarOld(): ?Linha
