@@ -12,6 +12,7 @@ use Solidbase\Geometria\Dominio\Fabrica\PolilinhaFabrica;
 use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
 use Solidbase\Geometria\Dominio\Linha;
 use Solidbase\Geometria\Dominio\Polilinha;
+use Solidbase\Geometria\Dominio\Ponto;
 
 class AreaCirculoContidoPoligono
 {
@@ -47,8 +48,8 @@ class AreaCirculoContidoPoligono
         if (0 == count($pontosIntersecao)) {
             return 0;
         }
-        $primeiro = reset($pontosIntersecao);
-        $ultimo = end($pontosIntersecao);
+        $primeiro = self::primeiroCruzarCirculo($pontosIntersecao, $circulo);
+        $ultimo = self::ultimoCruzarCirculo($pontosIntersecao, $circulo);
         $direcao = (VetorFabrica::apartirDoisPonto($primeiro, $ultimo))->produtoVetorial(VetorFabrica::BaseZ());
         $linha = new Linha($primeiro->pontoMedio($ultimo), $direcao, 1);
         $linhaIntersecao = InterseccaoLinhaCirculo::executar($linha, $circulo);
@@ -64,5 +65,24 @@ class AreaCirculoContidoPoligono
         $propriedade = PropriedadePoligono::executar($poligonoNovo);
 
         return $propriedade->area + $areaArco;
+    }
+
+    public static function primeiroCruzarCirculo(array $pontos, Circulo $circulo): Ponto
+    {
+        foreach ($pontos as $ponto) {
+            if ($circulo->pontoFronteiraCirculo($ponto)) {
+                return $ponto;
+            }
+        }
+    }
+
+    public static function ultimoCruzarCirculo(array $pontos, Circulo $circulo): Ponto
+    {
+        $pontos = array_reverse($pontos);
+        foreach ($pontos as $ponto) {
+            if ($circulo->pontoFronteiraCirculo($ponto)) {
+                return $ponto;
+            }
+        }
     }
 }

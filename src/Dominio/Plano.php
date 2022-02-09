@@ -51,7 +51,7 @@ class Plano implements PrecisaoInterface
 
     public function pontoPertenceAoPlano(Ponto $ponto): bool
     {
-        return eMenor(abs($this->distanciaPontoAoPlano($ponto)), $this::PRECISAO);
+        return eZero($this->distanciaPontoAoPlano($ponto));
     }
 
     public function projecaoPontoPlano(Ponto $ponto): Ponto
@@ -63,7 +63,7 @@ class Plano implements PrecisaoInterface
 
     public function projecaoPontoPlanoZ(Ponto $ponto): Ponto
     {
-        if (abs($this->normal->z) <= self::PRECISAO) {
+        if (eZero($this->normal->z)) {
             throw new DomainException('Não é possível calcular a projeção do ponto no plano Z');
         }
         $p = VetorFabrica::apartirPonto($this->origem);
@@ -76,7 +76,7 @@ class Plano implements PrecisaoInterface
 
     public function projecaoPontoPlanoX(Ponto $ponto): Ponto
     {
-        if (abs($this->normal->x) <= self::PRECISAO) {
+        if (eZero($this->normal->x)) {
             throw new DomainException('Não é possível calcular a projeção do ponto no plano X');
         }
         $p = VetorFabrica::apartirPonto($this->origem);
@@ -91,7 +91,7 @@ class Plano implements PrecisaoInterface
 
     public function projecaoPontoPlanoY(Ponto $ponto): Ponto
     {
-        if (abs($this->normal->y) <= self::PRECISAO) {
+        if (eZero($this->normal->y)) {
             throw new DomainException('Não é possível calcular a projeção do ponto no plano Y');
         }
         $p = VetorFabrica::apartirPonto($this->origem);

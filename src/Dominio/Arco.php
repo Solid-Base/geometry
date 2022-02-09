@@ -86,6 +86,9 @@ class Arco
         }
         $pInicial = $this->pontoInicial();
         $pFinal = $this->pontoFinal();
+        if (eZero($pFinal->distanciaParaPonto($ponto)) || eZero($pInicial->distanciaParaPonto($ponto))) {
+            return true;
+        }
         $arco = ArcoCirculoFabrica::arcoTresPontos($pInicial, $ponto, $pFinal);
 
         return eZero($arco->anguloInicial - $this->anguloInicial) && eZero($arco->anguloFinal - $this->anguloFinal);

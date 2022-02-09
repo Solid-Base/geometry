@@ -40,11 +40,11 @@ class Circulo
 
     public function pontoInternoCirculo(Ponto $ponto): bool
     {
-        return $this->centro->distanciaParaPonto($ponto) < $this->raio;
+        return entre(0, $this->centro->distanciaParaPonto($ponto), $this->raio);
     }
 
     public function pontoFronteiraCirculo(Ponto $ponto): bool
     {
-        return $this->centro->distanciaParaPonto($ponto) === $this->raio;
+        return eZero($this->centro->distanciaParaPonto($ponto) - $this->raio);
     }
 }
