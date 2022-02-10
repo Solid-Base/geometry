@@ -32,7 +32,7 @@ class InterseccaoLinhaCirculo
         if (eZero($comprimento)) {
             return [$ponto1];
         }
-        $ponto2 = $pontoIntersecao->somar($direcaoLinha->escalar(-$comprimento));
+        $ponto2 = $pontoIntersecao->somar($direcaoLinha->escalar($comprimento->multiplicar(-1)));
 
         return [$ponto1, $ponto2];
     }

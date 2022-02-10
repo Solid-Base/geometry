@@ -17,20 +17,16 @@ final class Vetor extends Ponto
         if ($this->vetorUnitario()->eIgual($vetor->vetorUnitario())) {
             return true;
         }
-        $angulo = $this->angulo($vetor);
-        $pi = numero(S_PI);
+        if ($this->vetorUnitario()->escalar(-1)->eIgual($vetor->vetorUnitario())) {
+            return true;
+        }
 
-        return eZero($angulo) || eZero(subtrair($angulo->modulo(), $pi));
+        return false;
     }
 
     public function temMesmoSentido(self $vetor): bool
     {
-        if (!$this->temMesmaDirecao($vetor)) {
-            return false;
-        }
-        $angulo = $this->angulo($vetor);
-
-        return eZero($angulo);
+        return $this->vetorUnitario()->subtrair($vetor->vetorUnitario())->eNulo();
     }
 
     public function produtoInterno(self $vetor): Numero
