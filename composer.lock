@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "08e14eb5738a035ce53d48a0a89a872f",
+    "content-hash": "60273ad87ea03b3d8a428f9719952a51",
     "packages": [
         {
             "name": "solidbase/matematica",
-            "version": "0.01",
+            "version": "0.01.2",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:solidbase30/matematica.git",
-                "reference": "0535f204a845f0da623443762ff66297ed4c6a75"
+                "reference": "723372d165a4d384011579ffe809655c4fc93eec"
             },
             "require": {
                 "ext-bcmath": "*",
@@ -35,7 +35,7 @@
                 }
             ],
             "description": "Modulo de matemática do SolidBase",
-            "time": "2022-02-10T14:25:40+00:00"
+            "time": "2022-02-10T18:00:37+00:00"
         }
     ],
     "packages-dev": [
