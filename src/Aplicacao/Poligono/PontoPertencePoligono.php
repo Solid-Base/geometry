@@ -35,7 +35,7 @@ class PontoPertencePoligono
                 continue;
             }
             $pontoIntersecao = InterseccaoLinhas::executar($linha, $linhaComparacao);
-            if ($pontoIntersecao->x < $ponto->x) {
+            if (eMenor($pontoIntersecao->x, $ponto->x)) {
                 continue;
             }
             if (eZero($pontoIntersecao->distanciaParaPonto($p1))

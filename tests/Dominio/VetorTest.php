@@ -79,8 +79,12 @@ final class VetorTest extends TestCase
         $vetor2 = new Vetor(-10, 0);
         $vetor3 = new Vetor(4, 4, 0);
         $vetor4 = new Vetor(-4, 4, 0);
-        static::assertTrue($vetor->angulo($vetor2)->eIgual(numero(S_PI)));
-        static::assertTrue($vetor->angulo($vetor3)->eIgual(dividir(S_PI, 4)));
+        static::assertTrue(
+            $vetor->angulo($vetor2)->arredondar(PRECISAO_SOLIDBASE)->eIgual(numero(S_PI)->arredondar(PRECISAO_SOLIDBASE))
+        );
+        static::assertTrue(
+            $vetor->angulo($vetor3)->arredondar(PRECISAO_SOLIDBASE)->eIgual(dividir(S_PI, 4)->arredondar(PRECISAO_SOLIDBASE))
+        );
         static::assertTrue(
             $vetor->angulo($vetor4)->arredondar(PRECISAO_SOLIDBASE)->eIgual(somar(dividir(S_PI, 4), dividir(S_PI, 2))->arredondar(PRECISAO_SOLIDBASE))
         );

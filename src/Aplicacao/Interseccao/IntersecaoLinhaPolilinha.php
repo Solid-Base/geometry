@@ -39,6 +39,11 @@ class IntersecaoLinhaPolilinha
         for ($i = 1; $i < $numeroPonto; ++$i) {
             $p1 = $pontos[$i - 1];
             $p2 = $pontos[$i];
+            if (2 == count($pontosRetorno)) {
+                $pontosPoligono[] = $p2;
+
+                continue;
+            }
             $linha = LinhaFabrica::apartirDoisPonto($p1, $p2);
             if ($linha->eParelo($linhaIntersecao)) {
                 $pontosPoligono[] = $p2;
