@@ -17,7 +17,7 @@ class RetanguloEquivalente
     public function apartirInercia(float|Numero $inerciaX, float|Numero $inerciaY): Polilinha
     {
         $hx = potencia($inerciaX, 3)->multiplicar(potencia(12, 2))->dividir($inerciaY);
-        $h = $hx->valor() ** (1 / 8);
+        $h = potencia($hx->valor(), dividir(1, 8))->valor();
         $b = multiplicar($inerciaX, 12)->dividir(potencia($h, 3))->valor();
 
         return PolilinhaFabrica::criarPoligonoRetangular($b, $h);
