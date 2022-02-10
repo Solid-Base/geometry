@@ -12,22 +12,22 @@ use Solidbase\Geometria\Dominio\PontoPoligono;
 
 class ConverteCirculoPoligono
 {
-    public function __construct(private Circulo $circulo, private int $numeroDivisao)
+    private function __construct()
+    {
+    }
+
+    public static function executar(Circulo $circulo, int $numeroDivisao): Polilinha
     {
         if ($numeroDivisao <= 0) {
             throw new DomainException('O número de divisão deve ser maior que 0');
         }
-    }
-
-    public function executar(): Polilinha
-    {
-        $angulo = 2 * M_PI / $this->numeroDivisao;
+        $angulo = dividir(multiplicar(S_PI, 2), $numeroDivisao);
         $pontos = [];
-        $raio = $this->circulo->raio;
-        $centro = $this->circulo->centro;
-        for ($i = 0; $i < $this->numeroDivisao; ++$i) {
-            $x = $raio * cos($angulo * $i) + $centro->x;
-            $y = $raio * sin($angulo * $i) + $centro->y;
+        $raio = $circulo->raio;
+        $centro = $circulo->centro;
+        for ($i = 0; $i < $numeroDivisao; ++$i) {
+            $x = multiplicar($raio, cosseno(multiplicar($angulo, $i)))->somar($centro->x);
+            $y = multiplicar($raio, seno(multiplicar($angulo, $i)))->somar($centro->y);
             $z = $centro->z;
             $pontos[] = new PontoPoligono($x, $y, $z);
         }

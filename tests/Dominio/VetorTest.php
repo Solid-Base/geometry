@@ -39,15 +39,15 @@ final class VetorTest extends TestCase
     {
         $ponto = new Vetor(5, 10, 5);
         $ponto2 = new Vetor(-4, -10, 6);
-        static::assertSame(-90.0, $ponto->produtoInterno($ponto2));
+        static::assertTrue($ponto->produtoInterno($ponto2)->eIgual(-90));
     }
 
     public function testModulo(): void
     {
         $ponto = new Vetor(3, 4, 0);
         $ponto2 = new Vetor(-12, -16, 5);
-        static::assertSame(5.0, $ponto->modulo());
-        static::assertSame(20.615528128088, $ponto2->modulo());
+        static::assertTrue($ponto->modulo()->eIgual(5));
+        static::assertTrue($ponto2->modulo()->eIgual(numero('20.61552812808830274910704927987')));
     }
 
     public function testEscalar(): void
@@ -79,10 +79,14 @@ final class VetorTest extends TestCase
         $vetor2 = new Vetor(-10, 0);
         $vetor3 = new Vetor(4, 4, 0);
         $vetor4 = new Vetor(-4, 4, 0);
-
-        static::assertSame(arredondar(M_PI, 5), arredondar($vetor->angulo($vetor2), 5));
-        static::assertSame(arredondar(M_PI / 4, 5), arredondar($vetor->angulo($vetor3), 5));
-        static::assertSame(arredondar(M_PI / 4 + M_PI / 2, 5), arredondar($vetor->angulo($vetor4), 5));
+        static::assertTrue($vetor->angulo($vetor2)->eIgual(numero(S_PI)));
+        static::assertTrue($vetor->angulo($vetor3)->eIgual(dividir(S_PI, 4)));
+        static::assertTrue(
+            $vetor->angulo($vetor4)->arredondar(PRECISAO_SOLIDBASE)->eIgual(somar(dividir(S_PI, 4), dividir(S_PI, 2))->arredondar(PRECISAO_SOLIDBASE))
+        );
+        // static::assertSame(arredondar(M_PI, 5), arredondar($vetor->angulo($vetor2), 5));
+        // static::assertSame(arredondar(M_PI / 4, 5), arredondar($vetor->angulo($vetor3), 5));
+        // static::assertSame(arredondar(M_PI / 4 + M_PI / 2, 5), arredondar($vetor->angulo($vetor4), 5));
     }
 
     public function testAnguloAbsoluto(): void
@@ -92,10 +96,15 @@ final class VetorTest extends TestCase
         $vetor4 = new Vetor(-4, 4, 0);
         $vetor5 = new Vetor(4, -4, 0);
 
-        static::assertSame(M_PI + M_PI / 4, $vetor1->anguloAbsoluto());
-        static::assertSame(M_PI / 4, $vetor3->anguloAbsoluto());
-        static::assertSame(M_PI / 2 + M_PI / 4, $vetor4->anguloAbsoluto());
-        static::assertSame(M_PI / 2 + M_PI / 4 + M_PI, $vetor5->anguloAbsoluto());
+        $angulo = somar(S_PI, dividir(S_PI, 4))->arredondar(PRECISAO_SOLIDBASE);
+        static::assertTrue($vetor1->anguloAbsoluto()->arredondar(PRECISAO_SOLIDBASE)->eIgual($angulo));
+        $angulo = dividir(S_PI, 4)->arredondar(PRECISAO_SOLIDBASE);
+        static::assertTrue($vetor3->anguloAbsoluto()->arredondar(PRECISAO_SOLIDBASE)->eIgual($angulo));
+        $angulo = somar(dividir(S_PI, 2), dividir(S_PI, 4))->arredondar(PRECISAO_SOLIDBASE);
+        static::assertTrue($vetor4->anguloAbsoluto()->arredondar(PRECISAO_SOLIDBASE)->eIgual($angulo));
+
+        $angulo = somar(somar(dividir(S_PI, 2), dividir(S_PI, 4)), numero(S_PI))->arredondar(PRECISAO_SOLIDBASE);
+        static::assertTrue($vetor5->anguloAbsoluto()->arredondar(PRECISAO_SOLIDBASE)->eIgual($angulo));
     }
 
     public function testProdutoVetorial(): void
@@ -111,7 +120,7 @@ final class VetorTest extends TestCase
         $vetor = new Vetor(2, 4, 3);
         $vetor2 = new Vetor(3, 5, 7);
         $vetor3 = new Vetor(4, 3, 1);
-        static::assertSame(35.0, $vetor->produtoMisto($vetor2, $vetor3));
+        static::assertTrue($vetor->produtoMisto($vetor2, $vetor3)->eIgual(35));
     }
 
     public function testProjecao(): void

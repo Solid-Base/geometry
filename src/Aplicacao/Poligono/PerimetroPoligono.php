@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Solidbase\Geometria\Aplicacao\Poligono;
 
 use Solidbase\Geometria\Dominio\Polilinha;
+use SolidBase\Matematica\Aritimetica\Numero;
 
 class PerimetroPoligono
 {
@@ -12,9 +13,9 @@ class PerimetroPoligono
     {
     }
 
-    public static function executar(Polilinha $poligono): ?float
+    public static function executar(Polilinha $poligono): ?Numero
     {
-        $soma = 0;
+        $soma = numero(0, PRECISAO_SOLIDBASE);
         if (\count($poligono) < 3) {
             return null;
         }
@@ -24,7 +25,7 @@ class PerimetroPoligono
         for ($i = 1; $i < $quantidade; ++$i) {
             $p1 = $pontos[$i - 1];
             $p2 = $pontos[$i];
-            $soma += $p1->distanciaParaPonto($p2);
+            $soma->somar($p1->distanciaParaPonto($p2));
         }
 
         return $soma;

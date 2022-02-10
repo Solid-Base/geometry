@@ -27,7 +27,7 @@ class InterseccaoPlanos
         if (eZero($decomposicao->Determinante())) {
             return null;
         }
-        $matrizPonto = $decomposicao->ResolverSistema(new Matriz([[-$d1], [-$d2], [-$d3]]))->obtenhaMatriz();
+        $matrizPonto = $decomposicao->ResolverSistema(new Matriz([[$d1->multiplicar(-1)], [$d2->multiplicar(-1)], [$d3->multiplicar(-1)]]))->obtenhaMatriz();
         $ponto = new Ponto($matrizPonto[0][0], $matrizPonto[1][0], $matrizPonto[2][0]);
 
         return new Linha($ponto, $direcaoReta, 1);

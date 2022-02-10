@@ -29,11 +29,11 @@ class PolilinhaFabrica
 
     public static function criarPoligonoRetangularDoisPontos(Ponto $p1, Ponto $p2): Polilinha
     {
-        $comprimento = abs($p1->x - $p2->x);
-        $largura = abs($p1->y - $p2->y);
+        $comprimento = modulo(subtrair($p1->x, $p2->x));
+        $largura = modulo(subtrair($p1->y, $p2->y));
         $centro = $p1->pontoMedio($p2);
 
-        $retangulo = self::criarPoligonoRetangular($comprimento, $largura);
+        $retangulo = self::criarPoligonoRetangular($comprimento->valor(), $largura->valor());
         $retangulo->mover($centro->x, $centro->y, $centro->z);
 
         return $retangulo;

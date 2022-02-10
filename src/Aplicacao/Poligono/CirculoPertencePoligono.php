@@ -26,7 +26,7 @@ class CirculoPertencePoligono
             $p1 = $pontos[$i - 1];
             $p2 = $pontos[$i];
             $linha = LinhaFabrica::apartirDoisPonto($p1, $p2);
-            if ($linha->distanciaPontoLinha($centro) < $circulo->raio) {
+            if ($linha->distanciaPontoLinha($centro)->eMenor($circulo->raio)) {
                 return false;
             }
         }

@@ -8,6 +8,7 @@ use Solidbase\Geometria\Aplicacao\Offset\Enum\DirecaoOffsetReta;
 use Solidbase\Geometria\Dominio\Fabrica\LinhaFabrica;
 use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
 use Solidbase\Geometria\Dominio\Linha;
+use SolidBase\Matematica\Aritimetica\Numero;
 
 class OffsetLinha
 {
@@ -15,7 +16,7 @@ class OffsetLinha
     {
     }
 
-    public static function executar(float $offset, Linha $linha, DirecaoOffsetReta $direcao): Linha
+    public static function executar(float|Numero $offset, Linha $linha, DirecaoOffsetReta $direcao): Linha
     {
         $perpendicular = VetorFabrica::Perpendicular($linha->direcao)->vetorUnitario();
         $origem = $linha->origem->somar($perpendicular->escalar($offset * $direcao->value));

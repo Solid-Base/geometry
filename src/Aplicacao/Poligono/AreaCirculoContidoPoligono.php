@@ -13,10 +13,11 @@ use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
 use Solidbase\Geometria\Dominio\Linha;
 use Solidbase\Geometria\Dominio\Polilinha;
 use Solidbase\Geometria\Dominio\Ponto;
+use SolidBase\Matematica\Aritimetica\Numero;
 
 class AreaCirculoContidoPoligono
 {
-    public static function executar(Polilinha $polilinha, Circulo $circulo): float
+    public static function executar(Polilinha $polilinha, Circulo $circulo): Numero
     {
         $polilinha->fecharPolilinha();
         $pontos = $polilinha->pontos();
@@ -64,7 +65,7 @@ class AreaCirculoContidoPoligono
         }
         $propriedade = PropriedadePoligono::executar($poligonoNovo);
 
-        return $propriedade->area + $areaArco;
+        return somar($areaArco, $propriedade->area);
     }
 
     public static function primeiroCruzarCirculo(array $pontos, Circulo $circulo): Ponto

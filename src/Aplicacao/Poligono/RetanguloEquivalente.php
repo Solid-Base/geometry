@@ -6,6 +6,7 @@ namespace Solidbase\Geometria\Aplicacao\Poligono;
 
 use Solidbase\Geometria\Dominio\Fabrica\PolilinhaFabrica;
 use Solidbase\Geometria\Dominio\Polilinha;
+use SolidBase\Matematica\Aritimetica\Numero;
 
 class RetanguloEquivalente
 {
@@ -13,7 +14,7 @@ class RetanguloEquivalente
     {
     }
 
-    public function apartirInercia(float $inerciaX, float $inerciaY): Polilinha
+    public function apartirInercia(float|Numero $inerciaX, float|Numero $inerciaY): Polilinha
     {
         $h = (($inerciaX ** 3) * (12 ** 2) / $inerciaY) ** (1 / 8);
         $b = $inerciaX * 12 / ($h ** 3);

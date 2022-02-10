@@ -6,6 +6,7 @@ namespace Solidbase\Geometria\Aplicacao\Poligono;
 
 use Solidbase\Geometria\Dominio\Polilinha;
 use Solidbase\Geometria\Dominio\Ponto;
+use SolidBase\Matematica\Aritimetica\Numero;
 
 class PropriedadePoligono
 {
@@ -21,18 +22,18 @@ class PropriedadePoligono
         if (null === $area) {
             return null;
         }
-        $sentido = $area > 0 ? 1 : -1;
-        $area = abs($area);
+        $sentido = $area->eMaior(0) ? 1 : -1;
+        $area = modulo($area);
         $centro = CentroPoligono::executar($poligono);
 
         [$ix,$iy] = SegundoMomentoInercia::executar($poligono);
 
-        $momentoInerciaX = $ix * $sentido;
-        $momentoInerciaY = $iy * $sentido;
+        $momentoInerciaX = multiplicar($ix, $sentido);
+        $momentoInerciaY = multiplicar($iy, $sentido);
 
         if ($centro->eIgual(new Ponto())) {
-            $momentoInerciaPrincipalX = $ix * $sentido;
-            $momentoInerciaPrincipalY = $iy * $sentido;
+            $momentoInerciaPrincipalX = multiplicar($ix, $sentido);
+            $momentoInerciaPrincipalY = multiplicar($iy, $sentido);
 
             return self::montarRetorno(
                 $area,
@@ -46,11 +47,11 @@ class PropriedadePoligono
             );
         }
         $poligono = clone $poligono;
-        $poligono->mover(-$centro->x, -$centro->y);
+        $poligono->mover(multiplicar($centro->x, -1), multiplicar($centro->y, -1));
 
         [$ix,$iy] = SegundoMomentoInercia::executar($poligono);
-        $momentoInerciaPrincipalX = $ix * $sentido;
-        $momentoInerciaPrincipalY = $iy * $sentido;
+        $momentoInerciaPrincipalX = multiplicar($ix, $sentido);
+        $momentoInerciaPrincipalY = multiplicar($iy, $sentido);
 
         return self::montarRetorno(
             $area,
@@ -65,14 +66,14 @@ class PropriedadePoligono
     }
 
     private static function montarRetorno(
-        float $area,
+        Numero $area,
         int $sentido,
         Ponto $centro,
         TipoPoligonoEnum $tipo,
-        float $momentoInerciaX,
-        float $momentoInerciay,
-        float $momentoInerciaPrincipalX,
-        float $momentoInerciaPrincipalY
+        Numero $momentoInerciaX,
+        Numero $momentoInerciay,
+        Numero $momentoInerciaPrincipalX,
+        Numero $momentoInerciaPrincipalY
     ): DadosPoligono {
         return new DadosPoligono(
             $area,

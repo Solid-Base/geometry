@@ -6,19 +6,27 @@ namespace Solidbase\Geometria\Dominio;
 
 use InvalidArgumentException;
 use JsonSerializable;
+use SolidBase\Matematica\Aritimetica\Numero;
 
 /**
- * @property-read float $x
- * @property-read float $y
- * @property-read float $z
+ * @property-read Numero $x
+ * @property-read Numero $y
+ * @property-read Numero $z
  */
 class Ponto implements PrecisaoInterface, JsonSerializable
 {
+    protected Numero $x;
+    protected Numero $y;
+    protected Numero $z;
+
     public function __construct(
-        protected float $x = 0,
-        protected float $y = 0,
-        protected float $z = 0
+        float|Numero $x = 0,
+        float|Numero $y = 0,
+        float|Numero $z = 0
     ) {
+        $this->x = numero($x);
+        $this->y = numero($y);
+        $this->z = numero($z);
     }
 
     public function __serialize(): array
@@ -37,7 +45,7 @@ class Ponto implements PrecisaoInterface, JsonSerializable
         $this->z = $data['z'];
     }
 
-    public function __get($name): float
+    public function __get($name): Numero
     {
         return match ($name) {
             'x' => $this->x,
@@ -52,34 +60,38 @@ class Ponto implements PrecisaoInterface, JsonSerializable
         return $this->__serialize();
     }
 
-    public function distanciaParaPonto(self $ponto): float
+    public function distanciaParaPonto(self $ponto): Numero
     {
-        return sqrt(($ponto->x - $this->x) ** 2 + ($ponto->y - $this->y) ** 2 + ($ponto->z - $this->z) ** 2);
+        $x2 = potencia(subtrair($ponto->x, $this->x), 2);
+        $y2 = potencia(subtrair($ponto->y, $this->y), 2);
+        $z2 = potencia(subtrair($ponto->z, $this->z), 2);
+
+        return raiz(somar($x2, $y2)->somar($z2));
     }
 
     public function somar(self $ponto): static
     {
-        $x = $this->x + $ponto->x;
-        $y = $this->y + $ponto->y;
-        $z = $this->z + $ponto->z;
+        $x = somar($this->x, $ponto->x);
+        $y = somar($this->y, $ponto->y);
+        $z = somar($this->z, $ponto->z);
 
         return new static($x, $y, $z);
     }
 
     public function subtrair(self $ponto): static
     {
-        $x = $this->x - $ponto->x;
-        $y = $this->y - $ponto->y;
-        $z = $this->z - $ponto->z;
+        $x = subtrair($this->x, $ponto->x);
+        $y = subtrair($this->y, $ponto->y);
+        $z = subtrair($this->z, $ponto->z);
 
         return new static($x, $y, $z);
     }
 
     public function pontoMedio(self $ponto): static
     {
-        $x = ($this->x + $ponto->x) / 2;
-        $y = ($this->y + $ponto->y) / 2;
-        $z = ($this->z + $ponto->z) / 2;
+        $x = dividir(somar($this->x, $ponto->x), 2);
+        $y = dividir(somar($this->y, $ponto->y), 2);
+        $z = dividir(somar($this->z, $ponto->z), 2);
 
         return new static($x, $y, $z);
     }
@@ -98,13 +110,13 @@ class Ponto implements PrecisaoInterface, JsonSerializable
 
     protected function quadrante(): int
     {
-        if ($this->x >= 0 && $this->y >= 0) {
+        if ($this->x->valor() >= 0 && $this->y->valor() >= 0) {
             return 1;
         }
-        if ($this->x < 0 && $this->y >= 0) {
+        if ($this->x->valor() < 0 && $this->y->valor() >= 0) {
             return 2;
         }
-        if ($this->x < 0 && $this->y < 0) {
+        if ($this->x->valor() < 0 && $this->y->valor() < 0) {
             return 3;
         }
 

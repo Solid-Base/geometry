@@ -7,21 +7,25 @@ namespace Solidbase\Geometria\Dominio;
 use InvalidArgumentException;
 use JsonSerializable;
 use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
+use SolidBase\Matematica\Aritimetica\Numero;
 
 /**
- * @property-read Ponto $origem
- * @property-read Ponto $final
- * @property-read Vetor $direcao
- * @property-read float $comprimento
+ * @property-read Ponto  $origem
+ * @property-read Ponto  $final
+ * @property-read Vetor  $direcao
+ * @property-read Numero $comprimento
  */
 class Linha implements PrecisaoInterface, JsonSerializable
 {
+    private Numero $comprimento;
+
     public function __construct(
         private Ponto $origem,
         private Vetor $direcao,
-        private float $comprimento
+        float|Numero $comprimento
     ) {
         $this->direcao = $direcao->vetorUnitario();
+        $this->comprimento = numero($comprimento, PRECISAO_SOLIDBASE);
     }
 
     public function __get($name)
@@ -55,10 +59,10 @@ class Linha implements PrecisaoInterface, JsonSerializable
         $vetorPonto = VetorFabrica::apartirDoisPonto($this->origem, $origem);
         $produtoMisto = $this->direcao->produtoMisto($linha->direcao, $vetorPonto);
 
-        return abs($produtoMisto) <= $this::PRECISAO;
+        return eZero($produtoMisto);
     }
 
-    public function distanciaPontoLinha(Ponto $ponto): float
+    public function distanciaPontoLinha(Ponto $ponto): Numero
     {
         $vetorAuxiliar = VetorFabrica::apartirDoisPonto($this->origem, $ponto);
         $vetorial = $vetorAuxiliar->produtoVetorial($this->direcao);
@@ -87,10 +91,10 @@ class Linha implements PrecisaoInterface, JsonSerializable
         $distOrigem = $ponto->distanciaParaPonto($this->origem);
         $distFinal = $ponto->distanciaParaPonto($this->final);
 
-        return $distOrigem <= $this->comprimento && $distFinal <= $this->comprimento;
+        return eMenor($distOrigem, $this->comprimento) && eMenor($distFinal, $this->comprimento);
     }
 
-    public function pontoRetaComprimento(float $comprimento): Ponto
+    public function pontoRetaComprimento(float|Numero $comprimento): Ponto
     {
         $origem = $this->origem;
         $diretor = $this->direcao;

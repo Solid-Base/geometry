@@ -19,21 +19,21 @@ class CentroPoligono
         if (null === $area) {
             return null;
         }
-        $somaX = 0;
-        $somaY = 0;
+        $somaX = numero(0, PRECISAO_SOLIDBASE);
+        $somaY = numero(0, PRECISAO_SOLIDBASE);
         $pontos = $poligono->pontos();
         $numPontos = \count($poligono);
 
         for ($i = 0; $i < $numPontos - 1; ++$i) {
             $ponto = $pontos[$i];
             $proximo = $pontos[$i + 1];
-            $comum = $ponto->x * $proximo->y - $ponto->y * $proximo->x;
-            $somaX += ($proximo->x + $ponto->x) * $comum;
-            $somaY += ($proximo->y + $ponto->y) * $comum;
+            $comum = subtrair(multiplicar($ponto->x, $proximo->y), multiplicar($ponto->y, $proximo->x));
+            $somaX->somar(somar($proximo->x, $ponto->x)->multiplicar($comum));
+            $somaY->somar(somar($proximo->y, $ponto->y)->multiplicar($comum));
         }
 
-        $x = ($somaX / (6 * $area));
-        $y = ($somaY / (6 * $area));
+        $x = dividir($somaX, multiplicar($area, 6));
+        $y = dividir($somaY, multiplicar($area, 6));
 
         return new Ponto($x, $y);
     }

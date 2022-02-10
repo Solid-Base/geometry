@@ -8,23 +8,31 @@ use InvalidArgumentException;
 use Solidbase\Geometria\Aplicacao\Modificadores\Transformacao;
 use Solidbase\Geometria\Dominio\Fabrica\ArcoCirculoFabrica;
 use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
+use SolidBase\Matematica\Aritimetica\Numero;
 
 /**
- * @property-read Ponto $centro
- * @property-read float $raio
- * @property-read float $anguloInicial
- * @property-read float $anguloFinal
- * @property-read float $anguloTotal
- * @property-read float $area
- * @property-read float $comprimento
+ * @property-read Ponto  $centro
+ * @property-read Numero $raio
+ * @property-read Numero $anguloInicial
+ * @property-read Numero $anguloFinal
+ * @property-read Numero $anguloTotal
+ * @property-read Numero $area
+ * @property-read Numero $comprimento
  */
 class Arco
 {
-    public function __construct(private Ponto $centro, private float $raio, private float $anguloInicial, private float $anguloFinal)
+    private Numero $raio;
+    private Numero $anguloInicial;
+    private Numero $anguloFinal;
+
+    public function __construct(private Ponto $centro, float|Numero $raio, float|Numero $anguloInicial, float|Numero $anguloFinal)
     {
-        if ($raio < 0) {
+        if (eMenor($raio, 0)) {
             throw new InvalidArgumentException('O raio do arco deve ser um numero positivo maior que zero');
         }
+        $this->raio = numero($raio, PRECISAO_SOLIDBASE);
+        $this->anguloInicial = numero($anguloInicial, PRECISAO_SOLIDBASE);
+        $this->anguloFinal = numero($anguloFinal, PRECISAO_SOLIDBASE);
     }
 
     public function __get($name)
@@ -41,31 +49,31 @@ class Arco
         };
     }
 
-    public function anguloTotal(): float
+    public function anguloTotal(): Numero
     {
-        $total = $this->anguloFinal - $this->anguloInicial;
-        if ($total < 0) {
-            $total += 2 * M_PI;
+        $total = subtrair($this->anguloFinal, $this->anguloInicial);
+        if (eMenor($total, 0)) {
+            $total->somar(multiplicar(S_PI, 2));
         }
 
         return $total;
     }
 
-    public function comprimentoArco(): float
+    public function comprimentoArco(): Numero
     {
-        return $this->anguloTotal() * $this->raio;
+        return multiplicar($this->anguloTotal(), $this->raio);
     }
 
-    public function area(): float
+    public function area(): Numero
     {
         $anguloTotal = $this->anguloTotal();
 
-        return ($this->raio ** 2) * ($anguloTotal - sin($anguloTotal)) / 2;
+        return dividir(multiplicar(potencia($this->raio, 2), subtrair($anguloTotal, seno($anguloTotal))), 2);
     }
 
     public function pontoInicial(): Ponto
     {
-        $transformaca = Transformacao::criarRotacaoPonto(VetorFabrica::BaseZ(), $this->anguloInicial, $this->centro);
+        $transformaca = Transformacao::criarRotacaoPonto(VetorFabrica::BaseZ(), $this->anguloInicial->valor(), $this->centro);
         $ponto = $this->centro->somar(VetorFabrica::BaseX()->escalar($this->raio));
 
         return $transformaca->dePonto($ponto);
@@ -73,7 +81,7 @@ class Arco
 
     public function pontoFinal(): Ponto
     {
-        $transformaca = Transformacao::criarRotacaoPonto(VetorFabrica::BaseZ(), $this->anguloFinal, $this->centro);
+        $transformaca = Transformacao::criarRotacaoPonto(VetorFabrica::BaseZ(), $this->anguloFinal->valor(), $this->centro);
         $ponto = $this->centro->somar(VetorFabrica::BaseX()->escalar($this->raio));
 
         return $transformaca->dePonto($ponto);
@@ -81,7 +89,7 @@ class Arco
 
     public function pontoPertenceArco(Ponto $ponto): bool
     {
-        if (!eZero($this->centro->distanciaParaPonto($ponto) - $this->raio)) {
+        if (!eZero(subtrair($this->centro->distanciaParaPonto($ponto), $this->raio))) {
             return false;
         }
         $pInicial = $this->pontoInicial();
@@ -91,6 +99,6 @@ class Arco
         }
         $arco = ArcoCirculoFabrica::arcoTresPontos($pInicial, $ponto, $pFinal);
 
-        return eZero($arco->anguloInicial - $this->anguloInicial) && eZero($arco->anguloFinal - $this->anguloFinal);
+        return eZero(subtrair($arco->anguloInicial, $this->anguloInicial)) && eZero(subtrair($arco->anguloFinal, $this->anguloFinal));
     }
 }

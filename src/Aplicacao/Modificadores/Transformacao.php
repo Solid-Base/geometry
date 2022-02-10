@@ -12,6 +12,7 @@ use Solidbase\Geometria\Dominio\Vetor;
 use SolidBase\Matematica\Algebra\FabricaMatriz;
 use SolidBase\Matematica\Algebra\Matriz;
 use SolidBase\Matematica\Algebra\MatrizInversa;
+use SolidBase\Matematica\Aritimetica\Numero;
 
 class Transformacao
 {
@@ -37,7 +38,7 @@ class Transformacao
         return new self(FabricaMatrizTransformacao::MatrizRotacao($eixo, $angulo), new Ponto());
     }
 
-    public static function criarRotacaoPonto(Vetor $eixo, float $angulo, Ponto $origem): self
+    public static function criarRotacaoPonto(Vetor $eixo, float|Numero $angulo, Ponto $origem): self
     {
         $matriz = FabricaMatrizTransformacao::MatrizRotacao($eixo, $angulo);
         $matrizRotacao = new self($matriz, new Ponto());
@@ -64,9 +65,9 @@ class Transformacao
         $normal = $plano->normal;
         $origem = VetorFabrica::apartirPonto($plano->origem);
         $d = $origem->escalar(-1)->produtoInterno($normal);
-        $x = -(2 * $normal->x * $d);
-        $y = -(2 * $normal->y * $d);
-        $z = -(2 * $normal->z * $d);
+        $x = multiplicar($normal->x, -2)->multiplicar($d);
+        $y = multiplicar($normal->y, -2)->multiplicar($d);
+        $z = multiplicar($normal->z, -2)->multiplicar($d);
         $origem = new Ponto($x, $y, $z);
         $matriz = FabricaMatrizTransformacao::Reflexao($plano);
 
@@ -170,11 +171,11 @@ class Transformacao
         return new self($matriz, new Ponto($origem->x, $origem->y, $origem->z));
     }
 
-    public function anguloTransformacao(): float
+    public function anguloTransformacao(): Numero
     {
         $ponto = VetorFabrica::BaseX();
         $pontoA = $this->deVetor($ponto);
 
-        return acos($pontoA->x);
+        return arcoCosseno($pontoA->x);
     }
 }
