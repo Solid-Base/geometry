@@ -16,16 +16,17 @@ class RetanguloEquivalente
 
     public function apartirInercia(float|Numero $inerciaX, float|Numero $inerciaY): Polilinha
     {
-        $h = (($inerciaX ** 3) * (12 ** 2) / $inerciaY) ** (1 / 8);
-        $b = $inerciaX * 12 / ($h ** 3);
+        $hx = potencia($inerciaX, 3)->multiplicar(potencia(12, 2))->dividir($inerciaY);
+        $h = $hx->valor() ** (1 / 8);
+        $b = multiplicar($inerciaX, 12)->dividir(potencia($h, 3))->valor();
 
         return PolilinhaFabrica::criarPoligonoRetangular($b, $h);
     }
 
-    public function apartirArea(float $area): Polilinha
+    public function apartirArea(float|Numero $area): Polilinha
     {
-        $a = sqrt($area);
+        $a = raiz($area);
 
-        return PolilinhaFabrica::criarPoligonoRetangular($a, $a);
+        return PolilinhaFabrica::criarPoligonoRetangular($a->valor(), $a->valor());
     }
 }
