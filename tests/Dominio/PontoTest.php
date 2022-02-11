@@ -6,6 +6,7 @@ namespace Tests\Dominio;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use Solidbase\Geometria\Dominio\Enum\QuadranteEnum;
 use Solidbase\Geometria\Dominio\Ponto;
 
 /**
@@ -60,11 +61,12 @@ final class PontoTest extends TestCase
         $ponto3 = new Ponto(-20, 10, 1);
         $ponto4 = new Ponto(-20, -10, 1);
         $ponto5 = new Ponto(20, -10, 1);
-        static::assertSame(1, $quadrante->invoke($ponto));
-        static::assertSame(1, $quadrante->invoke($ponto2));
-        static::assertSame(2, $quadrante->invoke($ponto3));
-        static::assertSame(3, $quadrante->invoke($ponto4));
-        static::assertSame(4, $quadrante->invoke($ponto5));
+
+        static::assertSame(QuadranteEnum::PRIMEIRO, $quadrante->invoke($ponto));
+        static::assertSame(QuadranteEnum::PRIMEIRO, $quadrante->invoke($ponto2));
+        static::assertSame(QuadranteEnum::SEGUNDO, $quadrante->invoke($ponto3));
+        static::assertSame(QuadranteEnum::TERCEIRO, $quadrante->invoke($ponto4));
+        static::assertSame(QuadranteEnum::QUARTO, $quadrante->invoke($ponto5));
     }
 
     public function testEIgual(): void

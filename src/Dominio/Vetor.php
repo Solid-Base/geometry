@@ -77,7 +77,7 @@ final class Vetor extends Ponto
     {
         $unitario = $this->vetorUnitario();
         $angulo = arcoCosseno($unitario->x);
-        if ($this->quadrante() > 2) {
+        if ($this->quadrante()->value > 2) {
             $angulo = subtrair(multiplicar(S_PI, 2), $angulo);
         }
 

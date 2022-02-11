@@ -44,12 +44,12 @@ class FabricaMatrizTransformacao
         $m02 = numero(-2, PRECISAO_SOLIDBASE)->multiplicar(multiplicar($normal->x, $normal->z));
 
         $m10 = numero(-2, PRECISAO_SOLIDBASE)->multiplicar(multiplicar($normal->x, $normal->y));
-        $m11 = numero(1, PRECISAO_SOLIDBASE)->subtrair(-2, potencia($normal->y, 2));
+        $m11 = numero(1, PRECISAO_SOLIDBASE)->subtrair(2, potencia($normal->y, 2));
         $m12 = numero(-2, PRECISAO_SOLIDBASE)->multiplicar(multiplicar($normal->y, $normal->z));
 
         $m20 = numero(-2, PRECISAO_SOLIDBASE)->multiplicar(multiplicar($normal->x, $normal->z));
         $m21 = numero(-2, PRECISAO_SOLIDBASE)->multiplicar(multiplicar($normal->y, $normal->z));
-        $m22 = numero(1, PRECISAO_SOLIDBASE)->subtrair(-2, potencia($normal->z, 2));
+        $m22 = numero(1, PRECISAO_SOLIDBASE)->subtrair(2, potencia($normal->z, 2));
 
         $matriz = [[$m00, $m01, $m02], [$m10, $m11, $m12], [$m20, $m21, $m22]];
 

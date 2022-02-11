@@ -6,6 +6,7 @@ namespace Solidbase\Geometria\Dominio;
 
 use InvalidArgumentException;
 use JsonSerializable;
+use Solidbase\Geometria\Dominio\Enum\QuadranteEnum;
 use SolidBase\Matematica\Aritimetica\Numero;
 
 /**
@@ -108,18 +109,18 @@ class Ponto implements PrecisaoInterface, JsonSerializable
         return $this->__serialize();
     }
 
-    protected function quadrante(): int
+    protected function quadrante(): QuadranteEnum
     {
-        if ($this->x->valor() >= 0 && $this->y->valor() >= 0) {
-            return 1;
+        if (eZeroOuPositivo($this->x) && eZeroOuPositivo($this->y)) {
+            return QuadranteEnum::PRIMEIRO;
         }
-        if ($this->x->valor() < 0 && $this->y->valor() >= 0) {
-            return 2;
+        if (eNegativo($this->x) && eZeroOuPositivo($this->y)) {
+            return QuadranteEnum::SEGUNDO;
         }
-        if ($this->x->valor() < 0 && $this->y->valor() < 0) {
-            return 3;
+        if (eNegativo($this->x) && eNegativo($this->y)) {
+            return QuadranteEnum::TERCEIRO;
         }
 
-        return 4;
+        return QuadranteEnum::QUARTO;
     }
 }

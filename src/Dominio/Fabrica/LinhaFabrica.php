@@ -6,6 +6,7 @@ namespace Solidbase\Geometria\Dominio\Fabrica;
 
 use Solidbase\Geometria\Dominio\Linha;
 use Solidbase\Geometria\Dominio\Ponto;
+use Solidbase\Geometria\Dominio\Vetor;
 
 class LinhaFabrica
 {
@@ -18,6 +19,11 @@ class LinhaFabrica
         $comprimento = $ponto2->distanciaParaPonto($ponto1);
 
         return new Linha($ponto1, $vetor->vetorUnitario(), $comprimento);
+    }
+
+    public static function origemDirecao(Ponto $origem, Vetor $direcao): Linha
+    {
+        return new Linha($origem, $direcao, 1);
     }
 
     public static function equacaoReta(?float $coeficienteAngular, float $coeficienteLinear): Linha
