@@ -125,7 +125,7 @@ class Plano implements PrecisaoInterface
         $a = $this->normal->x;
         $b = $this->normal->y;
         $c = $this->normal->z;
-        $d = ($a * $origem->x) + ($b * $origem->y) + ($c * $origem->z);
+        $d = -(($a * $origem->x) + ($b * $origem->y) + ($c * $origem->z));
 
         return [$a, $b, $c, $d];
     }
