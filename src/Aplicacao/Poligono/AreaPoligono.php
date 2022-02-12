@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Solidbase\Geometria\Aplicacao\Poligono;
 
 use Solidbase\Geometria\Dominio\Polilinha;
-use SolidBase\Matematica\Aritimetica\Numero;
 
 class AreaPoligono
 {
@@ -13,9 +12,9 @@ class AreaPoligono
     {
     }
 
-    public static function executar(Polilinha $poligono): ?Numero
+    public static function executar(Polilinha $poligono): ?float
     {
-        $soma = numero(0, PRECISAO_SOLIDBASE);
+        $soma = 0;
         if (\count($poligono) < 3) {
             return null;
         }
@@ -26,10 +25,10 @@ class AreaPoligono
                 break;
             }
             $proximo = $pontos[$i + 1];
-            $soma->somar(somar($ponto->x, $proximo->x)->multiplicar(subtrair($proximo->y, $ponto->y)));
+            $soma += ($ponto->x + $proximo->x) * ($proximo->y - $ponto->y);
         }
 
-        $area = dividir($soma, 2);
+        $area = $soma / 2;
 
         if (eZero($area)) {
             return null;

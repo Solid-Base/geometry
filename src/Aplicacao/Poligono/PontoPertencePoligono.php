@@ -40,10 +40,10 @@ class PontoPertencePoligono
             }
             if (eZero($pontoIntersecao->distanciaParaPonto($p1))
             || eZero($pontoIntersecao->distanciaParaPonto($p2))) {
-                if ((eZero(subtrair($pontoIntersecao->y, $p1->y))) && $pontoIntersecao->y->eMaior($p2->y)) {
+                if ((eZero(($pontoIntersecao->y - $p1->y))) && $pontoIntersecao->y > ($p2->y)) {
                     ++$contagem;
                 }
-                if ((eZero(subtrair($pontoIntersecao->y, $p2->y))) && $pontoIntersecao->y->eMaior($p1->y)) {
+                if ((eZero(($pontoIntersecao->y - $p2->y))) && $pontoIntersecao->y > ($p1->y)) {
                     ++$contagem;
                 }
 

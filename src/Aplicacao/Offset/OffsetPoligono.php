@@ -20,7 +20,6 @@ use Solidbase\Geometria\Dominio\Fabrica\PolilinhaFabrica;
 use Solidbase\Geometria\Dominio\Linha;
 use Solidbase\Geometria\Dominio\Polilinha;
 use Solidbase\Geometria\Dominio\PontoPoligono;
-use SolidBase\Matematica\Aritimetica\Numero;
 
 class OffsetPoligono
 {
@@ -28,7 +27,7 @@ class OffsetPoligono
     {
     }
 
-    public static function executar(float|Numero $offset, Polilinha $polilinha, DirecaoOffsetPoligono $direcao): Polilinha
+    public static function executar(float|int $offset, Polilinha $polilinha, DirecaoOffsetPoligono $direcao): Polilinha
     {
         $poligono = self::limparPoligono($polilinha);
         $propriedade = PropriedadePoligono::executar($poligono);
@@ -132,9 +131,9 @@ class OffsetPoligono
         [$p1] = InterseccaoLinhaArco::executar($linha, $arco);
         $angulo = $arco->anguloTotal();
 
-        $bulge = tangente($angulo->multiplicar(0.25))->modulo();
+        $bulge = abs(tan($angulo * 0.25));
         $p1 = new PontoPoligono($p1->x, $p1->y);
-        $p1->informarConcordancia($bulge->multiplicar($rotacao->value));
+        $p1->informarConcordancia($bulge * $rotacao->value);
 
         return $p1;
     }

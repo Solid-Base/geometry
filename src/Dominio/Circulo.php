@@ -5,22 +5,21 @@ declare(strict_types=1);
 namespace Solidbase\Geometria\Dominio;
 
 use InvalidArgumentException;
-use SolidBase\Matematica\Aritimetica\Numero;
 
 /**
- * @property-read Ponto  $centro
- * @property-read Numero $raio
+ * @property-read Ponto     $centro
+ * @property-read float|int $raio
  */
 class Circulo
 {
-    private Numero $raio;
+    private float|int $raio;
 
-    public function __construct(private Ponto $centro, float|Numero $raio)
+    public function __construct(private Ponto $centro, float|int $raio)
     {
         if (eMenor($raio, 0)) {
             throw new InvalidArgumentException('O raio do circulo deve ser um numero positivo maior que zero');
         }
-        $this->raio = numero($raio, PRECISAO_SOLIDBASE);
+        $this->raio = $raio;
     }
 
     public function __get($name)
@@ -32,14 +31,14 @@ class Circulo
         };
     }
 
-    public function area(): Numero
+    public function area(): float
     {
-        return multiplicar(S_PI, potencia($this->raio, 2));
+        return M_PI * $this->raio ** 2;
     }
 
-    public function perimetro(): Numero
+    public function perimetro(): float
     {
-        return multiplicar(multiplicar(S_PI, 2), $this->raio);
+        return 2 * M_PI * $this->raio;
     }
 
     public function pontoInternoCirculo(Ponto $ponto): bool
@@ -49,6 +48,6 @@ class Circulo
 
     public function pontoFronteiraCirculo(Ponto $ponto): bool
     {
-        return eZero(subtrair($this->centro->distanciaParaPonto($ponto), $this->raio));
+        return eZero($this->centro->distanciaParaPonto($ponto) - $this->raio);
     }
 }

@@ -7,7 +7,6 @@ namespace Solidbase\Geometria\Aplicacao\Interseccao;
 use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
 use Solidbase\Geometria\Dominio\Linha;
 use Solidbase\Geometria\Dominio\Ponto;
-use SolidBase\Matematica\Aritimetica\Numero;
 
 class InterseccaoLinhas
 {
@@ -35,7 +34,7 @@ class InterseccaoLinhas
     }
 
     /**
-     * @return Numero[]
+     * @return float[]
      */
     private static function calcularTS(Linha $linha1, Linha $linha2): array
     {
@@ -54,20 +53,20 @@ class InterseccaoLinhas
         $vetorialSMk = $diretorS->produtoVetorial($diretorMk);
         if ((!self::retaPertenceOx($linha1) || !self::retaPertenceOx($linha2))
         && (!self::retaPertenceOy($linha1) || !self::retaPertenceOy($linha2)) && !eZero($determinante->z)) {
-            $s = dividir($vetorialRMk->z, $determinante->z);
-            $t = dividir($vetorialSMk->z, $determinante->z);
+            $s = ($vetorialRMk->z / $determinante->z);
+            $t = ($vetorialSMk->z / $determinante->z);
 
             return [$s, $t];
         }
         if ((!self::retaPertenceOx($linha1) || !self::retaPertenceOx($linha2))
         && (!self::retaPertenceOz($linha1) || !self::retaPertenceOz($linha2)) && !eZero($determinante->y)) {
-            $s = dividir($vetorialRMk->y, $determinante->y);
-            $t = dividir($vetorialSMk->y, $determinante->y);
+            $s = ($vetorialRMk->y / $determinante->y);
+            $t = ($vetorialSMk->y / $determinante->y);
 
             return [$s, $t];
         }
-        $s = dividir($vetorialRMk->x, $determinante->x);
-        $t = dividir($vetorialSMk->x, $determinante->x);
+        $s = ($vetorialRMk->x / $determinante->x);
+        $t = ($vetorialSMk->x / $determinante->x);
 
         return [$s, $t];
     }

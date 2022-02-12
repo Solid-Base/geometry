@@ -9,7 +9,6 @@ use DomainException;
 use JsonSerializable;
 use Solidbase\Geometria\Aplicacao\Modificadores\Transformacao;
 use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
-use SolidBase\Matematica\Aritimetica\Numero;
 
 class Polilinha implements PrecisaoInterface, Countable, JsonSerializable
 {
@@ -89,14 +88,14 @@ class Polilinha implements PrecisaoInterface, Countable, JsonSerializable
         return array_map(fn (Ponto $p) => $p, $this->pontos);
     }
 
-    public function mover(float|Numero $dx = 0, float|Numero $dy = 0, float|Numero $dz = 0): void
+    public function mover(float|int $dx = 0, float|int $dy = 0, float|int $dz = 0): void
     {
         $transformacao = Transformacao::criarTranslacao(new Ponto($dx, $dy, $dz));
         $pontos = array_map(fn (Ponto $p) => $transformacao->dePonto($p), $this->pontos);
         $this->pontos = $pontos;
     }
 
-    public function rotacionar(float|Numero $angulo, ?Ponto $ponto = null): void
+    public function rotacionar(float|int $angulo, ?Ponto $ponto = null): void
     {
         if (eZero($angulo)) {
             return;

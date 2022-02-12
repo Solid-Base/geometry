@@ -7,25 +7,24 @@ namespace Solidbase\Geometria\Dominio;
 use InvalidArgumentException;
 use JsonSerializable;
 use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
-use SolidBase\Matematica\Aritimetica\Numero;
 
 /**
- * @property-read Ponto  $origem
- * @property-read Ponto  $final
- * @property-read Vetor  $direcao
- * @property-read Numero $comprimento
+ * @property-read Ponto     $origem
+ * @property-read Ponto     $final
+ * @property-read Vetor     $direcao
+ * @property-read float|int $comprimento
  */
 class Linha implements PrecisaoInterface, JsonSerializable
 {
-    private Numero $comprimento;
+    private float|int $comprimento;
 
     public function __construct(
         private Ponto $origem,
         private Vetor $direcao,
-        float|Numero $comprimento
+        float|int $comprimento
     ) {
         $this->direcao = $direcao->vetorUnitario();
-        $this->comprimento = numero($comprimento, PRECISAO_SOLIDBASE);
+        $this->comprimento = $comprimento;
     }
 
     public function __get($name)
@@ -62,7 +61,7 @@ class Linha implements PrecisaoInterface, JsonSerializable
         return eZero($produtoMisto);
     }
 
-    public function distanciaPontoLinha(Ponto $ponto): Numero
+    public function distanciaPontoLinha(Ponto $ponto): float
     {
         $vetorAuxiliar = VetorFabrica::apartirDoisPonto($this->origem, $ponto);
         $vetorial = $vetorAuxiliar->produtoVetorial($this->direcao);
@@ -94,7 +93,7 @@ class Linha implements PrecisaoInterface, JsonSerializable
         return eMenor($distOrigem, $this->comprimento) && eMenor($distFinal, $this->comprimento);
     }
 
-    public function pontoRetaComprimento(float|Numero $comprimento): Ponto
+    public function pontoRetaComprimento(float|int $comprimento): Ponto
     {
         $origem = $this->origem;
         $diretor = $this->direcao;

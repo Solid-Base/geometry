@@ -34,7 +34,7 @@ class OrdenarPontosLinha
             $pontosLinha[$key] = $pontoIntersecao;
         }
         $retorno = [];
-        $distancias = array_map(fn (Ponto $p) => $p->distanciaParaPonto($origem)->valor(), $pontosLinha);
+        $distancias = array_map(fn (Ponto $p) => $p->distanciaParaPonto($origem), $pontosLinha);
         asort($distancias);
         foreach (array_keys($distancias) as $key) {
             $retorno[] = $pontos[$key];

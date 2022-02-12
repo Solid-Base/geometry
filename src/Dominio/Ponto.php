@@ -7,27 +7,26 @@ namespace Solidbase\Geometria\Dominio;
 use InvalidArgumentException;
 use JsonSerializable;
 use Solidbase\Geometria\Dominio\Enum\QuadranteEnum;
-use SolidBase\Matematica\Aritimetica\Numero;
 
 /**
- * @property-read Numero $x
- * @property-read Numero $y
- * @property-read Numero $z
+ * @property-read float $x
+ * @property-read float $y
+ * @property-read float $z
  */
 class Ponto implements PrecisaoInterface, JsonSerializable
 {
-    protected Numero $x;
-    protected Numero $y;
-    protected Numero $z;
+    protected float $x;
+    protected float $y;
+    protected float $z;
 
     public function __construct(
-        float|Numero $x = 0,
-        float|Numero $y = 0,
-        float|Numero $z = 0
+        float $x = 0,
+        float $y = 0,
+        float $z = 0
     ) {
-        $this->x = numero($x);
-        $this->y = numero($y);
-        $this->z = numero($z);
+        $this->x = normalizar($x);
+        $this->y = normalizar($y);
+        $this->z = normalizar($z);
     }
 
     public function __serialize(): array
@@ -46,7 +45,7 @@ class Ponto implements PrecisaoInterface, JsonSerializable
         $this->z = $data['z'];
     }
 
-    public function __get($name): Numero
+    public function __get($name): float
     {
         return match ($name) {
             'x' => $this->x,
@@ -61,38 +60,38 @@ class Ponto implements PrecisaoInterface, JsonSerializable
         return $this->__serialize();
     }
 
-    public function distanciaParaPonto(self $ponto): Numero
+    public function distanciaParaPonto(self $ponto): float
     {
-        $x2 = potencia(subtrair($ponto->x, $this->x), 2);
-        $y2 = potencia(subtrair($ponto->y, $this->y), 2);
-        $z2 = potencia(subtrair($ponto->z, $this->z), 2);
+        $x2 = ($ponto->x - $this->x) ** 2;
+        $y2 = ($ponto->y - $this->y) ** 2;
+        $z2 = ($ponto->z - $this->z) ** 2;
 
-        return raiz(somar($x2, $y2)->somar($z2));
+        return sqrt($x2 + $y2 + $z2);
     }
 
     public function somar(self $ponto): static
     {
-        $x = somar($this->x, $ponto->x);
-        $y = somar($this->y, $ponto->y);
-        $z = somar($this->z, $ponto->z);
+        $x = ($this->x + $ponto->x);
+        $y = ($this->y + $ponto->y);
+        $z = ($this->z + $ponto->z);
 
         return new static($x, $y, $z);
     }
 
     public function subtrair(self $ponto): static
     {
-        $x = subtrair($this->x, $ponto->x);
-        $y = subtrair($this->y, $ponto->y);
-        $z = subtrair($this->z, $ponto->z);
+        $x = ($this->x - $ponto->x);
+        $y = ($this->y - $ponto->y);
+        $z = ($this->z - $ponto->z);
 
         return new static($x, $y, $z);
     }
 
     public function pontoMedio(self $ponto): static
     {
-        $x = dividir(somar($this->x, $ponto->x), 2);
-        $y = dividir(somar($this->y, $ponto->y), 2);
-        $z = dividir(somar($this->z, $ponto->z), 2);
+        $x = ($this->x + $ponto->x) / 2;
+        $y = ($this->y + $ponto->y) / 2;
+        $z = ($this->z + $ponto->z) / 2;
 
         return new static($x, $y, $z);
     }

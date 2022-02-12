@@ -20,8 +20,8 @@ final class PontoTest extends TestCase
         $ponto = new Ponto();
         $ponto2 = new Ponto(3, 4);
         $ponto3 = new Ponto(0, 0, 1);
-        static::assertTrue($ponto->distanciaParaPonto($ponto2)->eIgual(5));
-        static::assertTrue($ponto->distanciaParaPonto($ponto3)->eIgual(1));
+        static::assertSame($ponto->distanciaParaPonto($ponto2), 5.0);
+        static::assertSame($ponto->distanciaParaPonto($ponto3), 1.0);
     }
 
     public function testSomar(): void

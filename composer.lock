@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a6cf1e0259b9e2a5a9cfa744a51ac322",
+    "content-hash": "4818dc10c756e0d6a26e8a4b93a2de38",
     "packages": [
         {
             "name": "solidbase/matematica",
-            "version": "0.01.6",
+            "version": "1.00.2",
             "source": {
                 "type": "git",
-                "url": "git@bitbucket.org:solidbase30/matematica.git",
-                "reference": "0da8d070b658c825fd14631ac6851648bc81f061"
+                "url": "git@bitbucket.org:solidbase30/matematica-2.0.git",
+                "reference": "3da0c6c94070e0011bb9f005c3ac6d9a5d1ae3a2"
             },
             "require": {
                 "ext-bcmath": "*",
@@ -24,8 +24,7 @@
                     "SolidBase\\Matematica\\": "src/"
                 },
                 "files": [
-                    "src/Aritimetica/funcoes.php",
-                    "src/Aritimetica/funcoesTrigonometricas.php"
+                    "src/Aritimetica/funcoes.php"
                 ]
             },
             "authors": [
@@ -35,7 +34,7 @@
                 }
             ],
             "description": "Modulo de matemática do SolidBase",
-            "time": "2022-02-11T10:54:42+00:00"
+            "time": "2022-02-12T21:34:26+00:00"
         }
     ],
     "packages-dev": [
@@ -2142,7 +2141,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "8.1"
+        "php": "^8.1"
     },
     "platform-dev": [],
     "plugin-api-version": "2.1.0"

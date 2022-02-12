@@ -7,7 +7,6 @@ namespace Solidbase\Geometria\Dominio;
 use DomainException;
 use InvalidArgumentException;
 use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
-use SolidBase\Matematica\Aritimetica\Numero;
 
 /**
  * @property-read Vetor $u
@@ -43,7 +42,7 @@ class Plano implements PrecisaoInterface
         };
     }
 
-    public function distanciaPontoAoPlano(Ponto $ponto): Numero
+    public function distanciaPontoAoPlano(Ponto $ponto): float
     {
         $v = VetorFabrica::apartirDoisPonto($this->origem, $ponto);
 
@@ -68,7 +67,7 @@ class Plano implements PrecisaoInterface
             throw new DomainException('Não é possível calcular a projeção do ponto no plano Z');
         }
         [$a,$b,$c,$d] = $this->equacaoPlano();
-        $z = dividir($d->subtrair(multiplicar($b, $ponto->y))->subtrair(multiplicar($a, $ponto->x)), $c);
+        $z = (-$d - $b * $ponto->y - $a * $ponto->x) / $c;
 
         return new Ponto($ponto->x, $ponto->y, $z);
         // $p = VetorFabrica::apartirPonto($this->origem);
@@ -85,7 +84,7 @@ class Plano implements PrecisaoInterface
             throw new DomainException('Não é possível calcular a projeção do ponto no plano X');
         }
         [$a,$b,$c,$d] = $this->equacaoPlano();
-        $x = dividir($d->subtrair(multiplicar($b, $ponto->y))->subtrair(multiplicar($c, $ponto->z)), $a);
+        $x = (-$d - $b * $ponto->y - $c * $ponto->z) / $a;
 
         return new Ponto($x, $ponto->y, $ponto->z);
         // $p = VetorFabrica::apartirPonto($this->origem);
@@ -104,7 +103,7 @@ class Plano implements PrecisaoInterface
             throw new DomainException('Não é possível calcular a projeção do ponto no plano Y');
         }
         [$a,$b,$c,$d] = $this->equacaoPlano();
-        $y = dividir($d->subtrair(multiplicar($a, $ponto->x))->subtrair(multiplicar($c, $ponto->z)), $b);
+        $y = (-$d - $a * $ponto->x - $c * $ponto->z) / $b;
 
         return new Ponto($ponto->x, $y, $ponto->z);
         // $p = VetorFabrica::apartirPonto($this->origem);
@@ -118,7 +117,7 @@ class Plano implements PrecisaoInterface
     }
 
     /**
-     * @return Numero[]
+     * @return float[]
      */
     public function equacaoPlano(): array
     {
@@ -126,7 +125,7 @@ class Plano implements PrecisaoInterface
         $a = $this->normal->x;
         $b = $this->normal->y;
         $c = $this->normal->z;
-        $d = multiplicar($a, $origem->x)->somar(multiplicar($b, $origem->y))->somar(multiplicar($c, $origem->z))->multiplicar(-1);
+        $d = ($a * $origem->x) + ($b * $origem->y) + ($c * $origem->z);
 
         return [$a, $b, $c, $d];
     }

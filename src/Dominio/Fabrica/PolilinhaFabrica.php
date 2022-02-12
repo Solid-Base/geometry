@@ -29,11 +29,11 @@ class PolilinhaFabrica
 
     public static function criarPoligonoRetangularDoisPontos(Ponto $p1, Ponto $p2): Polilinha
     {
-        $comprimento = modulo(subtrair($p1->x, $p2->x));
-        $largura = modulo(subtrair($p1->y, $p2->y));
+        $comprimento = modulo(($p1->x - $p2->x));
+        $largura = modulo(($p1->y - $p2->y));
         $centro = $p1->pontoMedio($p2);
 
-        $retangulo = self::criarPoligonoRetangular($comprimento->valor(), $largura->valor());
+        $retangulo = self::criarPoligonoRetangular($comprimento, $largura);
         $retangulo->mover($centro->x, $centro->y, $centro->z);
 
         return $retangulo;
@@ -94,17 +94,17 @@ class PolilinhaFabrica
 
     public static function criarPoligonoRegular(Ponto $origem, int $numeroLados, bool $inscrito, float $raioCirculo, float $angulo = 0): Polilinha
     {
-        $anguloInterno = numero(self::anguloExternoRegular($numeroLados));
+        $anguloInterno = self::anguloExternoRegular($numeroLados);
         $anguloInicial = self::anguloInicial($numeroLados);
         if (!$inscrito) {
             $raioCirculo = self::raioPoligonoRegular($raioCirculo, $numeroLados);
         }
         $pontos = [];
         for ($i = 0; $i < $numeroLados; ++$i) {
-            $anguloCalculo = multiplicar($anguloInterno, $i)->somar($anguloInicial);
-            $x = multiplicar($raioCirculo, cosseno($anguloCalculo->valor()));
-            $y = multiplicar($raioCirculo, seno($anguloCalculo->valor()));
-            $pontos[] = new Ponto($x->valor(), $y->valor());
+            $anguloCalculo = ($anguloInterno * $i) + ($anguloInicial);
+            $x = $raioCirculo * cos($anguloCalculo);
+            $y = $raioCirculo * sin($anguloCalculo);
+            $pontos[] = new Ponto($x, $y);
         }
         $poligono = self::criarPolilinhaPontos($pontos);
         $poligono->fecharPolilinha();

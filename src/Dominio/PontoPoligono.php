@@ -4,25 +4,23 @@ declare(strict_types=1);
 
 namespace Solidbase\Geometria\Dominio;
 
-use SolidBase\Matematica\Aritimetica\Numero;
-
 /**
- * @property-read Numero $concordancia
+ * @property-read float $concordancia
  */
 class PontoPoligono extends Ponto
 {
-    private Numero $concordancia;
+    private float $concordancia;
 
     public function __construct(
-        float|Numero $x = 0,
-        float|Numero $y = 0,
-        float|Numero $z = 0
+        float|int $x = 0,
+        float|int $y = 0,
+        float|int $z = 0
     ) {
         parent::__construct($x, $y, $z);
-        $this->concordancia = numero(0, PRECISAO_SOLIDBASE);
+        $this->concordancia = 0;
     }
 
-    public function __get($name): Numero
+    public function __get($name): float
     {
         return match ($name) {
             'concordancia' => $this->concordancia,
@@ -47,9 +45,9 @@ class PontoPoligono extends Ponto
     /**
      * Informar o valor concordancia.
      */
-    public function informarConcordancia(float|Numero $concordancia): self
+    public function informarConcordancia(float|int $concordancia): self
     {
-        $this->concordancia = numero($concordancia);
+        $this->concordancia = $concordancia;
 
         return $this;
     }

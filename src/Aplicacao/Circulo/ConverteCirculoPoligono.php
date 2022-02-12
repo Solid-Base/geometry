@@ -21,13 +21,13 @@ class ConverteCirculoPoligono
         if ($numeroDivisao <= 0) {
             throw new DomainException('O número de divisão deve ser maior que 0');
         }
-        $angulo = dividir(multiplicar(S_PI, 2), $numeroDivisao);
+        $angulo = M_PI * 2 / $numeroDivisao;
         $pontos = [];
         $raio = $circulo->raio;
         $centro = $circulo->centro;
         for ($i = 0; $i < $numeroDivisao; ++$i) {
-            $x = multiplicar($raio, cosseno(multiplicar($angulo, $i)))->somar($centro->x);
-            $y = multiplicar($raio, seno(multiplicar($angulo, $i)))->somar($centro->y);
+            $x = $raio * cos($angulo * $i) + $centro->x;
+            $y = $raio * sin($angulo * $i) + $centro->y;
             $z = $centro->z;
             $pontos[] = new PontoPoligono($x, $y, $z);
         }

@@ -12,7 +12,6 @@ use Solidbase\Geometria\Dominio\Vetor;
 use SolidBase\Matematica\Algebra\FabricaMatriz;
 use SolidBase\Matematica\Algebra\Matriz;
 use SolidBase\Matematica\Algebra\MatrizInversa;
-use SolidBase\Matematica\Aritimetica\Numero;
 
 class Transformacao
 {
@@ -38,7 +37,7 @@ class Transformacao
         return new self(FabricaMatrizTransformacao::MatrizRotacao($eixo, $angulo), new Ponto());
     }
 
-    public static function criarRotacaoPonto(Vetor $eixo, float|Numero $angulo, Ponto $origem): self
+    public static function criarRotacaoPonto(Vetor $eixo, float|int $angulo, Ponto $origem): self
     {
         $matriz = FabricaMatrizTransformacao::MatrizRotacao($eixo, $angulo);
         $matrizRotacao = new self($matriz, new Ponto());
@@ -65,9 +64,9 @@ class Transformacao
         $normal = $plano->normal;
         $origem = VetorFabrica::apartirPonto($plano->origem);
         $d = $origem->escalar(-1)->produtoInterno($normal);
-        $x = multiplicar($normal->x, -2)->multiplicar($d);
-        $y = multiplicar($normal->y, -2)->multiplicar($d);
-        $z = multiplicar($normal->z, -2)->multiplicar($d);
+        $x = -2 * $normal->x * $d;
+        $y = -2 * $normal->y * $d;
+        $z = -2 * $normal->z * $d;
         $origem = new Ponto($x, $y, $z);
         $matriz = FabricaMatrizTransformacao::Reflexao($plano);
 
@@ -140,7 +139,7 @@ class Transformacao
         $x = $nova[0][3];
         $y = $nova[1][3];
         $z = $nova[2][3];
-        $origem = new Ponto($x->valor(), $y->valor(), $z->valor());
+        $origem = new Ponto($x, $y, $z);
 
         $matrizNova = [$nova[0], $nova[1], $nova[2]];
         unset($matrizNova[0][3], $matrizNova[1][3], $matrizNova[2][3]);
@@ -171,11 +170,11 @@ class Transformacao
         return new self($matriz, new Ponto($origem->x, $origem->y, $origem->z));
     }
 
-    public function anguloTransformacao(): Numero
+    public function anguloTransformacao(): float
     {
         $ponto = VetorFabrica::BaseX();
         $pontoA = $this->deVetor($ponto);
 
-        return arcoCosseno($pontoA->x);
+        return acos($pontoA->x);
     }
 }

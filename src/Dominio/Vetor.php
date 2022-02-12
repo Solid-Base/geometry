@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Solidbase\Geometria\Dominio;
 
 use Exception;
-use SolidBase\Matematica\Aritimetica\Numero;
 
 final class Vetor extends Ponto
 {
@@ -29,29 +28,30 @@ final class Vetor extends Ponto
         return $this->vetorUnitario()->subtrair($vetor->vetorUnitario())->eNulo();
     }
 
-    public function produtoInterno(self $vetor): Numero
+    public function produtoInterno(self $vetor): float
     {
-        $x = multiplicar($vetor->x, $this->x);
-        $y = multiplicar($vetor->y, $this->y);
-        $z = multiplicar($vetor->z, $this->z);
+        $x = ($vetor->x * $this->x);
+        $y = ($vetor->y * $this->y);
+        $z = ($vetor->z * $this->z);
 
-        return somar(somar($x, $y), $z);
+        return $x + $y + $z;
     }
 
-    public function modulo(): Numero
+    public function modulo(): float
     {
-        $x = potencia($this->x, 2);
-        $y = potencia($this->y, 2);
-        $z = potencia($this->z, 2);
+        $x = $this->x ** 2;
+        $y = ($this->y ** 2);
+        $z = ($this->z ** 2);
+        $modulo = sqrt($x + $y + $z);
 
-        return somar(somar($x, $y), $z)->raiz();
+        return eZero($modulo) ? 0 : (eInteiro($modulo) ? round($modulo, 0) : $modulo);
     }
 
-    public function escalar(float|Numero $fator): static
+    public function escalar(float|int $fator): static
     {
-        $x = multiplicar($this->x, $fator);
-        $y = multiplicar($this->y, $fator);
-        $z = multiplicar($this->z, $fator);
+        $x = ($this->x * $fator);
+        $y = ($this->y * $fator);
+        $z = ($this->z * $fator);
 
         return new static($x, $y, $z);
     }
@@ -63,37 +63,38 @@ final class Vetor extends Ponto
         }
         $modulo = $this->modulo();
 
-        return $this->escalar(dividir(1, $modulo));
+        return $this->escalar(1 / $modulo);
     }
 
-    public function angulo(self $vetor): Numero
+    public function angulo(self $vetor): float
     {
-        $angulo = dividir($this->produtoInterno($vetor), multiplicar($this->modulo(), $vetor->modulo()));
+        $angulo = ($this->produtoInterno($vetor) / ($this->modulo() * $vetor->modulo()));
+        $retorno = acos($angulo);
 
-        return arcoCosseno($angulo);
+        return normalizar($retorno);
     }
 
-    public function anguloAbsoluto(): Numero
+    public function anguloAbsoluto(): float
     {
         $unitario = $this->vetorUnitario();
-        $angulo = arcoCosseno($unitario->x);
+        $angulo = acos(normalizar($unitario->x));
         if ($this->quadrante()->value > 2) {
-            $angulo = subtrair(multiplicar(S_PI, 2), $angulo);
+            $angulo = M_PI * 2 - $angulo;
         }
 
-        return $angulo;
+        return normalizar($angulo);
     }
 
     public function produtoVetorial(self $vetor): static
     {
-        $x = subtrair(multiplicar($this->y, $vetor->z), multiplicar($this->z, $vetor->y));
-        $y = subtrair(multiplicar($this->z, $vetor->x), multiplicar($this->x, $vetor->z));
-        $z = subtrair(multiplicar($this->x, $vetor->y), multiplicar($this->y, $vetor->x));
+        $x = (($this->y * $vetor->z) - ($this->z * $vetor->y));
+        $y = (($this->z * $vetor->x) - ($this->x * $vetor->z));
+        $z = (($this->x * $vetor->y) - ($this->y * $vetor->x));
 
         return new static($x, $y, $z);
     }
 
-    public function produtoMisto(self $vetorV, self $vetorW): Numero
+    public function produtoMisto(self $vetorV, self $vetorW): float
     {
         return ($this->produtoVetorial($vetorV))->produtoInterno($vetorW);
     }
@@ -107,7 +108,7 @@ final class Vetor extends Ponto
             return new static();
         }
         $modulo = $this->modulo();
-        $escalar = dividir($this->produtoInterno($vetorU), potencia($modulo, 2));
+        $escalar = $this->produtoInterno($vetorU) / $modulo ** 2;
 
         return $this->escalar($escalar);
     }

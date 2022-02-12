@@ -9,7 +9,6 @@ use Solidbase\Geometria\Dominio\Fabrica\LinhaFabrica;
 use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
 use Solidbase\Geometria\Dominio\Linha;
 use Solidbase\Geometria\Dominio\Ponto;
-use SolidBase\Matematica\Aritimetica\Numero;
 
 class InterseccaoLinhaCirculo
 {
@@ -23,16 +22,17 @@ class InterseccaoLinhaCirculo
             return null;
         }
         $distancia = self::distanciaCentroLinha($linha, $circulo->centro);
-        $comprimento = eZero(subtrair($circulo->raio, $distancia)) ?
-                        numero(0, PRECISAO_SOLIDBASE) :
-                        raiz(potencia($circulo->raio, 2)->subtrair(potencia($distancia, 2)));
+        $comprimento = eZero($circulo->raio - $distancia) ?
+                        0 :
+                        sqrt($circulo->raio ** 2 - $distancia ** 2);
+
         $pontoIntersecao = self::pontoIntersecao($linha, $circulo);
         $direcaoLinha = $linha->direcao;
         $ponto1 = $pontoIntersecao->somar($direcaoLinha->escalar($comprimento));
         if (eZero($comprimento)) {
             return [$ponto1];
         }
-        $ponto2 = $pontoIntersecao->somar($direcaoLinha->escalar($comprimento->multiplicar(-1)));
+        $ponto2 = $pontoIntersecao->somar($direcaoLinha->escalar(-$comprimento));
 
         return [$ponto1, $ponto2];
     }
@@ -40,7 +40,7 @@ class InterseccaoLinhaCirculo
     public static function possuiInterseccao(Linha $linha, Circulo $circulo): bool
     {
         $distancia = $linha->distanciaPontoLinha($circulo->centro);
-        $igual = eZero(subtrair($distancia, $circulo->raio));
+        $igual = eZero(($distancia - $circulo->raio));
 
         return eMenor($distancia, $circulo->raio) || $igual;
     }
@@ -68,7 +68,7 @@ class InterseccaoLinhaCirculo
         return InterseccaoLinhas::executar($linha, $linhaPerpendicular);
     }
 
-    private static function distanciaCentroLinha(Linha $linha, Ponto $ponto): Numero
+    private static function distanciaCentroLinha(Linha $linha, Ponto $ponto): float
     {
         return $linha->distanciaPontoLinha($ponto);
     }
