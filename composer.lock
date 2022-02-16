@@ -8,11 +8,11 @@
     "packages": [
         {
             "name": "solidbase/matematica",
-            "version": "1.00.2",
+            "version": "1.00.6",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:solidbase30/matematica-2.0.git",
-                "reference": "3da0c6c94070e0011bb9f005c3ac6d9a5d1ae3a2"
+                "reference": "9de94f8d796c3abf52f684d8f58ff78d2f2684f0"
             },
             "require": {
                 "ext-bcmath": "*",
@@ -34,7 +34,7 @@
                 }
             ],
             "description": "Modulo de matemática do SolidBase",
-            "time": "2022-02-12T21:34:26+00:00"
+            "time": "2022-02-12T23:40:16+00:00"
         }
     ],
     "packages-dev": [
