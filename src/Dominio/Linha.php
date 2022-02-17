@@ -6,7 +6,9 @@ namespace Solidbase\Geometria\Dominio;
 
 use InvalidArgumentException;
 use JsonSerializable;
+use Solidbase\Geometria\Aplicacao\Modificadores\Transformacao;
 use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
+use Solidbase\Geometria\Dominio\Trait\TransformacaoTrait;
 
 /**
  * @property-read Ponto     $origem
@@ -14,8 +16,9 @@ use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
  * @property-read Vetor     $direcao
  * @property-read float|int $comprimento
  */
-class Linha implements PrecisaoInterface, JsonSerializable
+class Linha implements JsonSerializable, TransformacaoInterface
 {
+    use TransformacaoTrait;
     private float|int $comprimento;
 
     public function __construct(
@@ -36,6 +39,17 @@ class Linha implements PrecisaoInterface, JsonSerializable
             'comprimento' => $this->comprimento,
             default => throw new InvalidArgumentException('Prorpriedade solicitada não existe')
         };
+    }
+
+    public function aplicarTransformacao(Transformacao $transformacao): static
+    {
+        $origem = $transformacao->dePonto($this->origem);
+        $direcao = $transformacao->deVetor($this->direcao);
+        $this->origem = $origem;
+        $this->direcao = $direcao;
+        $this->comprimento *= $transformacao->obtenhaEscala();
+
+        return $this;
     }
 
     public function jsonSerialize(): mixed

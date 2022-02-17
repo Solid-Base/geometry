@@ -30,6 +30,6 @@ class AplicarFilletPoligono
             $pontosNovos[] = $pontos[$i];
         }
 
-        return PolilinhaFabrica::criarPolilinhaPontos($pontosNovos);
+        return PolilinhaFabrica::criarPolilinhaPontos($pontosNovos, fechado: $polilinha->ePoligono());
     }
 }

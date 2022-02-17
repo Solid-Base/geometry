@@ -6,15 +6,18 @@ namespace Solidbase\Geometria\Dominio;
 
 use InvalidArgumentException;
 use JsonSerializable;
+use Solidbase\Geometria\Aplicacao\Modificadores\Transformacao;
 use Solidbase\Geometria\Dominio\Enum\QuadranteEnum;
+use Solidbase\Geometria\Dominio\Trait\TransformacaoTrait;
 
 /**
  * @property-read float $x
  * @property-read float $y
  * @property-read float $z
  */
-class Ponto implements PrecisaoInterface, JsonSerializable
+class Ponto implements JsonSerializable, TransformacaoInterface
 {
+    use TransformacaoTrait;
     protected float $x;
     protected float $y;
     protected float $z;
@@ -53,6 +56,16 @@ class Ponto implements PrecisaoInterface, JsonSerializable
             'z' => $this->z,
             default => throw new InvalidArgumentException('Prorpriedade solicitada não existe')
         };
+    }
+
+    public function aplicarTransformacao(Transformacao $transformacao): static
+    {
+        $novo = $transformacao->dePonto($this);
+        $this->x = $novo->x;
+        $this->y = $novo->y;
+        $this->z = $novo->z;
+
+        return $this;
     }
 
     public function jsonSerialize(): mixed
@@ -108,7 +121,7 @@ class Ponto implements PrecisaoInterface, JsonSerializable
         return $this->__serialize();
     }
 
-    protected function quadrante(): QuadranteEnum
+    public function quadrante(): QuadranteEnum
     {
         if (eZeroOuPositivo($this->x) && eZeroOuPositivo($this->y)) {
             return QuadranteEnum::PRIMEIRO;

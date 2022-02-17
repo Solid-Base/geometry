@@ -31,7 +31,7 @@ class OffsetPoligono
     {
         $poligono = self::limparPoligono($polilinha);
         $propriedade = PropriedadePoligono::executar($poligono);
-        if (TipoPoligonoEnum::NaoConvexo == $propriedade->tipo) {
+        if (TipoPoligonoEnum::Concavo == $propriedade->tipo) {
             throw new DomainException('O algoritmo só funciona em poligonos convexos');
         }
         $offsetLinha = DirecaoOffsetReta::tryFrom($propriedade->sentido * $direcao->value);
@@ -64,7 +64,7 @@ class OffsetPoligono
 
     private static function limparPoligono(Polilinha $polilinha): Polilinha
     {
-        return PolilinhaFabrica::criarPolilinhaPontos($polilinha->pontos(), true);
+        return PolilinhaFabrica::criarPolilinhaPontos($polilinha->pontos(), true, $polilinha->ePoligono());
     }
 
     private static function gerarPoligonoOffset(array $linhas, bool $ePoligono, RotacaoPontoEnum $rotacao): Polilinha
@@ -110,10 +110,8 @@ class OffsetPoligono
         if ($ePoligono) {
             $primeiroPonto = InterseccaoLinhas::executar($linhas[0], $linhas[$numeroLinha - 1]);
             array_unshift($pontos, $primeiroPonto);
-            $poligono = PolilinhaFabrica::criarPolilinhaPontos($pontos);
-            $poligono->fecharPolilinha();
 
-            return $poligono;
+            return PolilinhaFabrica::criarPolilinhaPontos($pontos, fechado: true);
         }
         $primeiroPonto = RotacaoPontoEnum::HORARIO == $rotacao ? $linhas[0]->origem : $linhas[0]->final;
         $ultimoPonto = RotacaoPontoEnum::HORARIO == $rotacao ? $linhas[$numeroLinha - 1]->final : $linhas[$numeroLinha - 1]->origem;

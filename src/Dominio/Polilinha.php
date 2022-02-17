@@ -8,16 +8,17 @@ use Countable;
 use DomainException;
 use JsonSerializable;
 use Solidbase\Geometria\Aplicacao\Modificadores\Transformacao;
-use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
+use Solidbase\Geometria\Dominio\Trait\TransformacaoTrait;
 
-class Polilinha implements PrecisaoInterface, Countable, JsonSerializable
+class Polilinha implements Countable, JsonSerializable, TransformacaoInterface
 {
+    use TransformacaoTrait;
     /**
      * @var PontoPoligono[]
      */
     private array $pontos;
 
-    public function __construct()
+    public function __construct(private bool $fechado = false)
     {
         $this->pontos = [];
     }
@@ -35,6 +36,14 @@ class Polilinha implements PrecisaoInterface, Countable, JsonSerializable
         $this->pontos = array_map(fn (string $p) => unserialize($p), $pontos);
     }
 
+    public function aplicarTransformacao(Transformacao $transformacao): static
+    {
+        $pontos = array_map(fn (Ponto $p) => $transformacao->dePonto($p), $this->pontos);
+        $this->pontos = $pontos;
+
+        return $this;
+    }
+
     public function jsonSerialize(): mixed
     {
         return $this->pontos;
@@ -42,7 +51,10 @@ class Polilinha implements PrecisaoInterface, Countable, JsonSerializable
 
     public function count(): int
     {
-        return \count($this->pontos);
+        $total = count($this->pontos);
+        $total += $this->fechado && !$this->ultimoEIgualPrimeiro() ? 1 : 0;
+
+        return $total;
     }
 
     public function adicionarPonto(Ponto $ponto): self
@@ -63,21 +75,21 @@ class Polilinha implements PrecisaoInterface, Countable, JsonSerializable
         if (\count($this->pontos) <= 2) {
             throw new DomainException('Para fechar uma polilinha, é necessário pelo menos 3 pontos');
         }
-        if ($this->ePoligono()) {
-            return $this;
-        }
-        $primeiro = reset($this->pontos);
-        $this->pontos[] = $primeiro;
+        $this->fechado = true;
 
         return $this;
+        // if ($this->ePoligono()) {
+        //     return $this;
+        // }
+        // $primeiro = reset($this->pontos);
+        // $this->pontos[] = $primeiro;
+
+        // return $this;
     }
 
     public function ePoligono(): bool
     {
-        $primeiro = reset($this->pontos);
-        $ultimo = end($this->pontos);
-
-        return $primeiro->eIgual($ultimo);
+        return $this->fechado;
     }
 
     /**
@@ -85,27 +97,19 @@ class Polilinha implements PrecisaoInterface, Countable, JsonSerializable
      */
     public function pontos(): array
     {
-        return array_map(fn (Ponto $p) => $p, $this->pontos);
+        $retorno = array_values($this->pontos);
+        $ultimo = end($this->pontos);
+        if ($this->fechado && !$this->ultimoEIgualPrimeiro()) {
+            $retorno[] = $retorno[0];
+        }
+
+        return $retorno;
     }
 
-    public function mover(float|int $dx = 0, float|int $dy = 0, float|int $dz = 0): void
+    private function ultimoEIgualPrimeiro(): bool
     {
-        $transformacao = Transformacao::criarTranslacao(new Ponto($dx, $dy, $dz));
-        $pontos = array_map(fn (Ponto $p) => $transformacao->dePonto($p), $this->pontos);
-        $this->pontos = $pontos;
-    }
+        $ultimo = end($this->pontos);
 
-    public function rotacionar(float|int $angulo, ?Ponto $ponto = null): void
-    {
-        if (eZero($angulo)) {
-            return;
-        }
-        if (null === $ponto) {
-            $transformacao = Transformacao::criarRotacao(VetorFabrica::BaseZ(), $angulo);
-        } else {
-            $transformacao = Transformacao::criarRotacaoPonto(VetorFabrica::BaseZ(), $angulo, $ponto);
-        }
-        $pontos = array_map(fn (Ponto $p) => $transformacao->dePonto($p), $this->pontos);
-        $this->pontos = $pontos;
+        return $ultimo->eIgual($this->pontos[0]);
     }
 }

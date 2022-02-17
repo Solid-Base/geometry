@@ -31,7 +31,6 @@ class IntersecaoLinhaPolilinha
     private static function executarIntersecao(Linha $linhaIntersecao, Polilinha $poligono): array
     {
         $polilinha = clone $poligono;
-        $polilinha->fecharPolilinha();
         $pontos = $polilinha->pontos();
         $numeroPonto = \count($pontos);
         $pontosRetorno = [];
@@ -66,7 +65,7 @@ class IntersecaoLinhaPolilinha
 
             $pontosPoligono[] = $p2;
         }
-        $poligonoNovo = PolilinhaFabrica::criarPolilinhaPontos($pontosPoligono);
+        $poligonoNovo = PolilinhaFabrica::criarPolilinhaPontos($pontosPoligono, fechado: $poligono->ePoligono());
 
         return [$pontosRetorno, $poligonoNovo];
     }

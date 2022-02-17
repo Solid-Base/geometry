@@ -13,10 +13,11 @@ class PolilinhaFabrica
 {
     /**
      * @param Ponto[] $pontos
+     * @param mixed   $fechado
      */
-    public static function criarPolilinhaPontos(array $pontos, bool $limpar = false): Polilinha
+    public static function criarPolilinhaPontos(array $pontos, bool $limpar = false, $fechado = false): Polilinha
     {
-        $polilinha = new Polilinha();
+        $polilinha = new Polilinha($fechado);
         if ($limpar) {
             $pontos = self::limparPontosPoligono($pontos);
         }
@@ -47,7 +48,7 @@ class PolilinhaFabrica
         $pontos[] = new Ponto($comprimento / 2, $largura / 2);
         $pontos[] = new Ponto(-$comprimento / 2, $largura / 2);
 
-        return self::criarPolilinhaPontos($pontos);
+        return self::criarPolilinhaPontos($pontos, fechado: true);
     }
 
     public static function criarPoligonoL(float $comprimento, float $largura, float $comprimento1, float $largura1): Polilinha
@@ -59,7 +60,7 @@ class PolilinhaFabrica
         $p4 = $p3->somar(new Ponto(-$comprimento1, 0));
         $p5 = $p4->subtrair(new Ponto(0, -$largura1 + $largura));
         $p6 = $p5->somar(new Ponto($comprimento1 - $comprimento, 0));
-        $poligono = self::criarPolilinhaPontos([$p1, $p2, $p3, $p4, $p5, $p6]);
+        $poligono = self::criarPolilinhaPontos([$p1, $p2, $p3, $p4, $p5, $p6], fechado: true);
         $propriedades = PropriedadePoligono::executar($poligono);
         $centro = $propriedades->centro;
         $poligono->mover(-$centro->x, -$centro->y, -$centro->z);
@@ -77,7 +78,7 @@ class PolilinhaFabrica
         $p6 = $p5->subtrair(new Ponto(0, ($largura - $deslocamento)));
         $p7 = $p6->subtrair(new Ponto($comprimento - 2 * $deslocamento, 0));
         $p8 = $p7->somar(new Ponto(0, $largura - $deslocamento));
-        $poligono = self::criarPolilinhaPontos([$p1, $p2, $p3, $p4, $p5, $p6, $p7, $p8]);
+        $poligono = self::criarPolilinhaPontos([$p1, $p2, $p3, $p4, $p5, $p6, $p7, $p8], fechado: true);
         $propriedades = PropriedadePoligono::executar($poligono);
         $centro = $propriedades->centro;
         $poligono->mover(-$centro->x, -$centro->y, -$centro->z);
@@ -106,8 +107,8 @@ class PolilinhaFabrica
             $y = $raioCirculo * sin($anguloCalculo);
             $pontos[] = new Ponto($x, $y);
         }
-        $poligono = self::criarPolilinhaPontos($pontos);
-        $poligono->fecharPolilinha();
+        $poligono = self::criarPolilinhaPontos($pontos, fechado: true);
+
         $poligono->mover($origem->x, $origem->y, $origem->z);
         $poligono->rotacionar($angulo);
 

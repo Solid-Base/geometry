@@ -14,7 +14,7 @@ use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
  * @property-read Vetor $normal
  * @property-read Ponto $origem
  */
-class Plano implements PrecisaoInterface
+class Plano
 {
     private Vetor $u;
     private Vetor $v;

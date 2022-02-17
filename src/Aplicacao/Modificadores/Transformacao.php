@@ -81,6 +81,31 @@ class Transformacao
         return new self(FabricaMatriz::Identidade(3), $vetor);
     }
 
+    public static function criarEscala(float $escala): self
+    {
+        $matriz = new self(FabricaMatriz::Identidade(3), new Ponto());
+        $matriz->escala = $escala;
+
+        return $matriz;
+    }
+
+    public static function criarEscalaPonto(float $escala, Ponto $ponto): self
+    {
+        if ($ponto->eIgual(new Ponto())) {
+            return self::criarEscala($escala);
+        }
+        $matriz = FabricaMatriz::Identidade(3);
+        $matriz = $matriz->Escalar($escala);
+        $matrizEscala = new self($matriz, new Ponto());
+        $vetor = VetorFabrica::apartirPonto($ponto);
+        $translacao = $vetor->escalar(-1);
+        $matrizTlinha = self::criarTranslacao($translacao);
+        $matrizT = self::criarTranslacao($vetor);
+        $primeira = $matrizTlinha->multiplicar($matrizEscala);
+
+        return $primeira->multiplicar($matrizT);
+    }
+
     public function dePonto(Ponto $ponto): Ponto
     {
         $matriz = clone $this->matriz;
@@ -175,6 +200,11 @@ class Transformacao
         $ponto = VetorFabrica::BaseX();
         $pontoA = $this->deVetor($ponto);
 
-        return acos($pontoA->x);
+        return $pontoA->anguloAbsoluto();
+    }
+
+    public function obtenhaEscala(): int|float
+    {
+        return $this->escala;
     }
 }

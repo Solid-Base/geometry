@@ -16,7 +16,7 @@ class TipoPoligono
     public static function executar(Polilinha $poligono): TipoPoligonoEnum
     {
         if (\count($poligono) < 3) {
-            return TipoPoligonoEnum::NaoConvexo;
+            return TipoPoligonoEnum::Concavo;
         }
         $pontos = $poligono->pontos();
         $quantidade = count($poligono);
@@ -28,7 +28,7 @@ class TipoPoligono
             $orientacao = SentidoRotacaoTresPontos::executar($p1, $p2, $p3);
             $orientacaoOriginal ??= $orientacao;
             if ($orientacao !== $orientacaoOriginal) {
-                return TipoPoligonoEnum::NaoConvexo;
+                return TipoPoligonoEnum::Concavo;
             }
         }
 

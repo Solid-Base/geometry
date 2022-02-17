@@ -15,7 +15,7 @@ class AreaPoligono
     public static function executar(Polilinha $poligono): ?float
     {
         $soma = 0;
-        if (\count($poligono) < 3) {
+        if (\count($poligono) <= 3) {
             return null;
         }
         $poligono->fecharPolilinha();

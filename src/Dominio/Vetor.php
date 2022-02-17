@@ -5,9 +5,20 @@ declare(strict_types=1);
 namespace Solidbase\Geometria\Dominio;
 
 use Exception;
+use Solidbase\Geometria\Aplicacao\Modificadores\Transformacao;
 
 final class Vetor extends Ponto
 {
+    public function aplicarTransformacao(Transformacao $transformacao): static
+    {
+        $novo = $transformacao->deVetor($this);
+        $this->x = $novo->x;
+        $this->y = $novo->y;
+        $this->z = $novo->z;
+
+        return $this;
+    }
+
     public function temMesmaDirecao(self $vetor): bool
     {
         if ($vetor->eNulo() || $this->eNulo()) {

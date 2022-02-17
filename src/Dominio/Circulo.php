@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace Solidbase\Geometria\Dominio;
 
 use InvalidArgumentException;
+use Solidbase\Geometria\Aplicacao\Modificadores\Transformacao;
+use Solidbase\Geometria\Dominio\Trait\TransformacaoTrait;
 
 /**
  * @property-read Ponto     $centro
  * @property-read float|int $raio
  */
-class Circulo
+class Circulo implements TransformacaoInterface
 {
+    use TransformacaoTrait;
     private float|int $raio;
 
     public function __construct(private Ponto $centro, float|int $raio)
@@ -49,5 +52,13 @@ class Circulo
     public function pontoFronteiraCirculo(Ponto $ponto): bool
     {
         return eZero($this->centro->distanciaParaPonto($ponto) - $this->raio);
+    }
+
+    public function aplicarTransformacao(Transformacao $transformacao): static
+    {
+        $this->centro = $transformacao->dePonto($this->centro);
+        $this->raio *= $transformacao->obtenhaEscala();
+
+        return $this;
     }
 }

@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use Solidbase\Geometria\Aplicacao\Modificadores\Transformacao;
 use Solidbase\Geometria\Dominio\Fabrica\ArcoCirculoFabrica;
 use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
+use Solidbase\Geometria\Dominio\Trait\TransformacaoTrait;
 
 /**
  * @property-read Ponto     $centro
@@ -18,8 +19,9 @@ use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
  * @property-read float|int $area
  * @property-read float|int $comprimento
  */
-class Arco
+class Arco implements TransformacaoInterface
 {
+    use TransformacaoTrait;
     private float $raio;
     private float $anguloInicial;
     private float $anguloFinal;
@@ -46,6 +48,21 @@ class Arco
             'area' => $this->area(),
             default => throw new InvalidArgumentException('A propriedade solicitada não existe')
         };
+    }
+
+    public function aplicarTransformacao(Transformacao $transformacao): static
+    {
+        $pontoInicial = $transformacao->dePonto($this->pontoInicial());
+        $pontoFinal = $transformacao->dePonto($this->pontoFinal());
+        $centro = $transformacao->dePonto($this->centro);
+        $arco = ArcoCirculoFabrica::arcoCentroInicioFim($centro, $pontoInicial, $pontoFinal);
+        $this->centro = $arco->centro;
+        $this->anguloInicial = $arco->anguloInicial;
+        $this->anguloFinal = $arco->anguloFinal;
+        $this->raio = normalizar($arco->raio);
+        unset($arco);
+
+        return $this;
     }
 
     public function anguloTotal(): float

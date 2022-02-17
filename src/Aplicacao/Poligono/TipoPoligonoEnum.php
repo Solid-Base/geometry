@@ -8,5 +8,5 @@ enum TipoPoligonoEnum
 {
     case Convexo;
 
-    case NaoConvexo;
+    case Concavo;
 }

@@ -34,10 +34,7 @@ class FechoConvexo
             --$total;
         }
 
-        $retorno = PolilinhaFabrica::criarPolilinhaPontos($pontos);
-        $retorno->fecharPolilinha();
-
-        return $retorno;
+        return PolilinhaFabrica::criarPolilinhaPontos($pontos, fechado: true);
     }
 
     private static function pontoInferior(array &$pontos): Ponto
