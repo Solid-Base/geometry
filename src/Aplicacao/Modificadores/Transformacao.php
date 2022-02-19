@@ -207,4 +207,9 @@ class Transformacao
     {
         return $this->escala;
     }
+
+    public function eReflexao(): bool
+    {
+        return $this->mirror;
+    }
 }
