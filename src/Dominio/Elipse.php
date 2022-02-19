@@ -21,7 +21,7 @@ class Elipse implements TransformacaoInterface
     use TransformacaoTrait;
     private Vetor $direcao;
 
-    public function __construct(private Ponto $centro, private float $raioMaior, private float $raioMenor)
+    public function __construct(private Ponto $centro, private float $raioMaior, private float $raioMenor, float $angulo = 0)
     {
         if ($raioMaior <= 0 || $this->raioMenor <= 0) {
             throw new InvalidArgumentException('Os raios da elipse deve ser um numero positivo maior que zero');
@@ -29,7 +29,7 @@ class Elipse implements TransformacaoInterface
         if ($raioMenor >= $raioMaior) {
             throw new DomainException('O raio menor nõa deve ser maior que o raio maior');
         }
-        $this->direcao = VetorFabrica::BaseX();
+        $this->direcao = VetorFabrica::DirecaoModulo($angulo);
     }
 
     public function __get($name)

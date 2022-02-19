@@ -87,11 +87,8 @@ final class Vetor extends Ponto
 
     public function anguloAbsoluto(): float
     {
-        $unitario = $this->vetorUnitario();
-        $angulo = acos(normalizar($unitario->x));
-        if ($this->quadrante()->value > 2) {
-            $angulo = M_PI * 2 - $angulo;
-        }
+        $angulo = atan2($this->y, $this->x);
+        $angulo += eMenor($angulo, 0) ? 2 * M_PI : 0;
 
         return normalizar($angulo);
     }
