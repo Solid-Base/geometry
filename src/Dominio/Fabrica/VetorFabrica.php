@@ -49,4 +49,12 @@ final class VetorFabrica
 
         return $vetor->produtoVetorial($baseZ);
     }
+
+    public static function DirecaoModulo(float $angulo, float $modulo = 1): Vetor
+    {
+        $x = cos($angulo) * $modulo;
+        $y = sin($angulo) * $modulo;
+
+        return new Vetor($x, $y);
+    }
 }

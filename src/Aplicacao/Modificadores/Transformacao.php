@@ -166,7 +166,7 @@ class Transformacao
         $z = $nova[2][3];
         $origem = new Ponto($x, $y, $z);
 
-        $matrizNova = [$nova[0], $nova[1], $nova[2]];
+        $matrizNova = [$nova[0]->obtenhaMatriz(), $nova[1]->obtenhaMatriz(), $nova[2]->obtenhaMatriz()];
         unset($matrizNova[0][3], $matrizNova[1][3], $matrizNova[2][3]);
 
         $retorno = new self(new Matriz($matrizNova), $origem);

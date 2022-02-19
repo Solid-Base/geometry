@@ -15,6 +15,7 @@ class FechoConvexo
 {
     public static function executar(array $pontos): Polilinha
     {
+        self::retirarRepetidos($pontos);
         $pontoInicial = self::pontoInferior($pontos);
         self::ordenarPontos($pontos, $pontoInicial);
         $total = count($pontos);
@@ -50,5 +51,25 @@ class FechoConvexo
     {
         usort($pontos, fn (Ponto $p1, Ponto $p2) => VetorFabrica::apartirDoisPonto($p1, $pontoInicial)->anguloAbsoluto() <=> VetorFabrica::apartirDoisPonto($p2, $pontoInicial)->anguloAbsoluto());
         array_unshift($pontos, $pontoInicial);
+    }
+
+    private static function retirarRepetidos(array &$pontos): void
+    {
+        $total = count($pontos);
+        for ($i = 0; $i < $total; ++$i) {
+            if (!isset($pontos[$i])) {
+                continue;
+            }
+            for ($j = $i + 1; $j < $total; ++$j) {
+                if (!isset($pontos[$j])) {
+                    continue;
+                }
+                if (!$pontos[$i]->eIgual($pontos[$j])) {
+                    continue;
+                }
+                unset($pontos[$j]);
+            }
+        }
+        $pontos = array_values($pontos);
     }
 }
