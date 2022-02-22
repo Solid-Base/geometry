@@ -37,8 +37,8 @@
     },
     "repositories": [
         {
-            "type": "vcs",
-            "url": "git@bitbucket.org:solidbase30/matematica-2.0.git"
+            "type": "composer",
+            "url": "https://packpage.solidbase.dev.br"
         }
     ]
 }

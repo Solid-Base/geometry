@@ -4,19 +4,28 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4818dc10c756e0d6a26e8a4b93a2de38",
+    "content-hash": "b2d8d859602528df684a762cbcbec86c",
     "packages": [
         {
             "name": "solidbase/matematica",
-            "version": "1.00.11",
+            "version": "1.00.13",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:solidbase30/matematica-2.0.git",
-                "reference": "6e02ff13cf101fa6966589c208d1edbb90996a9a"
+                "reference": "016e27518145e7e00863aeab3d11430281f254b5"
+            },
+            "dist": {
+                "type": "tar",
+                "url": "https://packpage.solidbase.dev.br/dist//solidbase/matematica/solidbase-matematica-1.00.13-545093.tar",
+                "reference": "016e27518145e7e00863aeab3d11430281f254b5",
+                "shasum": "f5493caffffdab1c85e8485a212cf828ef655d4f"
             },
             "require": {
                 "ext-bcmath": "*",
                 "php": "^8.1.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.4"
             },
             "type": "library",
             "autoload": {
@@ -24,7 +33,8 @@
                     "SolidBase\\Matematica\\": "src/"
                 },
                 "files": [
-                    "src/Aritimetica/funcoes.php"
+                    "src/Aritimetica/funcoes.php",
+                    "src/Aritimetica/funcoesAngulos.php"
                 ]
             },
             "authors": [
@@ -34,7 +44,7 @@
                 }
             ],
             "description": "Modulo de matemática do SolidBase",
-            "time": "2022-02-13T15:18:53+00:00"
+            "time": "2022-02-22T12:00:14+00:00"
         }
     ],
     "packages-dev": [
@@ -123,9 +133,6 @@
             },
             "require": {
                 "php": "^7.1 || ^8.0"
-            },
-            "replace": {
-                "myclabs/deep-copy": "self.version"
             },
             "require-dev": {
                 "doctrine/collections": "^1.0",
@@ -283,16 +290,16 @@
         },
         {
             "name": "phar-io/version",
-            "version": "3.1.1",
+            "version": "3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/version.git",
-                "reference": "15a90844ad40f127afd244c0cad228de2a80052a"
+                "reference": "4f7fd7836c6f332bb2933569e566a0d6c4cbed74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/version/zipball/15a90844ad40f127afd244c0cad228de2a80052a",
-                "reference": "15a90844ad40f127afd244c0cad228de2a80052a",
+                "url": "https://api.github.com/repos/phar-io/version/zipball/4f7fd7836c6f332bb2933569e566a0d6c4cbed74",
+                "reference": "4f7fd7836c6f332bb2933569e566a0d6c4cbed74",
                 "shasum": ""
             },
             "require": {
@@ -328,9 +335,9 @@
             "description": "Library for handling version information and constraints",
             "support": {
                 "issues": "https://github.com/phar-io/version/issues",
-                "source": "https://github.com/phar-io/version/tree/3.1.1"
+                "source": "https://github.com/phar-io/version/tree/3.2.1"
             },
-            "time": "2022-02-07T21:56:48+00:00"
+            "time": "2022-02-21T01:04:05+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -2144,5 +2151,5 @@
         "php": "^8.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }

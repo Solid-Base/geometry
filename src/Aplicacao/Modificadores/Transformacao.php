@@ -83,10 +83,12 @@ class Transformacao
 
     public static function criarEscala(float $escala): self
     {
-        $matriz = new self(FabricaMatriz::Identidade(3), new Ponto());
-        $matriz->escala = $escala;
+        $identidade = FabricaMatriz::Identidade(3);
 
-        return $matriz;
+        $retorno = new self($identidade, new Ponto());
+        $retorno->escala = $escala;
+
+        return $retorno;
     }
 
     public static function criarEscalaPonto(float $escala, Ponto $ponto): self
@@ -94,12 +96,12 @@ class Transformacao
         if ($ponto->eIgual(new Ponto())) {
             return self::criarEscala($escala);
         }
-        $matriz = FabricaMatriz::Identidade(3);
-        $matriz = $matriz->Escalar($escala);
-        $matrizEscala = new self($matriz, new Ponto());
+        $matrizEscala = self::criarEscala($escala);
+
         $vetor = VetorFabrica::apartirPonto($ponto);
         $translacao = $vetor->escalar(-1);
         $matrizTlinha = self::criarTranslacao($translacao);
+
         $matrizT = self::criarTranslacao($vetor);
         $primeira = $matrizTlinha->multiplicar($matrizEscala);
 
@@ -109,14 +111,15 @@ class Transformacao
     public function dePonto(Ponto $ponto): Ponto
     {
         $matriz = clone $this->matriz;
+        if (1 != $this->escala) {
+            $matriz = $matriz->Escalar($this->escala);
+        }
         $matriz->adicionarLinha([0, 0, 0]);
         $matriz->adicionarColuna([$this->origem->x, $this->origem->y, $this->origem->z, 1]);
         $pontoM = new Matriz([[$ponto->x], [$ponto->y], [$ponto->z], [1]]);
         $pontoT = $matriz->Multiplicar($pontoM)->obtenhaMatriz();
-        $pontoR = new Vetor($pontoT[0][0], $pontoT[1][0], $pontoT[2][0]);
-        $pontoR = $pontoR->escalar($this->escala);
 
-        return new Ponto($pontoR->x, $pontoR->y, $pontoR->z);
+        return new Ponto($pontoT[0][0], $pontoT[1][0], $pontoT[2][0]);
     }
 
     public function deVetor(Vetor $vetor): Vetor
@@ -153,10 +156,16 @@ class Transformacao
     public function multiplicar(self $transformacao): self
     {
         $matriz = clone $transformacao->matriz;
+        if (1 != $transformacao->escala) {
+            $matriz = $matriz->Escalar($transformacao->escala);
+        }
         $matriz->adicionarLinha([0, 0, 0]);
         $matriz->adicionarColuna([$transformacao->origem->x, $transformacao->origem->y, $transformacao->origem->z, 1]);
 
         $matrizOriginal = clone $this->matriz;
+        if (1 != $this->escala) {
+            $matrizOriginal = $matrizOriginal->Escalar($this->escala);
+        }
         $matrizOriginal->adicionarLinha([0, 0, 0]);
         $matrizOriginal->adicionarColuna([$this->origem->x, $this->origem->y, $this->origem->z, 1]);
 
@@ -168,9 +177,13 @@ class Transformacao
 
         $matrizNova = [$nova[0]->obtenhaMatriz(), $nova[1]->obtenhaMatriz(), $nova[2]->obtenhaMatriz()];
         unset($matrizNova[0][3], $matrizNova[1][3], $matrizNova[2][3]);
-
-        $retorno = new self(new Matriz($matrizNova), $origem);
-        $retorno->escalar($transformacao->escala * $this->escala);
+        $matrizNova = new Matriz($matrizNova);
+        $escalaFinal = $transformacao->escala * $this->escala;
+        if (1 != $escalaFinal) {
+            $matrizNova = $matrizNova->Escalar(1 / $escalaFinal);
+        }
+        $retorno = new self($matrizNova, $origem);
+        $retorno->escala = ($transformacao->escala * $this->escala);
         $mirror = ($this->mirror ? -1 : 1) * ($transformacao->mirror ? -1 : 1) * -1;
         $retorno->mirror = -1 == $mirror ? false : true;
 
