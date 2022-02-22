@@ -40,7 +40,13 @@ class OffsetPoligono
         $pontos = $poligono->pontos();
         $linhas = [];
         for ($i = 1; $i < $numeroPonto; ++$i) {
+            /**
+             * @var PontoPoligono
+             */
             $p1 = $pontos[$i - 1];
+            /**
+             * @var PontoPoligono
+             */
             $p2 = $pontos[$i];
             $linha = LinhaFabrica::apartirDoisPonto($p2, $p1);
             if (DirecaoOffsetPoligono::Interno == $direcao && eMenor($linha->distanciaPontoLinha($propriedade->centro), $offset)) {

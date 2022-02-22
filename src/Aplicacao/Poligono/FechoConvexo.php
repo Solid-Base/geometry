@@ -6,6 +6,7 @@ namespace Solidbase\Geometria\Aplicacao\Poligono;
 
 use Solidbase\Geometria\Aplicacao\Pontos\RotacaoPontoEnum;
 use Solidbase\Geometria\Aplicacao\Pontos\SentidoRotacaoTresPontos;
+use Solidbase\Geometria\Colecao\ColecaoPontos;
 use Solidbase\Geometria\Dominio\Fabrica\PolilinhaFabrica;
 use Solidbase\Geometria\Dominio\Fabrica\VetorFabrica;
 use Solidbase\Geometria\Dominio\Polilinha;
@@ -13,9 +14,9 @@ use Solidbase\Geometria\Dominio\Ponto;
 
 class FechoConvexo
 {
-    public static function executar(array $pontos): Polilinha
+    public static function executar(ColecaoPontos $pontos): Polilinha
     {
-        self::retirarRepetidos($pontos);
+        $pontos = $pontos->unique();
         $pontoInicial = self::pontoInferior($pontos);
         self::ordenarPontos($pontos, $pontoInicial);
         $total = count($pontos);
@@ -30,7 +31,7 @@ class FechoConvexo
             }
 
             unset($pontos[$i - 1]);
-            $pontos = array_values($pontos);
+            $pontos->enumerarIndices();
             $i -= 2;
             --$total;
         }
@@ -38,38 +39,22 @@ class FechoConvexo
         return PolilinhaFabrica::criarPolilinhaPontos($pontos, fechado: true);
     }
 
-    private static function pontoInferior(array &$pontos): Ponto
+    private static function pontoInferior(ColecaoPontos &$pontos): Ponto
     {
-        usort($pontos, fn (Ponto $p1, Ponto $p2) => ($p1->y == $p2->y) ? $p1->x <=> $p2->x : $p1->y <=> $p2->y);
-        $pontoRetorno = reset($pontos);
-        unset($pontos[0]);
+        $retorno = $pontos->array();
+        usort($retorno, fn (Ponto $p1, Ponto $p2) => ($p1->y == $p2->y) ? $p1->x <=> $p2->x : $p1->y <=> $p2->y);
+        $pontoRetorno = reset($retorno);
+        unset($retorno[0]);
+        $pontos = ColecaoPontos::deArray($retorno);
 
         return $pontoRetorno;
     }
 
-    private static function ordenarPontos(array &$pontos, Ponto $pontoInicial): void
+    private static function ordenarPontos(ColecaoPontos &$pontos, Ponto $pontoInicial): void
     {
-        usort($pontos, fn (Ponto $p1, Ponto $p2) => VetorFabrica::apartirDoisPonto($p1, $pontoInicial)->anguloAbsoluto() <=> VetorFabrica::apartirDoisPonto($p2, $pontoInicial)->anguloAbsoluto());
-        array_unshift($pontos, $pontoInicial);
-    }
-
-    private static function retirarRepetidos(array &$pontos): void
-    {
-        $total = count($pontos);
-        for ($i = 0; $i < $total; ++$i) {
-            if (!isset($pontos[$i])) {
-                continue;
-            }
-            for ($j = $i + 1; $j < $total; ++$j) {
-                if (!isset($pontos[$j])) {
-                    continue;
-                }
-                if (!$pontos[$i]->eIgual($pontos[$j])) {
-                    continue;
-                }
-                unset($pontos[$j]);
-            }
-        }
-        $pontos = array_values($pontos);
+        $array = $pontos->array();
+        usort($array, fn (Ponto $p1, Ponto $p2) => VetorFabrica::apartirDoisPonto($p1, $pontoInicial)->anguloAbsoluto() <=> VetorFabrica::apartirDoisPonto($p2, $pontoInicial)->anguloAbsoluto());
+        array_unshift($array, $pontoInicial);
+        $pontos = ColecaoPontos::deArray($array);
     }
 }

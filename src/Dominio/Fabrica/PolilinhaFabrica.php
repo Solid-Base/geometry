@@ -6,17 +6,19 @@ namespace Solidbase\Geometria\Dominio\Fabrica;
 
 use Solidbase\Geometria\Aplicacao\Poligono\PropriedadePoligono;
 use Solidbase\Geometria\Aplicacao\Pontos\PontosAlinhados;
+use Solidbase\Geometria\Colecao\ColecaoPontos;
 use Solidbase\Geometria\Dominio\Polilinha;
 use Solidbase\Geometria\Dominio\Ponto;
 
 class PolilinhaFabrica
 {
     /**
-     * @param Ponto[] $pontos
-     * @param mixed   $fechado
+     * @param ColecaoPontos|Ponto[] $pontos
+     * @param bool                  $fechado
      */
-    public static function criarPolilinhaPontos(array $pontos, bool $limpar = false, $fechado = false): Polilinha
+    public static function criarPolilinhaPontos(array|ColecaoPontos $pontos, bool $limpar = false, $fechado = false): Polilinha
     {
+        $pontos = $pontos instanceof ColecaoPontos ? $pontos : ColecaoPontos::deArray($pontos);
         $polilinha = new Polilinha($fechado);
         if ($limpar) {
             $pontos = self::limparPontosPoligono($pontos);
@@ -42,7 +44,7 @@ class PolilinhaFabrica
 
     public static function criarPoligonoRetangular(float $comprimento, float $largura): Polilinha
     {
-        $pontos = [];
+        $pontos = new ColecaoPontos();
         $pontos[] = new Ponto(-$comprimento / 2, -$largura / 2);
         $pontos[] = new Ponto($comprimento / 2, -$largura / 2);
         $pontos[] = new Ponto($comprimento / 2, $largura / 2);
@@ -150,7 +152,7 @@ class PolilinhaFabrica
         return $lado / (2 * sin(M_PI / $numeroLados));
     }
 
-    private static function limparPontosPoligono(array $pontos): array
+    private static function limparPontosPoligono(ColecaoPontos $pontos): ColecaoPontos
     {
         if (count($pontos) < 3) {
             return $pontos;
@@ -162,8 +164,9 @@ class PolilinhaFabrica
             $p3 = $pontos[$i];
             if (PontosAlinhados::executar($p1, $p2, $p3)) {
                 unset($pontos[$i - 1]);
+                $pontos->enumerarIndices();
 
-                return self::limparPontosPoligono(array_values($pontos));
+                return self::limparPontosPoligono($pontos);
             }
         }
 

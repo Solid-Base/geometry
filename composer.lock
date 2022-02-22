@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b2d8d859602528df684a762cbcbec86c",
+    "content-hash": "ecaff7d91f28859c5550a7e9f1640f6c",
     "packages": [
         {
             "name": "solidbase/matematica",
@@ -45,6 +45,48 @@
             ],
             "description": "Modulo de matemática do SolidBase",
             "time": "2022-02-22T12:00:14+00:00"
+        },
+        {
+            "name": "solidbase/utilitarios",
+            "version": "0.01.2",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:solidbase30/utilitarios.git",
+                "reference": "92fac1df4b331185e1bc029bbc3383049936c1d6"
+            },
+            "dist": {
+                "type": "tar",
+                "url": "https://packpage.solidbase.dev.br/dist//solidbase/utilitarios/solidbase-utilitarios-0.01.2-262d03.tar",
+                "reference": "92fac1df4b331185e1bc029bbc3383049936c1d6",
+                "shasum": "c49684eb533c8d03d2f6ffc12eb04b974f83b025"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SolidBase\\Utilitarios\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "phpunit"
+                ]
+            },
+            "authors": [
+                {
+                    "name": "Guilherme Luiz",
+                    "email": "guilherme@solidbase.com.br"
+                }
+            ],
+            "description": "Utilitarios de sistemas",
+            "time": "2022-02-22T14:40:10+00:00"
         }
     ],
     "packages-dev": [

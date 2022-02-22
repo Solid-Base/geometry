@@ -8,24 +8,23 @@ use Countable;
 use DomainException;
 use JsonSerializable;
 use Solidbase\Geometria\Aplicacao\Modificadores\Transformacao;
+use Solidbase\Geometria\Colecao\ColecaoPontos;
 use Solidbase\Geometria\Dominio\Trait\TransformacaoTrait;
 
 class Polilinha implements Countable, JsonSerializable, TransformacaoInterface
 {
     use TransformacaoTrait;
-    /**
-     * @var PontoPoligono[]
-     */
-    private array $pontos;
+
+    private ColecaoPontos $pontos;
 
     public function __construct(private bool $fechado = false)
     {
-        $this->pontos = [];
+        $this->pontos = new ColecaoPontos();
     }
 
     public function __serialize(): array
     {
-        $pontos = array_map(fn (Ponto $p) => serialize($p), $this->pontos);
+        $pontos = $this->pontos->map(fn (Ponto $p) => serialize($p));
 
         return ['pontos' => $pontos];
     }
@@ -33,13 +32,13 @@ class Polilinha implements Countable, JsonSerializable, TransformacaoInterface
     public function __unserialize(array $data): void
     {
         $pontos = $data['pontos'];
-        $this->pontos = array_map(fn (string $p) => unserialize($p), $pontos);
+        $pontos = array_map(fn (string $p) => unserialize($p), $pontos);
+        $this->pontos = ColecaoPontos::deArray($pontos);
     }
 
     public function aplicarTransformacao(Transformacao $transformacao): static
     {
-        $pontos = array_map(fn (Ponto $p) => $transformacao->dePonto($p), $this->pontos);
-        $this->pontos = $pontos;
+        $this->pontos->each(fn (Ponto $p) => $p->aplicarTransformacao($transformacao));
 
         return $this;
     }
@@ -92,15 +91,12 @@ class Polilinha implements Countable, JsonSerializable, TransformacaoInterface
         return $this->fechado;
     }
 
-    /**
-     * @return PontoPoligono[]
-     */
-    public function pontos(): array
+    public function pontos(): ColecaoPontos
     {
-        $retorno = array_values($this->pontos);
-        $ultimo = end($this->pontos);
+        $retorno = clone $this->pontos;
+        $ultimo = $this->pontos->primeiro(null);
         if ($this->fechado && !$this->ultimoEIgualPrimeiro()) {
-            $retorno[] = $retorno[0];
+            $retorno->adicionar($ultimo);
         }
 
         return $retorno;
@@ -108,8 +104,9 @@ class Polilinha implements Countable, JsonSerializable, TransformacaoInterface
 
     private function ultimoEIgualPrimeiro(): bool
     {
-        $ultimo = end($this->pontos);
+        $ultimo = $this->pontos->ultimo(null);
+        $primeiro = $this->pontos->primeiro(null);
 
-        return $ultimo->eIgual($this->pontos[0]);
+        return $ultimo->eIgual($primeiro);
     }
 }
