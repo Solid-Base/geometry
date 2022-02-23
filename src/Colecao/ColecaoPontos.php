@@ -74,7 +74,7 @@ class ColecaoPontos extends Colecao implements UniqueInterface
         $indices = array_keys($distancias);
         $retorno = array_map(fn (int $k) => $this[$k], $indices);
 
-        return $this->apartirArray($retorno);
+        return static::deArray($retorno);
     }
 
     public function uniao(ColecaoPontos|array $pontos): static

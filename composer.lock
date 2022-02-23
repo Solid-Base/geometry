@@ -48,17 +48,17 @@
         },
         {
             "name": "solidbase/utilitarios",
-            "version": "0.01.2",
+            "version": "0.01.3",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:solidbase30/utilitarios.git",
-                "reference": "92fac1df4b331185e1bc029bbc3383049936c1d6"
+                "reference": "43282c0241d069417f5eb858d5c07aa592b92bd0"
             },
             "dist": {
                 "type": "tar",
-                "url": "https://packpage.solidbase.dev.br/dist//solidbase/utilitarios/solidbase-utilitarios-0.01.2-262d03.tar",
-                "reference": "92fac1df4b331185e1bc029bbc3383049936c1d6",
-                "shasum": "c49684eb533c8d03d2f6ffc12eb04b974f83b025"
+                "url": "https://packpage.solidbase.dev.br/dist//solidbase/utilitarios/solidbase-utilitarios-0.01.3-feaa3d.tar",
+                "reference": "43282c0241d069417f5eb858d5c07aa592b92bd0",
+                "shasum": "5a81031886b52e20234fc478a79ad6733060757c"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
@@ -86,7 +86,7 @@
                 }
             ],
             "description": "Utilitarios de sistemas",
-            "time": "2022-02-22T14:40:10+00:00"
+            "time": "2022-02-23T13:19:37+00:00"
         }
     ],
     "packages-dev": [
@@ -610,16 +610,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "9.2.11",
+            "version": "9.2.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "665a1ac0a763c51afc30d6d130dac0813092b17f"
+                "reference": "c011a0b6aaa4acd2f39b7f51fb4ad4442b6ec631"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/665a1ac0a763c51afc30d6d130dac0813092b17f",
-                "reference": "665a1ac0a763c51afc30d6d130dac0813092b17f",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/c011a0b6aaa4acd2f39b7f51fb4ad4442b6ec631",
+                "reference": "c011a0b6aaa4acd2f39b7f51fb4ad4442b6ec631",
                 "shasum": ""
             },
             "require": {
@@ -675,7 +675,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.11"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.12"
             },
             "funding": [
                 {
@@ -683,7 +683,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-02-18T12:46:09+00:00"
+            "time": "2022-02-23T06:30:26+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -928,16 +928,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.14",
+            "version": "9.5.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "1883687169c017d6ae37c58883ca3994cfc34189"
+                "reference": "dc738383c519243b0a967f63943a848d3fd861aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1883687169c017d6ae37c58883ca3994cfc34189",
-                "reference": "1883687169c017d6ae37c58883ca3994cfc34189",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/dc738383c519243b0a967f63943a848d3fd861aa",
+                "reference": "dc738383c519243b0a967f63943a848d3fd861aa",
                 "shasum": ""
             },
             "require": {
@@ -953,7 +953,7 @@
                 "phar-io/version": "^3.0.2",
                 "php": ">=7.3",
                 "phpspec/prophecy": "^1.12.1",
-                "phpunit/php-code-coverage": "^9.2.7",
+                "phpunit/php-code-coverage": "^9.2.12",
                 "phpunit/php-file-iterator": "^3.0.5",
                 "phpunit/php-invoker": "^3.1.1",
                 "phpunit/php-text-template": "^2.0.3",
@@ -1015,7 +1015,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.14"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.15"
             },
             "funding": [
                 {
@@ -1027,7 +1027,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-02-18T12:54:07+00:00"
+            "time": "2022-02-23T08:53:20+00:00"
         },
         {
             "name": "sebastian/cli-parser",
