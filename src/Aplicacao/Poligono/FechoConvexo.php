@@ -17,6 +17,9 @@ class FechoConvexo
     public static function executar(ColecaoPontos $pontos): Polilinha
     {
         $pontos = $pontos->unique();
+        if (count($pontos) <= 3) {
+            return PolilinhaFabrica::criarPolilinhaPontos($pontos, fechado: true);
+        }
         $pontoInicial = self::pontoInferior($pontos);
         self::ordenarPontos($pontos, $pontoInicial);
         $total = count($pontos);
