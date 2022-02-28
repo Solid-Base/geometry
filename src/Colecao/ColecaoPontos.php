@@ -28,11 +28,6 @@ class ColecaoPontos extends Colecao implements UniqueInterface
         $this->tipoObjeto = Ponto::class;
     }
 
-    public function __clone()
-    {
-        $this->objetos = array_map(fn (Ponto $p) => clone $p, $this->objetos);
-    }
-
     public function existe(mixed $objeto): bool
     {
         if (!$this->objetoEValido($objeto)) {

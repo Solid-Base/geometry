@@ -94,7 +94,7 @@ class Polilinha implements Countable, JsonSerializable, TransformacaoInterface
     public function pontos(): ColecaoPontos
     {
         $retorno = clone $this->pontos;
-        $ultimo = $this->pontos->primeiro(null);
+        $ultimo = $retorno->primeiro(null);
         if ($this->fechado && !$this->ultimoEIgualPrimeiro()) {
             $retorno->adicionar($ultimo);
         }
