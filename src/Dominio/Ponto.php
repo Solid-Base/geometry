@@ -123,13 +123,14 @@ class Ponto implements JsonSerializable, TransformacaoInterface
 
     public function quadrante(): QuadranteEnum
     {
-        if (eZeroOuPositivo($this->x) && eZeroOuPositivo($this->y)) {
+        $angulo = normatizarAngulo(atan2($this->y, $this->x));
+        if (eZero($angulo) || entre(0, $angulo, M_PI / 2, false)) {
             return QuadranteEnum::PRIMEIRO;
         }
-        if (eNegativo($this->x) && eZeroOuPositivo($this->y)) {
+        if (entre(M_PI / 2, $angulo, M_PI, false) || eIgual($angulo, M_PI / 2)) {
             return QuadranteEnum::SEGUNDO;
         }
-        if (eNegativo($this->x) && eNegativo($this->y)) {
+        if (entre(M_PI, $angulo, 3 * M_PI / 2, false) || eIgual($angulo, 3 * M_PI / 2)) {
             return QuadranteEnum::TERCEIRO;
         }
 
