@@ -39,6 +39,9 @@ class Polilinha implements Countable, JsonSerializable, TransformacaoInterface
     public function aplicarTransformacao(Transformacao $transformacao): static
     {
         $this->pontos->each(fn (Ponto $p) => $p->aplicarTransformacao($transformacao));
+        if ($transformacao->eReflexao()) {
+            $this->pontos->each(fn (PontoPoligono $p) => $p->informarConcordancia($p->concordancia * -1));
+        }
 
         return $this;
     }
