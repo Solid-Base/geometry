@@ -35,7 +35,7 @@ class FechoConvexo
 
             unset($pontos[$i - 1]);
             $pontos->enumerarIndices();
-            $i -= 2;
+            $i -= $i > 3 ? 2 : 1;
             --$total;
         }
 
