@@ -115,20 +115,20 @@ class Transformacao
             $matriz = $matriz->Escalar($this->escala);
         }
         $matriz->adicionarLinha([0, 0, 0]);
-        $matriz->adicionarColuna([$this->origem->x, $this->origem->y, $this->origem->z, 1]);
+        $matriz->adicionarColuna([[$this->origem->x], [$this->origem->y], [$this->origem->z], [1]]);
         $pontoM = new Matriz([[$ponto->x], [$ponto->y], [$ponto->z], [1]]);
-        $pontoT = $matriz->Multiplicar($pontoM)->obtenhaMatriz();
+        $pontoT = $matriz->Multiplicar($pontoM);
 
-        return new Ponto($pontoT[0][0], $pontoT[1][0], $pontoT[2][0]);
+        return new Ponto($pontoT['1'], $pontoT['2'], $pontoT['3']);
     }
 
     public function deVetor(Vetor $vetor): Vetor
     {
         $matriz = clone $this->matriz;
         $pontoM = new Matriz([[$vetor->x], [$vetor->y], [$vetor->z]]);
-        $pontoT = $matriz->Multiplicar($pontoM)->obtenhaMatriz();
+        $pontoT = $matriz->Multiplicar($pontoM);
 
-        return new Vetor($pontoT[0][0], $pontoT[1][0], $pontoT[2][0]);
+        return new Vetor($pontoT['1'], $pontoT['2'], $pontoT['3']);
     }
 
     public function obtenhaMatriz(): Matriz
@@ -157,30 +157,33 @@ class Transformacao
     {
         $matriz = clone $transformacao->matriz;
         if (1 != $transformacao->escala) {
-            $matriz = $matriz->Escalar($transformacao->escala);
+            $matriz = $matriz->escalar($transformacao->escala);
         }
         $matriz->adicionarLinha([0, 0, 0]);
         $matriz->adicionarColuna([$transformacao->origem->x, $transformacao->origem->y, $transformacao->origem->z, 1]);
 
         $matrizOriginal = clone $this->matriz;
         if (1 != $this->escala) {
-            $matrizOriginal = $matrizOriginal->Escalar($this->escala);
+            $matrizOriginal = $matrizOriginal->escalar($this->escala);
         }
         $matrizOriginal->adicionarLinha([0, 0, 0]);
         $matrizOriginal->adicionarColuna([$this->origem->x, $this->origem->y, $this->origem->z, 1]);
 
-        $nova = $matriz->Multiplicar($matrizOriginal);
-        $x = $nova[0][3];
-        $y = $nova[1][3];
-        $z = $nova[2][3];
+        $nova = $matriz->multiplicar($matrizOriginal);
+        $x = $nova['1,4'];
+        $y = $nova['2,4'];
+        $z = $nova['3,4'];
         $origem = new Ponto($x, $y, $z);
 
-        $matrizNova = [$nova[0]->obtenhaMatriz(), $nova[1]->obtenhaMatriz(), $nova[2]->obtenhaMatriz()];
-        unset($matrizNova[0][3], $matrizNova[1][3], $matrizNova[2][3]);
+        $linha1 = [$nova['1,1'], $nova['1,2'], $nova['1,3']];
+        $linha2 = [$nova['2,1'], $nova['2,2'], $nova['2,3']];
+        $linha3 = [$nova['3,1'], $nova['3,2'], $nova['3,3']];
+
+        $matrizNova = [$linha1, $linha2, $linha3];
         $matrizNova = new Matriz($matrizNova);
         $escalaFinal = $transformacao->escala * $this->escala;
         if (1 != $escalaFinal) {
-            $matrizNova = $matrizNova->Escalar(1 / $escalaFinal);
+            $matrizNova = $matrizNova->escalar(1 / $escalaFinal);
         }
         $retorno = new self($matrizNova, $origem);
         $retorno->escala = ($transformacao->escala * $this->escala);

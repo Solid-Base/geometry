@@ -14,24 +14,24 @@ class FabricaMatrizTransformacao
 {
     public static function MatrizRotacao(Vetor $eixo, float|int $angulo): Matriz
     {
-        $retorno = FabricaMatriz::Nula(3)->obtenhaMatriz();
+        $retorno = FabricaMatriz::Nula(3);
         $cos = cos($angulo);
         $sen = sin($angulo);
         $unitario = $eixo->VetorUnitario();
         $umCos = 1 - $cos;
-        $retorno[0][0] = $unitario->x ** 2 * $umCos + $cos;
-        $retorno[0][1] = ($unitario->x * $unitario->y) * $umCos - $unitario->z * $sen;
-        $retorno[0][2] = $unitario->x * $unitario->z * $umCos + $unitario->y * $sen;
+        $retorno['1,1'] = $unitario->x ** 2 * $umCos + $cos;
+        $retorno['1,2'] = ($unitario->x * $unitario->y) * $umCos - $unitario->z * $sen;
+        $retorno['1,3'] = $unitario->x * $unitario->z * $umCos + $unitario->y * $sen;
 
-        $retorno[1][0] = $unitario->x * $unitario->y * $umCos + $unitario->z * $sen;
-        $retorno[1][1] = $unitario->y ** 2 * $umCos + $cos;
-        $retorno[1][2] = $unitario->y * $unitario->z * $umCos - $unitario->x * $sen;
+        $retorno['2,1'] = $unitario->x * $unitario->y * $umCos + $unitario->z * $sen;
+        $retorno['2,2'] = $unitario->y ** 2 * $umCos + $cos;
+        $retorno['2,3'] = $unitario->y * $unitario->z * $umCos - $unitario->x * $sen;
 
-        $retorno[2][0] = $unitario->x * $unitario->z * $umCos - ($unitario->y * $sen);
-        $retorno[2][1] = $unitario->y * $unitario->z * $umCos + ($unitario->x * $sen);
-        $retorno[2][2] = ($unitario->z ** 2) * ($umCos) + ($cos);
+        $retorno['3,1'] = $unitario->x * $unitario->z * $umCos - ($unitario->y * $sen);
+        $retorno['3,2'] = $unitario->y * $unitario->z * $umCos + ($unitario->x * $sen);
+        $retorno['3,3'] = ($unitario->z ** 2) * ($umCos) + ($cos);
 
-        return new Matriz($retorno);
+        return $retorno;
     }
 
     public static function Reflexao(Plano $plano): Matriz

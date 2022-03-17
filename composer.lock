@@ -163,7 +163,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:solidbase30/matematica-2.0.git",
-                "reference": "3a62e1ed75f4ac93f6dad91d75a2c2513a6a48aa"
+                "reference": "733673112d311e2db256783813a86bd130af19d8"
             },
             "require": {
                 "ext-bcmath": "*",
@@ -189,7 +189,7 @@
                 }
             ],
             "description": "Modulo de matemática do SolidBase",
-            "time": "2022-03-16T12:49:36+00:00"
+            "time": "2022-03-17T14:58:32+00:00"
         },
         {
             "name": "solidbase/utilitarios",
