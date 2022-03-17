@@ -160,14 +160,14 @@ class Transformacao
             $matriz = $matriz->escalar($transformacao->escala);
         }
         $matriz->adicionarLinha([0, 0, 0]);
-        $matriz->adicionarColuna([$transformacao->origem->x, $transformacao->origem->y, $transformacao->origem->z, 1]);
+        $matriz->adicionarColuna([[$transformacao->origem->x], [$transformacao->origem->y], [$transformacao->origem->z], [1]]);
 
         $matrizOriginal = clone $this->matriz;
         if (1 != $this->escala) {
             $matrizOriginal = $matrizOriginal->escalar($this->escala);
         }
         $matrizOriginal->adicionarLinha([0, 0, 0]);
-        $matrizOriginal->adicionarColuna([$this->origem->x, $this->origem->y, $this->origem->z, 1]);
+        $matrizOriginal->adicionarColuna([[$transformacao->origem->x], [$transformacao->origem->y], [$transformacao->origem->z], [1]]);
 
         $nova = $matriz->multiplicar($matrizOriginal);
         $x = $nova['1,4'];
