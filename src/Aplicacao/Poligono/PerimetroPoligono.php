@@ -12,19 +12,22 @@ class PerimetroPoligono
     {
     }
 
-    public static function executar(Polilinha $poligono): ?float
+    public static function executar(Polilinha $poligono): float
     {
         $soma = 0;
-        if (\count($poligono) < 3) {
-            return null;
+        if (\count($poligono) < 2) {
+            return 0;
         }
-        $poligono->fecharPolilinha();
         $pontos = $poligono->pontos();
         $quantidade = count($pontos);
         for ($i = 1; $i < $quantidade; ++$i) {
             $p1 = $pontos[$i - 1];
             $p2 = $pontos[$i];
             $soma += ($p1->distanciaParaPonto($p2));
+        }
+        if ($poligono->ePoligono()) {
+            $ultimo = $pontos->ultimo();
+            $soma += $pontos[0]->distanciaParaPonto($ultimo);
         }
 
         return $soma;
