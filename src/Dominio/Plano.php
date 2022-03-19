@@ -20,8 +20,8 @@ class Plano
     private Vetor $v;
 
     public function __construct(
-        protected Ponto $origem,
-        protected Vetor $normal
+        private Ponto $origem,
+        private Vetor $normal
     ) {
         if ($normal->eNulo()) {
             throw new DomainException('Não é possível criar Planos com normal nula');
@@ -29,6 +29,14 @@ class Plano
         $this->normal = $normal->vetorUnitario();
         $this->u = VetorFabrica::Perpendicular($normal)->vetorUnitario();
         $this->v = $this->normal->produtoVetorial($this->u)->vetorUnitario();
+    }
+
+    public function __clone()
+    {
+        $this->u = clone $this->u;
+        $this->v = clone $this->v;
+        $this->origem = clone $this->origem;
+        $this->normal = clone $this->normal;
     }
 
     public function __get($name)

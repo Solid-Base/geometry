@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "cb3675ee15cc0157c1694b8cac1af7ad436b31c7"
+                "reference": "f2f66cd480df5f165391ff9b6332700d467b25ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/cb3675ee15cc0157c1694b8cac1af7ad436b31c7",
-                "reference": "cb3675ee15cc0157c1694b8cac1af7ad436b31c7",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/f2f66cd480df5f165391ff9b6332700d467b25ac",
+                "reference": "f2f66cd480df5f165391ff9b6332700d467b25ac",
                 "shasum": ""
             },
             "require": {
@@ -104,7 +104,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-14T12:51:26+00:00"
+            "time": "2022-03-18T09:48:03+00:00"
         },
         {
             "name": "psr/log",
@@ -163,7 +163,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:solidbase30/matematica-2.0.git",
-                "reference": "733673112d311e2db256783813a86bd130af19d8"
+                "reference": "18bea382e18fbd4ef98892e81962003db19e5362"
             },
             "require": {
                 "ext-bcmath": "*",
@@ -189,7 +189,7 @@
                 }
             ],
             "description": "Modulo de matemática do SolidBase",
-            "time": "2022-03-17T14:58:32+00:00"
+            "time": "2022-03-17T15:46:00+00:00"
         },
         {
             "name": "solidbase/utilitarios",
@@ -197,7 +197,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:solidbase30/utilitarios.git",
-                "reference": "0f2f6f617a2756c447f23103d78aeda041e69e1a"
+                "reference": "d9dc50d6e856be6aeeda5b56983c1ef336cbbe2e"
             },
             "require": {
                 "monolog/monolog": "^2.3"
@@ -231,7 +231,7 @@
                 }
             ],
             "description": "Utilitarios de sistemas",
-            "time": "2022-03-02T11:44:57+00:00"
+            "time": "2022-03-19T11:53:28+00:00"
         }
     ],
     "packages-dev": [
@@ -1094,12 +1094,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "5fc83848551ec5fc0086af8024efc9c42fcde559"
+                "reference": "ddd5d89f3c4f2f1093939e75f302cee1d4756653"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/5fc83848551ec5fc0086af8024efc9c42fcde559",
-                "reference": "5fc83848551ec5fc0086af8024efc9c42fcde559",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ddd5d89f3c4f2f1093939e75f302cee1d4756653",
+                "reference": "ddd5d89f3c4f2f1093939e75f302cee1d4756653",
                 "shasum": ""
             },
             "require": {
@@ -1189,7 +1189,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-03-15T10:09:15+00:00"
+            "time": "2022-03-19T09:28:52+00:00"
         },
         {
             "name": "sebastian/cli-parser",

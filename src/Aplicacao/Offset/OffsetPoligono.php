@@ -32,7 +32,7 @@ class OffsetPoligono
         $poligono = self::limparPoligono($polilinha);
         $propriedade = PropriedadePoligono::executar($poligono);
         if (TipoPoligonoEnum::Concavo == $propriedade->tipo) {
-            throw new DomainException('O algoritmo só funciona em poligonos convexos');
+            throw new DomainException('O algoritmo só funciona em polígonos convexos');
         }
         $offsetLinha = DirecaoOffsetReta::tryFrom($propriedade->sentido * $direcao->value);
 
@@ -44,6 +44,7 @@ class OffsetPoligono
              * @var PontoPoligono
              */
             $p1 = $pontos[$i - 1];
+
             /**
              * @var PontoPoligono
              */
@@ -70,7 +71,9 @@ class OffsetPoligono
 
     private static function limparPoligono(Polilinha $polilinha): Polilinha
     {
-        return PolilinhaFabrica::criarPolilinhaPontos($polilinha->pontos(), true, $polilinha->ePoligono());
+        $pontos = PolilinhaFabrica::limparPontosPoligono($polilinha->pontos());
+
+        return PolilinhaFabrica::criarPolilinhaPontos($pontos, fechado: $polilinha->ePoligono());
     }
 
     private static function gerarPoligonoOffset(array $linhas, bool $ePoligono, RotacaoPontoEnum $rotacao): Polilinha

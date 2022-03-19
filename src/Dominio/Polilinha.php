@@ -22,6 +22,11 @@ class Polilinha implements Countable, JsonSerializable, TransformacaoInterface
         $this->pontos = new ColecaoPontos();
     }
 
+    public function __clone()
+    {
+        $this->pontos = clone $this->pontos;
+    }
+
     public function __serialize(): array
     {
         $pontos = $this->pontos->map(fn (Ponto $p) => serialize($p));

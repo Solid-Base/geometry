@@ -18,7 +18,7 @@ class PolilinhaFabrica
      */
     public static function criarPolilinhaPontos(array|ColecaoPontos $pontos, bool $limpar = false, $fechado = false): Polilinha
     {
-        $pontos = $pontos instanceof ColecaoPontos ? $pontos : ColecaoPontos::deArray($pontos);
+        $pontos = ColecaoPontos::deArray($pontos, clonar: true);
         $polilinha = new Polilinha($fechado);
         if ($limpar) {
             $pontos = self::limparPontosPoligono($pontos);
@@ -117,6 +117,27 @@ class PolilinhaFabrica
         return $poligono;
     }
 
+    public static function limparPontosPoligono(ColecaoPontos $pontos): ColecaoPontos
+    {
+        if (count($pontos) < 3) {
+            return $pontos;
+        }
+        $quantidade = count($pontos);
+        for ($i = 2; $i < $quantidade; ++$i) {
+            $p1 = $pontos[$i - 2];
+            $p2 = $pontos[$i - 1];
+            $p3 = $pontos[$i];
+            if (PontosAlinhados::executar($p1, $p2, $p3)) {
+                unset($pontos[$i - 1]);
+                $pontos->enumerarIndices();
+
+                return self::limparPontosPoligono($pontos);
+            }
+        }
+
+        return $pontos;
+    }
+
     private static function anguloInicial(int $numeroLados): float
     {
         if (0 === $numeroLados % 2) {
@@ -150,26 +171,5 @@ class PolilinhaFabrica
     private static function RaioLado(float $lado, int $numeroLados): float
     {
         return $lado / (2 * sin(M_PI / $numeroLados));
-    }
-
-    private static function limparPontosPoligono(ColecaoPontos $pontos): ColecaoPontos
-    {
-        if (count($pontos) < 3) {
-            return $pontos;
-        }
-        $quantidade = count($pontos);
-        for ($i = 2; $i < $quantidade; ++$i) {
-            $p1 = $pontos[$i - 2];
-            $p2 = $pontos[$i - 1];
-            $p3 = $pontos[$i];
-            if (PontosAlinhados::executar($p1, $p2, $p3)) {
-                unset($pontos[$i - 1]);
-                $pontos->enumerarIndices();
-
-                return self::limparPontosPoligono($pontos);
-            }
-        }
-
-        return $pontos;
     }
 }

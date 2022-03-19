@@ -46,9 +46,9 @@ class Transformacao
         }
         $vetor = VetorFabrica::apartirPonto($origem);
         $translacao = $vetor->escalar(-1);
-        $matrizTlinha = self::criarTranslacao($translacao);
+        $matrizTLinha = self::criarTranslacao($translacao);
         $matrizT = self::criarTranslacao($vetor);
-        $primeira = $matrizTlinha->multiplicar($matrizRotacao);
+        $primeira = $matrizTLinha->multiplicar($matrizRotacao);
 
         return $primeira->multiplicar($matrizT);
     }
@@ -100,10 +100,10 @@ class Transformacao
 
         $vetor = VetorFabrica::apartirPonto($ponto);
         $translacao = $vetor->escalar(-1);
-        $matrizTlinha = self::criarTranslacao($translacao);
+        $matrizTLinha = self::criarTranslacao($translacao);
 
         $matrizT = self::criarTranslacao($vetor);
-        $primeira = $matrizTlinha->multiplicar($matrizEscala);
+        $primeira = $matrizTLinha->multiplicar($matrizEscala);
 
         return $primeira->multiplicar($matrizT);
     }

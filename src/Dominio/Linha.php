@@ -41,6 +41,12 @@ class Linha implements JsonSerializable, TransformacaoInterface
         };
     }
 
+    public function __clone()
+    {
+        $this->origem = clone $this->origem;
+        $this->direcao = clone $this->direcao;
+    }
+
     public function aplicarTransformacao(Transformacao $transformacao): static
     {
         $origem = $transformacao->dePonto($this->origem);

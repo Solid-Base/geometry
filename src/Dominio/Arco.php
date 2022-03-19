@@ -50,6 +50,11 @@ class Arco implements TransformacaoInterface
         };
     }
 
+    public function __clone()
+    {
+        $this->centro = clone $this->centro;
+    }
+
     public function aplicarTransformacao(Transformacao $transformacao): static
     {
         $pontoInicial = $transformacao->dePonto($this->pontoInicial());

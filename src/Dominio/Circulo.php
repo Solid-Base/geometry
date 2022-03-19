@@ -25,6 +25,11 @@ class Circulo implements TransformacaoInterface
         $this->raio = $raio;
     }
 
+    public function __clone()
+    {
+        $this->centro = clone $this->centro;
+    }
+
     public function __get($name)
     {
         return match ($name) {

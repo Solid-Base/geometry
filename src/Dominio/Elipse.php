@@ -32,6 +32,12 @@ class Elipse implements TransformacaoInterface
         $this->direcao = VetorFabrica::DirecaoModulo($angulo);
     }
 
+    public function __clone()
+    {
+        $this->centro = clone $this->centro;
+        $this->direcao = clone $this->direcao;
+    }
+
     public function __get($name)
     {
         return match ($name) {
