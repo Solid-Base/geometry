@@ -81,17 +81,16 @@ class Transformacao
         return new self(FabricaMatriz::Identidade(3), $vetor);
     }
 
-    public static function criarEscala(float $escala): self
+    public static function criarEscala(float|Vetor $escala): self
     {
-        $identidade = FabricaMatriz::Identidade(3);
-
+        $identidade = self::criarMatrizEscala($escala);
         $retorno = new self($identidade, new Ponto());
-        $retorno->escala = $escala;
+        $retorno->escala = is_float($escala) ? $escala : abs($escala->x);
 
         return $retorno;
     }
 
-    public static function criarEscalaPonto(float $escala, Ponto $ponto): self
+    public static function criarEscalaPonto(float|Vetor $escala, Ponto $ponto): self
     {
         if ($ponto->eIgual(new Ponto())) {
             return self::criarEscala($escala);
@@ -227,5 +226,14 @@ class Transformacao
     public function eReflexao(): bool
     {
         return $this->mirror;
+    }
+
+    private static function criarMatrizEscala(float|Vetor $escala): Matriz
+    {
+        if (is_float($escala)) {
+            return FabricaMatriz::Identidade(3);
+        }
+
+        return new Matriz([[$escala->x, 0, 0], [0, $escala->y, 0], [0, 0, $escala->z]]);
     }
 }
