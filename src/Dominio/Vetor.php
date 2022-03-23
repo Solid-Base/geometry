@@ -36,6 +36,10 @@ final class Vetor extends Ponto
 
     public function temMesmoSentido(self $vetor): bool
     {
+        if ($vetor->eNulo() || $this->eNulo()) {
+            return false;
+        }
+
         return $this->vetorUnitario()->subtrair($vetor->vetorUnitario())->eNulo();
     }
 
