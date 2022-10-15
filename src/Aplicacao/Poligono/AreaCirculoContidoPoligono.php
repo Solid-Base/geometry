@@ -51,6 +51,9 @@ class AreaCirculoContidoPoligono
         $primeiro = self::primeiroCruzarCirculo($pontosIntersecao, $circulo);
         $ultimo = self::ultimoCruzarCirculo($pontosIntersecao, $circulo);
         $direcao = (VetorFabrica::apartirDoisPonto($primeiro, $ultimo))->produtoVetorial(VetorFabrica::BaseZ());
+        if ($direcao->eNulo()) {
+            return 0;
+        }
         $linha = new Linha($primeiro->pontoMedio($ultimo), $direcao, 1);
         $linhaIntersecao = InterseccaoLinhaCirculo::executar($linha, $circulo);
         $origem = $linhaIntersecao[0];
