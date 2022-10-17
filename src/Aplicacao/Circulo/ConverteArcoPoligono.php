@@ -31,9 +31,9 @@ class ConverteArcoPoligono
         $raio = $arco->raio;
         $centro = $arco->centro;
         for ($i = 0; $i < $numeroDivisao; ++$i) {
-            $angulo = $anguloInicial + $delta;
-            $x = $raio * cos($angulo * $i) + $centro->x;
-            $y = $raio * sin($angulo * $i) + $centro->y;
+            $angulo = $anguloInicial + $delta * $i;
+            $x = $raio * cos($angulo) + $centro->x;
+            $y = $raio * sin($angulo) + $centro->y;
             $z = $centro->z;
             $pontos[] = new PontoPoligono($x, $y, $z);
         }
