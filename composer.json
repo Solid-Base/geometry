@@ -1,5 +1,5 @@
 {
-    "name": "solidbase/geometria",
+    "name": "solidbase/geometry",
     "description": "Módulo de Geometria do SolidBase",
     "type": "packpage",
     "autoload": {
