@@ -1,150 +1,110 @@
 <?php
 
-declare(strict_types=1);
+use Solidbase\Geometry\Domain\Vector;
 
-namespace Tests\Dominio;
+$deltaEqual = 0.00000001;
+test("Direção", function (Vector $vetor, Vector $vetorComparacao, bool $esperado) {
+    $resultado = $vetor->hasSameDirection($vetorComparacao);
 
-use Exception;
-use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use Solidbase\Geometria\Dominio\Vetor;
+    expect($resultado)->toBe($esperado);
+})->with([
+    [new Vector(1, 0),new Vector(-1, 0), true],
+    [new Vector(1, 0),new Vector(5, 0), true],
+    [new Vector(1, 0),new Vector(-1, 1), false],
+    [new Vector(1, -1),new Vector(-1, 1), true],
+])->group("Vetor");
 
-/**
- * @internal
- * @coversNothing
- */
-final class VetorTest extends TestCase
-{
-    public function testTemMesmaDirecao(): void
-    {
-        $ponto = new Vetor(0, 10);
-        $ponto2 = new Vetor(0, -10);
-        $pontoNulo = new Vetor();
-        static::assertTrue($ponto->temMesmaDirecao($ponto2));
-        static::assertFalse($pontoNulo->temMesmaDirecao($ponto));
-        static::assertTrue($ponto->temMesmaDirecao($ponto));
-    }
 
-    public function testTemMesmoSentido(): void
-    {
-        $ponto = new Vetor(0, 10);
-        $ponto2 = new Vetor(0, -10);
-        $ponto3 = new Vetor(0, 30);
+test("Sentido", function (Vector $vetor, Vector $vetorComparacao, bool $esperado) {
+    $resultado = $vetor->hasSameSense($vetorComparacao);
 
-        static::assertTrue($ponto->temMesmoSentido($ponto3));
-        static::assertFalse($ponto->temMesmoSentido($ponto2));
-    }
+    expect($resultado)->toBe($esperado);
+})->with([
+    [new Vector(1, 0),new Vector(-1, 0), false],
+    [new Vector(1, 0),new Vector(5, 0), true],
+    [new Vector(1, 0),new Vector(-1, 1), false],
+    [new Vector(1, -1),new Vector(-1, 1), false],
+    [new Vector(5, 5),new Vector(1, 1), true],
+])->group("Vetor");
 
-    public function testProdutoInterno(): void
-    {
-        $ponto = new Vetor(5, 10, 5);
-        $ponto2 = new Vetor(-4, -10, 6);
-        static::assertSame($ponto->produtoInterno($ponto2), -90.0);
-    }
 
-    public function testModulo(): void
-    {
-        $ponto = new Vetor(3, 4, 0);
-        $ponto2 = new Vetor(-12, -16, 5);
-        static::assertSame($ponto->modulo(), 5.0);
-        static::assertSame($ponto2->modulo(), 20.61552812808830274910704927987);
-    }
+test("Produto-Interno", function (Vector $vetor, Vector $vetorComparacao, float $esperado) {
+    $resultado = $vetor->product($vetorComparacao);
+    expect($resultado)->toBe($esperado);
+})->with([
+    [new Vector(1, 2, 3),new Vector(4, 5, 6),32.0],
+    [new Vector(1, 4, -3),new Vector(-1, 2, 0),7.0]
+]);
 
-    public function testEscalar(): void
-    {
-        $ponto = new Vetor(3, 4, 0);
-        $ponto2 = new Vetor(-12, -16, 4);
-        static::assertTrue($ponto->escalar(2)->eIgual(new Vetor(6, 8, 0)));
-        static::assertTrue($ponto2->escalar(3)->eIgual(new Vetor(-36, -48, 12)));
-    }
 
-    public function testVetorUnitario(): void
-    {
-        $vetor = new Vetor();
-        $vetor2 = new Vetor(3, 4, 8);
-        static::assertTrue(
-            $vetor2->vetorUnitario()->eIgual(new Vetor(
-                0.31799936400190799364002225991987,
-                0.42399915200254399152002967989327,
-                0.84799830400508798304005935978654
-            ))
-        );
-        $this->expectException(Exception::class);
-        $vetor->vetorUnitario();
-    }
+test("Módulo", function (Vector $vetor, float $esperado) use ($deltaEqual) {
+    $resultado = $vetor->module();
+    expect($resultado)->toEqualWithDelta($esperado, $deltaEqual);
+})->with([
+    [new Vector(3, 4, 0),5.0],
+    [new Vector(-25, 40, 0),47.16990566]
+]);
 
-    public function testAngulo(): void
-    {
-        $vetor = new Vetor(10, 0);
-        $vetor2 = new Vetor(-10, 0);
-        $vetor3 = new Vetor(4, 4, 0);
-        $vetor4 = new Vetor(-4, 4, 0);
-        static::assertSame(
-            $vetor->angulo($vetor2),
-            M_PI
-        );
-        static::assertSame(arredondar(M_PI, 5), arredondar($vetor->angulo($vetor2), 5));
-        static::assertSame(arredondar(M_PI / 4, 5), arredondar($vetor->angulo($vetor3), 5));
-        static::assertSame(arredondar(M_PI / 4 + M_PI / 2, 5), arredondar($vetor->angulo($vetor4), 5));
-    }
+test("Escalar", function (Vector $vetor, float $escalar, Vector $esperado) {
+    $resultado = $vetor->scalar($escalar);
+    expect($resultado)->toEqual($esperado);
+})->with([
+    [new Vector(1, 2, 3),2,new Vector(2, 4, 6)],
+    [new Vector(1, 4, -3),5,new Vector(5, 20, -15)]
+]);
+test("Unitário", function (Vector $vetor, Vector $esperado) use ($deltaEqual) {
+    $resultado = $vetor->getUnitary();
+    expect($resultado)->toEqualWithDelta($esperado, $deltaEqual);
+})->with([
+    [new Vector(-3, 4), new Vector(-3 / 5, 4 / 5)],
+    [new Vector(1, -2, 3), new Vector(1 / sqrt(14), -2 / sqrt(14), 3 / sqrt(14))]
+]);
 
-    public function testAnguloAbsoluto(): void
-    {
-        $vetor1 = new Vetor(-4, -4, 0);
-        $vetor3 = new Vetor(4, 4, 0);
-        $vetor4 = new Vetor(-4, 4, 0);
-        $vetor5 = new Vetor(4, -4, 0);
 
-        $angulo = M_PI + M_PI / 4;
-        static::assertSame($vetor1->anguloAbsoluto(), $angulo);
-        $angulo = M_PI / 4;
-        static::assertSame($vetor3->anguloAbsoluto(), $angulo);
-        $angulo = M_PI / 2 + M_PI / 4;
-        static::assertSame($vetor4->anguloAbsoluto(), $angulo);
-        $angulo = M_PI / 2 + M_PI / 4 + M_PI;
-        static::assertSame($vetor5->anguloAbsoluto(), $angulo);
-    }
+test("Unitário-Exception", function (Vector $vetor) {
+    $vetor->getUnitary();
+})->with([
+    [new Vector(0, 0, 0)],
+])->throws(Exception::class, "Vetores nulos não possui vetor unitário");
 
-    public function testProdutoVetorial(): void
-    {
-        $vetor = new Vetor(2, 4, 3);
-        $vetor2 = new Vetor(3, 5, 7);
-        $resposta = new Vetor(13, -5, -2);
-        static::assertTrue($resposta->eIgual($vetor->produtoVetorial($vetor2)));
-    }
 
-    public function testProdutoMisto(): void
-    {
-        $vetor = new Vetor(2, 4, 3);
-        $vetor2 = new Vetor(3, 5, 7);
-        $vetor3 = new Vetor(4, 3, 1);
-        static::assertSame($vetor->produtoMisto($vetor2, $vetor3), 35.0);
-    }
+test("Ângulo", function (Vector $vetor, Vector $segundo, float $esperado) use ($deltaEqual) {
+    $resultado = $vetor->getAngle($segundo);
+    expect($resultado)->toEqualWithDelta($esperado, $deltaEqual);
+})->with([
+    [new Vector(1, 1, 4), new Vector(-1, 2, 2),M_PI / 4],
+    [new Vector(2, 1, -2), new Vector(4, 4, 2),1.1102423351135742],
+]);
 
-    public function testProjecao(): void
-    {
-        $vetor = new Vetor(-2, -3, 4);
-        $vetor2 = new Vetor(2, -1, 3);
+test("Ângulo-Exception", function (Vector $vetor, Vector $segundo) {
+    $vetor->getAngle($segundo);
+})->with([
+    [new Vector(1, 1, 4), new Vector(0, 0, 0)],
+    [new Vector(0, 0, 0), new Vector(4, 4, 2)],
+    [new Vector(0, 0, 0), new Vector(0, 0, 0)],
+])->throws(Exception::class, "Nenhum dos vetores podem ser nulos");
 
-        $modulo = 11 / 29;
-        $resposta = new Vetor(-2 * $modulo, -3 * $modulo, 4 * $modulo);
+test("Produto-Vetorial", function (Vector $vetor, Vector $segundo, Vector $esperado) use ($deltaEqual) {
+    $resultado = $vetor->crossProduct($segundo);
+    expect($resultado)->toEqualWithDelta($esperado, $deltaEqual);
+})->with([
+    [new Vector(2, -1, 3), new Vector(5, -2, 1),new Vector(5, 13, 1)],
+    [new Vector(5, 4, 3), new Vector(1, 0, 1),new Vector(4, -2, -4)],
+]);
 
-        static::assertTrue($resposta->eIgual($vetor->projecao($vetor2)));
-        $vetor3 = new Vetor();
-        static::assertTrue((new Vetor())->eIgual($vetor->projecao($vetor3)));
-        $this->expectException(Exception::class);
-        $vetor3->projecao($vetor);
-    }
 
-    public function testENulo(): void
-    {
-        $reflexao = new ReflectionClass(Vetor::class);
-        $metodoENulo = $reflexao->getMethod('eNulo');
-        $metodoENulo->setAccessible(true);
-        $vetor = new Vetor();
-        $vetor2 = new Vetor(2, 5, 8);
+test("Produto-Misto", function (Vector $vetor, Vector $segundo, Vector $terceiro, float $esperado) use ($deltaEqual) {
+    $resultado = $vetor->tripleProduct($segundo, $terceiro);
+    expect($resultado)->toEqualWithDelta($esperado, $deltaEqual);
+})->with([
+    [new Vector(2, 3, 5), new Vector(-1, 3, 3),new Vector(4, -3, 2),27],
+    [new Vector(1, 2, 3), new Vector(2, 1, 3),new Vector(1, 1, 3),-3],
+]);
 
-        static::assertTrue($metodoENulo->invoke($vetor));
-        static::assertFalse($metodoENulo->invoke($vetor2));
-    }
-}
+
+test("Projeção", function (Vector $vetor, Vector $segundo, Vector $esperado) use ($deltaEqual) {
+    $resultado = $vetor->getProjection($segundo);
+    expect($resultado)->toEqualWithDelta($esperado, $deltaEqual);
+})->with([
+    [new Vector(1, 1, 4), new Vector(-1, 2, 2),new Vector(0.5, 0.5, 2)]
+]);

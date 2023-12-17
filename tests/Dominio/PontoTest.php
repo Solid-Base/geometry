@@ -1,150 +1,62 @@
 <?php
 
-declare(strict_types=1);
+use Solidbase\Geometry\Domain\Enum\QuadrantEnum;
+use Solidbase\Geometry\Domain\Point;
 
-namespace Tests\Dominio;
+$deltaEqual = 0.00000001;
+test("Distância", function (Point $ponto, Point $segundoPonto, float $esperado) {
+    $resultado = $ponto->distanceToPoint($segundoPonto);
 
-use PHPUnit\Framework\TestCase;
-use Solidbase\Geometria\Dominio\Enum\QuadranteEnum;
-use Solidbase\Geometria\Dominio\Ponto;
-use Tests\PontoEIgual;
+    expect($resultado)->toBe($esperado);
+})->with([
+    [new Point(1, 1, 0), new Point(4, 1),3.0]
+]);
 
-/**
- * @internal
- * @coversNothing
- */
-final class PontoTest extends TestCase
-{
-    /**
-     * @psalm-param Ponto $p1
-     * @psalm-param Ponto $p2
-     * @psalm-param float $esperado
-     *
-     * @dataProvider pontosDistancias
-     * @test
-     */
-    public function testDistanciaParaPonto(Ponto $p1, Ponto $p2, float $esperado): void
-    {
-        static::assertSame($p1->distanciaParaPonto($p2), $esperado);
-    }
 
-    public function testSomar(): void
-    {
-        $ponto = new Ponto();
-        $ponto2 = new Ponto(3, 4);
-        $ponto3 = new Ponto(0, 0, 1);
-        static::assertTrue($ponto->somar($ponto2)->eIgual(new Ponto(3, 4, 0)));
-        static::assertTrue($ponto2->somar($ponto3)->eIgual(new Ponto(3, 4, 1)));
-    }
+test("Soma", function (Point $ponto, Point $pontoSoma, Point $esperado) use ($deltaEqual) {
+    $resultado = $ponto->add($pontoSoma);
 
-    public function testSubtrair(): void
-    {
-        $ponto = new Ponto();
-        $ponto2 = new Ponto(3, 4);
-        $ponto3 = new Ponto(0, 0, 1);
-        static::assertTrue($ponto->subtrair($ponto2)->eIgual(new Ponto(-3, -4), $ponto->subtrair($ponto2)));
-        static::assertTrue($ponto2->subtrair($ponto3)->eIgual(new Ponto(3, 4, -1)));
-    }
+    expect($resultado)->toEqualWithDelta($esperado, $deltaEqual);
+})->with([
+    [new Point(1, 2, 3), new Point(0, -1, -3), new Point(1, 1, 0)],
+    [new Point(-1, 2.58, 2.85), new Point(1, 1.3, 2.9), new Point(0, 3.88, 5.75)]
+]);
 
-    /**
-     * @psalm-param Ponto $p1
-     * @psalm-param Ponto $p2
-     * @psalm-param Ponto $esperado
-     *
-     * @dataProvider pontosPontoMedio
-     * @test
-     */
-    public function testPontoMedio(Ponto $p1, Ponto $p2, Ponto $esperado): void
-    {
-        static::assertTrue($p1->pontoMedio($p2)->eIgual($esperado));
-    }
+test("Subtração", function (Point $ponto, Point $pontoSubtracao, Point $esperado) use ($deltaEqual) {
+    $resultado = $ponto->difference($pontoSubtracao);
 
-    /**
-     * @psalm-param Ponto $ponto
-     * @psalm-param QuadranteEnum $esperado
-     *
-     * @dataProvider pontosQuadrante
-     * @test
-     */
-    public function testQuadrante(Ponto $ponto, QuadranteEnum $esperado): void
-    {
-        static::assertSame($esperado, $ponto->quadrante());
-    }
+    expect($resultado)->toEqualWithDelta($esperado, $deltaEqual);
+})->with([
+    [new Point(1, 2, 3), new Point(0, -1, -3), new Point(1, 3, 6)],
+    [new Point(-1, 2.58, 2.85), new Point(1, 1.3, 2.9), new Point(-2, 1.28, -0.05)]
+]);
 
-    public function testEIgual(): void
-    {
-        $ponto1 = new Ponto(3, 4);
-        $ponto2 = new Ponto(3, 4);
+test("Ponto-Médio", function (Point $ponto, Point $segundoPonto, Point $esperado) use ($deltaEqual) {
+    $pontoMedio = $ponto->midpoint($segundoPonto);
+    expect($pontoMedio)->toEqualWithDelta($esperado, $deltaEqual);
+})->with([
+    [new Point(1, 2, 3), new Point(0, -1, -3), new Point(0.5, 0.5, 0)],
+    [new Point(1, 2, 3), new Point(6, 2.5, 2.99), new Point(3.5, 2.25, 2.995)],
+]);
 
-        static::assertThat($ponto1, new PontoEIgual($ponto2));
-        static::assertTrue($ponto1->eIgual($ponto2));
-        static::assertFalse($ponto1->eIgual(new Ponto()));
-    }
+test("Igualdade", function (Point $ponto, Point $segundoPonto, bool $esperado) {
+    $resultado = $ponto->isEquals($segundoPonto);
 
-    /**
-     * @psalm-return non-empty-list<array{
-     *     Ponto,
-     *     Ponto,
-     *     float
-     * }>
-     */
-    public function pontosDistancias(): array
-    {
-        $ponto = new Ponto();
-        $ponto2 = new Ponto(3, 4);
-        $ponto3 = new Ponto(0, 0, 1);
-        $ponto4 = new Ponto(1.5, 2.8, 0);
+    expect($resultado)->toBe($esperado);
+})->with([
+    [new Point(1, 2, 3), new Point(0.999999999999, 1.99999999999999, 2.999999999999999), true],
+    [new Point(2, 2, 3), new Point(6, 2.5, 2.99), false],
+]);
 
-        return [
-            [$ponto, $ponto2, 5.0],
-            [$ponto, $ponto3, 1.0],
-            [$ponto2, $ponto3, sqrt(26)],
-            [$ponto, $ponto4, sqrt(10.09)],
-        ];
-    }
 
-    /**
-     * @psalm-return non-empty-list<array{
-     *     Ponto,
-     *     QuadranteEnum
-     * }>
-     */
-    public function pontosQuadrante(): array
-    {
-        $ponto = new Ponto();
-        $ponto2 = new Ponto(3, 4);
-        $ponto3 = new Ponto(-20, 10, 1);
-        $ponto4 = new Ponto(-20, -10, 1);
-        $ponto5 = new Ponto(20, -10, 1);
-
-        return [
-            [$ponto, QuadranteEnum::PRIMEIRO],
-            [$ponto2, QuadranteEnum::PRIMEIRO],
-            [$ponto3, QuadranteEnum::SEGUNDO],
-            [$ponto4, QuadranteEnum::TERCEIRO],
-            [$ponto5, QuadranteEnum::QUARTO],
-        ];
-    }
-
-    /**
-     * @psalm-return non-empty-list<array{
-     *     Ponto,
-     *     Ponto,
-     *     Ponto
-     * }>
-     */
-    public function pontosPontoMedio(): array
-    {
-        $ponto = new Ponto();
-        $ponto2 = new Ponto(3, 4);
-        $ponto3 = new Ponto(0, 0, 1);
-        $ponto4 = new Ponto(1.5, 2.8, 0);
-
-        return [
-            [$ponto, $ponto2, new Ponto(1.5, 2)],
-            [$ponto, $ponto, new Ponto(0, 0)],
-            [$ponto3, $ponto4, new Ponto(0.75, 1.4, 0.5)],
-            [$ponto2, $ponto4, new Ponto(2.25, 3.4)],
-        ];
-    }
-}
+test("Quadrante", function (Point $ponto, QuadrantEnum $esperado) {
+    $resultado = $ponto->getQuadrant();
+    expect($resultado)->toEqual($esperado);
+})->with([
+    [new Point(1, 2, 0), QuadrantEnum::First],
+    [new Point(1, 0, 0), QuadrantEnum::First],
+    [new Point(0, 1, 0), QuadrantEnum::Second],
+    [new Point(-1, 0, 0), QuadrantEnum::Third],
+    [new Point(0, -1, 0), QuadrantEnum::Fourth],
+    [new Point(2, -1, 0), QuadrantEnum::Fourth]
+]);

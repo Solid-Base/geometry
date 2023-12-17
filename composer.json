@@ -2,13 +2,12 @@
     "name": "solidbase/geometria",
     "description": "Módulo de Geometria do SolidBase",
     "type": "packpage",
-    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-            "Solidbase\\Geometria\\": "src/"
+            "Solidbase\\Geometry\\": "src/"
         },
         "files": [
-            "src/Utilitario/funcoes.php"
+            "src/Utils/functions.php"
         ]
     },
     "autoload-dev": {
@@ -24,24 +23,23 @@
     ],
     "require": {
         "php": "^8.1",
-        "solidbase/matematica": "dev-dev",
-        "solidbase/utilitarios": "dev-dev"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^9.5"
+        "doctrine/collections": "^2.1",
+        "solidbase/mathematics": "^0.0.2"
     },
     "config": {
         "process-timeout": 0,
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     },
     "scripts": {
         "start": "php -S api.solidbase:8080 -t public",
-        "test": "phpunit"
+        "test": "./vendor/bin/pest"
     },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://packpage.solidbase.dev.br"
-        }
-    ]
+    "require-dev": {
+        "pestphp/pest": "^2.0",
+        "mockery/mockery": "^1.6",
+        "symfony/var-dumper": "^6.3.0"
+    }
 }
