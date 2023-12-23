@@ -45,7 +45,7 @@ class PolygonPropertiesCalculator
             );
         }
         $poligono = clone $poligono;
-        $poligono->move(-$centro->_x, -$centro->_y);
+        $poligono->move(-$centro->x, -$centro->y);
 
         [$ix,$iy] = SecondMomentOfInertiaCalculator::Calculate($poligono);
         $momentoInerciaPrincipalX = ($ix * $sentido);

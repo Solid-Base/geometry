@@ -17,10 +17,10 @@ class PosicaoPontoLinha
         }
 
         $origem = $linha->origin;
-        $direcao = $linha->_direction;
+        $direcao = $linha->direction;
         $vetor1 = VectorFactory::CreateFromPoints($origem, $ponto);
         $resultado = $direcao->produtoVetorial($vetor1);
-        if (sbBiggerThen($resultado->_z, 0)) {
+        if (sbBiggerThen($resultado->z, 0)) {
             return PointRelationToLineEnum::Left;
         }
 

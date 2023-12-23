@@ -28,7 +28,7 @@ class LineIntersector
         }
         [$s,] = self::calcularTS($linha1, $linha2);
 
-        return $linha1->origin->add($linha1->_direction->escalar($s));
+        return $linha1->origin->add($linha1->direction->scalar($s));
     }
 
     /**
@@ -50,43 +50,43 @@ class LineIntersector
         $vetorialRMk = $diretorR->crossProduct($diretorMk);
         $vetorialSMk = $diretorS->crossProduct($diretorMk);
         if ((!self::retaPertenceOx($linha1) || !self::retaPertenceOx($linha2))
-        && (!self::retaPertenceOy($linha1) || !self::retaPertenceOy($linha2)) && !sbIsZero($determinante->_z)) {
-            $s = ($vetorialRMk->_z / $determinante->_z);
-            $t = ($vetorialSMk->_z / $determinante->_z);
+        && (!self::retaPertenceOy($linha1) || !self::retaPertenceOy($linha2)) && !sbIsZero($determinante->z)) {
+            $s = ($vetorialRMk->z / $determinante->z);
+            $t = ($vetorialSMk->z / $determinante->z);
 
             return [$s, $t];
         }
         if ((!self::retaPertenceOx($linha1) || !self::retaPertenceOx($linha2))
-        && (!self::retaPertenceOz($linha1) || !self::retaPertenceOz($linha2)) && !sbIsZero($determinante->_y)) {
-            $s = ($vetorialRMk->_y / $determinante->_y);
-            $t = ($vetorialSMk->_y / $determinante->_y);
+        && (!self::retaPertenceOz($linha1) || !self::retaPertenceOz($linha2)) && !sbIsZero($determinante->y)) {
+            $s = ($vetorialRMk->y / $determinante->y);
+            $t = ($vetorialSMk->y / $determinante->y);
 
             return [$s, $t];
         }
-        $s = ($vetorialRMk->_x / $determinante->_x);
-        $t = ($vetorialSMk->_x / $determinante->_x);
+        $s = ($vetorialRMk->x / $determinante->x);
+        $t = ($vetorialSMk->x / $determinante->x);
 
         return [$s, $t];
     }
 
     private static function retaPertenceOx(Line $linha): bool
     {
-        $direcao = $linha->_direction->vetorUnitario();
+        $direcao = $linha->direction->getUnitary();
 
-        return sbEquals($direcao->_x, 1);
+        return sbEquals($direcao->x, 1);
     }
 
     private static function retaPertenceOy(Line $linha): bool
     {
-        $direcao = $linha->_direction->vetorUnitario();
+        $direcao = $linha->direction->getUnitary();
 
-        return sbEquals($direcao->_y, 1);
+        return sbEquals($direcao->y, 1);
     }
 
     private static function retaPertenceOz(Line $linha): bool
     {
-        $direcao = $linha->_direction->vetorUnitario();
+        $direcao = $linha->direction->getUnitary();
 
-        return sbEquals($direcao->_z, 1);
+        return sbEquals($direcao->z, 1);
     }
 }

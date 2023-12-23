@@ -8,32 +8,32 @@ use DomainException;
 use Solidbase\Geometry\Domain\Arc;
 use Solidbase\Geometry\Domain\Factory\PolylineFactory;
 use Solidbase\Geometry\Domain\Polyline;
-use Solidbase\Geometry\Domain\PontoPoligono;
+use Solidbase\Geometry\Domain\PointOfPolygon;
 
 class ConvertArcToPolygon
 {
     private function __construct() {}
 
-    public static function execute(Arc $arco, int $numeroDivisao): Polyline
+    public static function execute(Arc $arc, int $numeroDivisao): Polyline
     {
-        if ($numeroDivisao <= 3) {
-            throw new DomainException('O número de divisão deve ser maior que 0');
+        if ($numeroDivisao < 4) {
+            throw new DomainException('O número de divisão deve ser maior que 3');
         }
-        $anguloInicial = $arco->startAngle;
-        $anguloFinal = $arco->endAngle;
+        $anguloInicial = $arc->startAngle;
+        $anguloFinal = $arc->endAngle;
         if ($anguloFinal < $anguloInicial) {
             $anguloFinal += M_PI * 2;
         }
         $delta = ($anguloFinal - $anguloInicial) / ($numeroDivisao - 1);
         $pontos = [];
-        $raio = $arco->radius;
-        $centro = $arco->center;
+        $raio = $arc->radius;
+        $centro = $arc->center;
         for ($i = 0; $i < $numeroDivisao; ++$i) {
             $angulo = $anguloInicial + $delta * $i;
-            $x = $raio * cos($angulo) + $centro->_x;
-            $y = $raio * sin($angulo) + $centro->_y;
-            $z = $centro->_z;
-            $pontos[] = new PontoPoligono($x, $y, $z);
+            $x = $raio * cos($angulo) + $centro->x;
+            $y = $raio * sin($angulo) + $centro->y;
+            $z = $centro->z;
+            $pontos[] = new PointOfPolygon($x, $y, $z);
         }
 
         return PolylineFactory::CreateFromPoints($pontos);

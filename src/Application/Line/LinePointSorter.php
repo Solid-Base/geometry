@@ -20,8 +20,8 @@ class LinePointSorter
      */
     public static function Calculate(Line $linha, array $pontos): array
     {
-        $direcao = $linha->_direction;
-        $direcaoPerpendicular = VectorFactory::CreatePerpendicular($linha->_direction);
+        $direcao = $linha->direction;
+        $direcaoPerpendicular = VectorFactory::CreatePerpendicular($linha->direction);
         $pontosLinha = [];
         $origem = $linha->origin;
         foreach ($pontos as $key => $ponto) {

@@ -25,9 +25,9 @@ class PolygonCenterCalculator
         for ($i = 0; $i < $numPontos - 1; ++$i) {
             $ponto = $pontos[$i];
             $proximo = $pontos[$i + 1];
-            $comum = (($ponto->_x * $proximo->_y) - ($ponto->_y * $proximo->_x));
-            $somaX += (($proximo->_x + $ponto->_x) * ($comum));
-            $somaY += (($proximo->_y + $ponto->_y) * ($comum));
+            $comum = (($ponto->x * $proximo->y) - ($ponto->y * $proximo->x));
+            $somaX += (($proximo->x + $ponto->x) * ($comum));
+            $somaY += (($proximo->y + $ponto->y) * ($comum));
         }
 
         $x = $somaX / (6 * $area);

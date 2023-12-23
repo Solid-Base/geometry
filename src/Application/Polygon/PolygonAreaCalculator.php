@@ -23,7 +23,7 @@ class PolygonAreaCalculator
                 break;
             }
             $proximo = $pontos[$i + 1];
-            $soma += ($ponto->_x + $proximo->_x) * ($proximo->_y - $ponto->_y);
+            $soma += ($ponto->x + $proximo->x) * ($proximo->y - $ponto->y);
         }
 
         $area = $soma / 2;

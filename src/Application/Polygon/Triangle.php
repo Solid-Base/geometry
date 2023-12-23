@@ -12,8 +12,8 @@ class Triangle
 
     public function getCenter(): Point
     {
-        $x = $this->p1->_x + $this->p2->_x + $this->p3->_x;
-        $y = $this->p1->_y + $this->p2->_y + $this->p3->_y;
+        $x = $this->p1->x + $this->p2->x + $this->p3->x;
+        $y = $this->p1->y + $this->p2->y + $this->p3->y;
 
         return new Point($x, $y);
     }
@@ -21,12 +21,12 @@ class Triangle
     public function getArea(): float
     {
         $area = (
-            $this->p1->_x * $this->p2->_y -
-            $this->p1->_y * $this->p2->_x -
-            $this->p1->_y * $this->p3->_x -
-            $this->p1->_x * $this->p3->_y +
-            $this->p2->_x * $this->p3->_y -
-            $this->p3->_x * $this->p2->_y
+            $this->p1->x * $this->p2->y -
+            $this->p1->y * $this->p2->x -
+            $this->p1->y * $this->p3->x -
+            $this->p1->x * $this->p3->y +
+            $this->p2->x * $this->p3->y -
+            $this->p3->x * $this->p2->y
         ) / 2;
 
         return abs($area);

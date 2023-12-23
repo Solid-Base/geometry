@@ -33,9 +33,9 @@ final class PointCollection extends ArrayCollection
 
     public function sortPointOfLine(Line $linha): static
     {
-        $direcaoOrtogonal = VectorFactory::CreatePerpendicular($linha->_direction);
+        $direcaoOrtogonal = VectorFactory::CreatePerpendicular($linha->direction);
         $pontos = $this->map(fn(Point $p) => LineIntersector::Calculate($linha, LineFactory::CreateFromOriginAndDirection($p, $direcaoOrtogonal)));
-        $direcaoReta = $linha->_direction;
+        $direcaoReta = $linha->direction;
         $origemOriginal = $linha->origin;
         $pontosOrigem = $pontos->filter(fn(Point $p) => !(VectorFactory::CreateFromPoints($origemOriginal, $p)->hasSameSense($direcaoReta)));
         if (count($pontosOrigem) > 0) {

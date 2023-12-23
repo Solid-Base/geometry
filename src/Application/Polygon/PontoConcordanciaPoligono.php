@@ -8,11 +8,11 @@ use Solidbase\Geometry\Application\Intersector\LineIntersector;
 use Solidbase\Geometry\Application\Transform\Transform;
 use Solidbase\Geometry\Domain\Factory\LineFactory;
 use Solidbase\Geometry\Domain\Factory\VectorFactory;
-use Solidbase\Geometry\Domain\PontoPoligono;
+use Solidbase\Geometry\Domain\PointOfPolygon;
 
 class PontoConcordanciaPoligono
 {
-    public static function executar(PontoPoligono $p1, PontoPoligono $p2): array
+    public static function executar(PointOfPolygon $p1, PointOfPolygon $p2): array
     {
         $angulo = atan($p1->agreement) * 4;
         $rotacao = ($angulo / 2);

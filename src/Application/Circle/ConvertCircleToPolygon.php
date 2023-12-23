@@ -8,7 +8,7 @@ use DomainException;
 use Solidbase\Geometry\Domain\Circle;
 use Solidbase\Geometry\Domain\Factory\PolylineFactory;
 use Solidbase\Geometry\Domain\Polyline;
-use Solidbase\Geometry\Domain\PontoPoligono;
+use Solidbase\Geometry\Domain\PointOfPolygon;
 
 class ConvertCircleToPolygon
 {
@@ -24,10 +24,10 @@ class ConvertCircleToPolygon
         $raio = $circulo->radius;
         $centro = $circulo->center;
         for ($i = 0; $i < $numeroDivisao; ++$i) {
-            $x = $raio * cos($angulo * $i) + $centro->_x;
-            $y = $raio * sin($angulo * $i) + $centro->_y;
-            $z = $centro->_z;
-            $pontos[] = new PontoPoligono($x, $y, $z);
+            $x = $raio * cos($angulo * $i) + $centro->x;
+            $y = $raio * sin($angulo * $i) + $centro->y;
+            $z = $centro->z;
+            $pontos[] = new PointOfPolygon($x, $y, $z);
         }
 
         return PolylineFactory::CreateFromPoints($pontos);

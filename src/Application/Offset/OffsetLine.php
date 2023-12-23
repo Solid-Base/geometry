@@ -15,7 +15,7 @@ class OffsetLine
 
     public static function Generate(float|int $offset, Line $linha, DirecaoOffsetReta $direcao): Line
     {
-        $perpendicular = VectorFactory::CreatePerpendicular($linha->_direction)->getUnitary();
+        $perpendicular = VectorFactory::CreatePerpendicular($linha->direction)->getUnitary();
         $origem = $linha->origin->add($perpendicular->scalar($offset * $direcao->value));
         $final = $linha->end->add($perpendicular->scalar($offset * $direcao->value));
 

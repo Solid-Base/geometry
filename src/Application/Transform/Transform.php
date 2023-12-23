@@ -64,9 +64,9 @@ class Transform
         $normal = $plano->normal;
         $origem = VectorFactory::FromPoint($plano->origin);
         $d = $origem->scalar(-1)->product($normal);
-        $x = -2 * $normal->_x * $d;
-        $y = -2 * $normal->_y * $d;
-        $z = -2 * $normal->_z * $d;
+        $x = -2 * $normal->x * $d;
+        $y = -2 * $normal->y * $d;
+        $z = -2 * $normal->z * $d;
         $origem = new Point($x, $y, $z);
         $matriz = FactoryMatrizTranform::CreateMatrixReflection($plano);
 
@@ -85,7 +85,7 @@ class Transform
     {
         $identidade = self::CreateMatrizFromEscala($escala);
         $retorno = new self($identidade, new Point());
-        $retorno->scale = is_float($escala) ? $escala : abs($escala->_x);
+        $retorno->scale = is_float($escala) ? $escala : abs($escala->x);
 
         return $retorno;
     }
@@ -114,8 +114,8 @@ class Transform
             $matriz = $matriz->scalar($this->scale);
         }
         $matriz->addRow([0, 0, 0]);
-        $matriz->addCol([[$this->origin->_x], [$this->origin->_y], [$this->origin->_z], [1]]);
-        $pontoM = new Matriz([[$ponto->_x], [$ponto->_y], [$ponto->_z], [1]]);
+        $matriz->addCol([[$this->origin->x], [$this->origin->y], [$this->origin->z], [1]]);
+        $pontoM = new Matriz([[$ponto->x], [$ponto->y], [$ponto->z], [1]]);
         $pontoT = $matriz->multiply($pontoM);
 
         return new Point($pontoT['1'], $pontoT['2'], $pontoT['3']);
@@ -124,7 +124,7 @@ class Transform
     public function applyToVector(Vector $vetor): Vector
     {
         $matriz = clone $this->matriz;
-        $pontoM = new Matriz([[$vetor->_x], [$vetor->_y], [$vetor->_z]]);
+        $pontoM = new Matriz([[$vetor->x], [$vetor->y], [$vetor->z]]);
         $pontoT = $matriz->multiply($pontoM);
 
         return new Vector($pontoT['1'], $pontoT['2'], $pontoT['3']);
@@ -159,14 +159,14 @@ class Transform
             $matriz = $matriz->scalar($transformacao->scale);
         }
         $matriz->addRow([0, 0, 0]);
-        $matriz->addCol([[$transformacao->origin->_x], [$transformacao->origin->_y], [$transformacao->origin->_z], [1]]);
+        $matriz->addCol([[$transformacao->origin->x], [$transformacao->origin->y], [$transformacao->origin->z], [1]]);
 
         $matrizOriginal = clone $this->matriz;
         if (1 != $this->scale) {
             $matrizOriginal = $matrizOriginal->scalar($this->scale);
         }
         $matrizOriginal->addRow([0, 0, 0]);
-        $matrizOriginal->addCol([[$this->origin->_x], [$this->origin->_y], [$this->origin->_z], [1]]);
+        $matrizOriginal->addCol([[$this->origin->x], [$this->origin->y], [$this->origin->z], [1]]);
 
         $nova = $matriz->multiply($matrizOriginal);
         $x = $nova['1,4'];
@@ -207,7 +207,7 @@ class Transform
         $origem = VectorFactory::FromPoint($this->origin);
         $origem = $origem->scalar($escala);
 
-        return new self($matriz, new Point($origem->_x, $origem->_y, $origem->_z));
+        return new self($matriz, new Point($origem->x, $origem->y, $origem->z));
     }
 
     public function getTranformAngle(): float
@@ -234,6 +234,6 @@ class Transform
             return FabricaMatriz::Identity(3);
         }
 
-        return new Matriz([[$escala->_x, 0, 0], [0, $escala->_y, 0], [0, 0, $escala->_z]]);
+        return new Matriz([[$escala->x, 0, 0], [0, $escala->y, 0], [0, 0, $escala->z]]);
     }
 }

@@ -8,11 +8,11 @@ use DomainException;
 use Solidbase\Geometry\Application\Points\RotationDirectionEnum;
 use Solidbase\Geometry\Application\Points\DetermineRotationDirection;
 use Solidbase\Geometry\Domain\Factory\VectorFactory;
-use Solidbase\Geometry\Domain\PontoPoligono;
+use Solidbase\Geometry\Domain\PointOfPolygon;
 
 class ConcordanciaPoligono
 {
-    public static function executar(PontoPoligono $p1, PontoPoligono $p2, PontoPoligono $p3, float|int $raio): array
+    public static function executar(PointOfPolygon $p1, PointOfPolygon $p2, PointOfPolygon $p3, float|int $raio): array
     {
         $sentido = DetermineRotationDirection::execute($p1, $p2, $p3);
         if (RotationDirectionEnum::COLLINEAR == $sentido) {

@@ -19,7 +19,7 @@ use Solidbase\Geometry\Domain\Factory\LineFactory;
 use Solidbase\Geometry\Domain\Factory\PolylineFactory;
 use Solidbase\Geometry\Domain\Line;
 use Solidbase\Geometry\Domain\Polyline;
-use Solidbase\Geometry\Domain\PontoPoligono;
+use Solidbase\Geometry\Domain\PointOfPolygon;
 
 class OffsetPoligono
 {
@@ -39,12 +39,12 @@ class OffsetPoligono
         $linhas = [];
         for ($i = 1; $i < $numeroPonto; ++$i) {
             /**
-             * @var PontoPoligono
+             * @var PointOfPolygon
              */
             $p1 = $pontos[$i - 1];
 
             /**
-             * @var PontoPoligono
+             * @var PointOfPolygon
              */
             $p2 = $pontos[$i];
             $linha = LineFactory::CreateFromPoints($p2, $p1);
@@ -128,7 +128,7 @@ class OffsetPoligono
         return PolylineFactory::CreateFromPoints($pontos);
     }
 
-    private static function PointFromArc(Arc $arco, Line $linha, RotationDirectionEnum $rotacao): ?PontoPoligono
+    private static function PointFromArc(Arc $arco, Line $linha, RotationDirectionEnum $rotacao): ?PointOfPolygon
     {
         if (sbIsZero($arco->radius)) {
             return null;
@@ -137,7 +137,7 @@ class OffsetPoligono
         $angulo = $arco->getAngleTotal();
 
         $bulge = abs(tan($angulo * 0.25));
-        $p1 = new PontoPoligono($p1->x, $p1->y);
+        $p1 = new PointOfPolygon($p1->x, $p1->y);
         $p1->setAgreement($bulge * $rotacao->value);
 
         return $p1;

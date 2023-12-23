@@ -10,11 +10,11 @@ use Solidbase\Geometry\Domain\Arc;
 use Solidbase\Geometry\Domain\Factory\CircleArchFactory;
 use Solidbase\Geometry\Domain\Factory\LineFactory;
 use Solidbase\Geometry\Domain\Factory\VectorFactory;
-use Solidbase\Geometry\Domain\PontoPoligono;
+use Solidbase\Geometry\Domain\PointOfPolygon;
 
 class ArcoConcordanciaPoligono
 {
-    public static function executar(PontoPoligono $p1, PontoPoligono $p2): Arc
+    public static function executar(PointOfPolygon $p1, PointOfPolygon $p2): Arc
     {
         $angulo = atan($p1->agreement) * 4;
         $rotacao = (M_PI / 2 - $angulo / 2);

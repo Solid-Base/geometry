@@ -24,7 +24,7 @@ class LineCircleIntersector
                         sqrt($circulo->radius ** 2 - $distancia ** 2);
 
         $pontoIntersecao = self::GetIntersect($linha, $circulo);
-        $direcaoLinha = $linha->_direction;
+        $direcaoLinha = $linha->direction;
         $ponto1 = $pontoIntersecao->add($direcaoLinha->escalar($comprimento));
         if (sbIsZero($comprimento)) {
             return [$ponto1];
@@ -59,7 +59,7 @@ class LineCircleIntersector
 
     private static function GetIntersect(Line $linha, Circle $circulo): Point
     {
-        $perpendicular = VectorFactory::CreatePerpendicular($linha->_direction);
+        $perpendicular = VectorFactory::CreatePerpendicular($linha->direction);
         $linhaPerpendicular = new Line($circulo->center, $perpendicular, 1);
 
         return LineIntersector::Calculate($linha, $linhaPerpendicular);

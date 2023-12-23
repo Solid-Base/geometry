@@ -23,36 +23,36 @@ class Line implements JsonSerializable, Transform
 
     public function __construct(
         private Point $_origin,
-        private Vector $_direction,
+        private Vector $direction,
         float|int $length
     ) {
-        $this->_direction = $_direction->getUnitary();
+        $this->direction = $direction->getUnitary();
         $this->_length = sbNormalize($length);
     }
 
     public function __get($name)
     {
         return match ($name) {
-            'origem' => $this->origin,
+            'origin' => $this->_origin,
             'end' => $this->getEndPoint(),
-            'direction' => $this->_direction,
+            'direction' => $this->direction,
             'length' => $this->_length,
-            default => throw new InvalidArgumentException('Prorpriedade solicitada não existe')
+            default => throw new InvalidArgumentException("Prorpriedade {$name} solicitada não existe")
         };
     }
 
     public function __clone()
     {
         $this->_origin = clone $this->_origin;
-        $this->_direction = clone $this->_direction;
+        $this->direction = clone $this->direction;
     }
 
     public function applyTransform(TransformTransform $transformacao): static
     {
         $origem = $transformacao->applyToPoint($this->_origin);
-        $direcao = $transformacao->applyToVector($this->_direction);
+        $direcao = $transformacao->applyToVector($this->direction);
         $this->_origin = $origem;
-        $this->_direction = $direcao;
+        $this->direction = $direcao;
         $this->_length *= $transformacao->getScale();
 
         return $this;
@@ -62,21 +62,21 @@ class Line implements JsonSerializable, Transform
     {
         return [
             'origem' => $this->_origin,
-            'direcao' => $this->_direction,
+            'direcao' => $this->direction,
             'comprimento' => $this->_length,
         ];
     }
 
     public function isParallel(self $linha): bool
     {
-        return $linha->_direction->hasSameDirection($this->_direction);
+        return $linha->direction->hasSameDirection($this->direction);
     }
 
     public function isCoplanar(self $line): bool
     {
         $origin = $this->_origin->isEquals($line->origin) ? $line->origin : $line->end;
         $vectorFromPoints = Vector::CreateFromPoints($this->_origin, $origin);
-        $tripleProduct = $this->_direction->tripleProduct($line->_direction, $vectorFromPoints);
+        $tripleProduct = $this->direction->tripleProduct($line->direction, $vectorFromPoints);
 
         return sbIsZero($tripleProduct);
     }
@@ -84,7 +84,7 @@ class Line implements JsonSerializable, Transform
     public function distanceFromPoint(Point $ponto): float
     {
         $vetorAuxiliar = Vector::CreateFromPoints($this->_origin, $ponto);
-        $vetorial = $vetorAuxiliar->crossProduct($this->_direction);
+        $vetorial = $vetorAuxiliar->crossProduct($this->direction);
 
         return $vetorial->module();
     }
@@ -95,7 +95,7 @@ class Line implements JsonSerializable, Transform
             return true;
         }
         $vetor = Vector::CreateFromPoints($ponto, $this->origin)->getUnitary();
-        if (!$vetor->hasSameDirection($this->_direction)) {
+        if (!$vetor->hasSameDirection($this->direction)) {
             return false;
         }
 
@@ -116,7 +116,7 @@ class Line implements JsonSerializable, Transform
     public function pointAtLength(float|int $comprimento): Point
     {
         $origem = $this->origin;
-        $diretor = $this->_direction;
+        $diretor = $this->direction;
 
         return $origem->add($diretor->scalar($comprimento));
     }

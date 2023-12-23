@@ -12,7 +12,7 @@ final class VectorFactory
 {
     public static function FromPoint(Point $ponto): Vector
     {
-        return new Vector($ponto->_x, $ponto->_y, $ponto->_z);
+        return new Vector($ponto->x, $ponto->y, $ponto->z);
     }
 
     public static function CreateFromPoints(Point $ponto1, Point $ponto2): Vector

@@ -71,24 +71,24 @@ class Plane
 
     public function getPlaneZProjectionPoint(Point $point): Point
     {
-        if (sbIsZero($this->normal->_z)) {
+        if (sbIsZero($this->normal->z)) {
             throw new DomainException('Não é possível calcular a projeção do ponto no plano Z');
         }
         [$a,$b,$c,$d] = $this->getPlaneEquation();
-        $z = (-$d - $b * $point->_y - $a * $point->_x) / $c;
+        $z = (-$d - $b * $point->y - $a * $point->x) / $c;
 
-        return new Point($point->_x, $point->_y, $z);
+        return new Point($point->x, $point->y, $z);
     }
 
     public function getPlaneXProjectionPoint(Point $point): Point
     {
-        if (sbIsZero($this->normal->_x)) {
+        if (sbIsZero($this->normal->x)) {
             throw new DomainException('Não é possível calcular a projeção do ponto no plano X');
         }
         [$a,$b,$c,$d] = $this->getPlaneEquation();
-        $x = (-$d - $b * $point->_y - $c * $point->_z) / $a;
+        $x = (-$d - $b * $point->y - $c * $point->z) / $a;
 
-        return new Point($x, $point->_y, $point->_z);
+        return new Point($x, $point->y, $point->z);
         // $p = VetorFabrica::apartirPonto($this->origem);
         // $normal = $this->normal;
         // $comprimento = $normal->produtoInterno($p);
@@ -101,13 +101,13 @@ class Plane
 
     public function getPlaneYProjectionPoint(Point $point): Point
     {
-        if (sbIsZero($this->normal->_y)) {
+        if (sbIsZero($this->normal->y)) {
             throw new DomainException('Não é possível calcular a projeção do ponto no plano Y');
         }
         [$a,$b,$c,$d] = $this->getPlaneEquation();
-        $y = (-$d - $a * $point->_x - $c * $point->_z) / $b;
+        $y = (-$d - $a * $point->x - $c * $point->z) / $b;
 
-        return new Point($point->_x, $y, $point->_z);
+        return new Point($point->x, $y, $point->z);
         // $p = VetorFabrica::apartirPonto($this->origem);
         // $normal = $this->normal;
         // $comprimento = $normal->produtoInterno($p);
@@ -124,10 +124,10 @@ class Plane
     public function getPlaneEquation(): array
     {
         $origem = $this->origin;
-        $a = $this->normal->_x;
-        $b = $this->normal->_y;
-        $c = $this->normal->_z;
-        $d = -(($a * $origem->_x) + ($b * $origem->_y) + ($c * $origem->_z));
+        $a = $this->normal->x;
+        $b = $this->normal->y;
+        $c = $this->normal->z;
+        $d = -(($a * $origem->x) + ($b * $origem->y) + ($c * $origem->z));
 
         return [$a, $b, $c, $d];
     }

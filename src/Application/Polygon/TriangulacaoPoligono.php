@@ -89,10 +89,10 @@ class TriangulacaoPoligono
         $vetor2 = VectorFactory::CreateFromPoints($p2, $p3);
         $valor = $vetor1->crossProduct($vetor2);
 
-        if ($valor->_z < 0) {
+        if ($valor->z < 0) {
             return -1;
         }
-        if ($valor->_z > 0) {
+        if ($valor->z > 0) {
             return 1;
         }
 

@@ -46,7 +46,7 @@ class Polyline implements Countable, JsonSerializable, DomainTransform
     {
         $this->points->map(fn(Point $p) => $p->applyTransform($transformacao));
         if ($transformacao->isReflection()) {
-            $this->points->map(fn(PontoPoligono $p) => $p->setAgreement($p->agreement * -1));
+            $this->points->map(fn(PointOfPolygon $p) => $p->setAgreement($p->agreement * -1));
         }
 
         return $this;
@@ -68,10 +68,10 @@ class Polyline implements Countable, JsonSerializable, DomainTransform
     public function addPoint(Point $ponto): self
     {
         if (Point::class === $ponto::class || Vector::class === $ponto::class) {
-            $x = $ponto->_x;
-            $y = $ponto->_y;
-            $z = $ponto->_z;
-            $ponto = new PontoPoligono($x, $y, $z);
+            $x = $ponto->x;
+            $y = $ponto->y;
+            $z = $ponto->z;
+            $ponto = new PointOfPolygon($x, $y, $z);
         }
         $this->points[] = $ponto;
 

@@ -49,7 +49,7 @@ trait TransformTrait
     public function applyMirror(Plane|Line $planoOuLinha): static
     {
         if ($planoOuLinha instanceof Line) {
-            $direcao = $planoOuLinha->_direction;
+            $direcao = $planoOuLinha->direction;
             $normal = $direcao->produtoVetorial(VectorFactory::CreateBaseZ());
             $planoOuLinha = new Plane($planoOuLinha->origin, $normal);
         }

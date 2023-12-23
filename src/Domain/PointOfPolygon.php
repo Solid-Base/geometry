@@ -7,7 +7,7 @@ namespace Solidbase\Geometry\Domain;
 /**
  * @property-read float $agreement
  */
-class PontoPoligono extends Point
+class PointOfPolygon extends Point
 {
     private float $agreement;
 

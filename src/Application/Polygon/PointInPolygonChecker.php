@@ -33,15 +33,15 @@ class PointInPolygonChecker
                 continue;
             }
             $pontoIntersecao = LineIntersector::Calculate($linha, $linhaComparacao);
-            if (sbLessThan($pontoIntersecao->_x, $ponto->_x)) {
+            if (sbLessThan($pontoIntersecao->x, $ponto->x)) {
                 continue;
             }
             if (sbIsZero($pontoIntersecao->distanceToPoint($p1))
             || sbIsZero($pontoIntersecao->distanceToPoint($p2))) {
-                if ((sbIsZero(($pontoIntersecao->_y - $p1->_y))) && $pontoIntersecao->_y > ($p2->_y)) {
+                if ((sbIsZero(($pontoIntersecao->y - $p1->y))) && $pontoIntersecao->y > ($p2->y)) {
                     ++$contagem;
                 }
-                if ((sbIsZero(($pontoIntersecao->_y - $p2->_y))) && $pontoIntersecao->_y > ($p1->_y)) {
+                if ((sbIsZero(($pontoIntersecao->y - $p2->y))) && $pontoIntersecao->y > ($p1->y)) {
                     ++$contagem;
                 }
 

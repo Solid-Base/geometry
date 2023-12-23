@@ -45,7 +45,7 @@ class ConvexCalculator
     private static function pontoInferior(PointCollection &$pontos): Point
     {
         $retorno = $pontos->toArray();
-        usort($retorno, fn(Point $p1, Point $p2) => ($p1->_y == $p2->_y) ? $p1->_x <=> $p2->_x : $p1->_y <=> $p2->_y);
+        usort($retorno, fn(Point $p1, Point $p2) => ($p1->y == $p2->y) ? $p1->x <=> $p2->x : $p1->y <=> $p2->y);
         $pontoRetorno = reset($retorno);
         unset($retorno[0]);
         $pontos = new PointCollection($retorno);
