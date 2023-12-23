@@ -76,6 +76,15 @@ test("Ângulo", function (Vector $vetor, Vector $segundo, float $esperado) use (
     [new Vector(2, 1, -2), new Vector(4, 4, 2),1.1102423351135742],
 ]);
 
+test("Ângulo Absoluto", function (Vector $vetor, float $esperado) use ($deltaEqual) {
+    $resultado = $vetor->getAbsoluteAngle();
+    expect($resultado)->toEqualWithDelta($esperado, $deltaEqual);
+})->with([
+    [new Vector(-2, 0),M_PI],
+    [new Vector(1, 1),M_PI_4],
+    [new Vector(-1, 1),sbRad(135)]
+]);
+
 test("Ângulo-Exception", function (Vector $vetor, Vector $segundo) {
     $vetor->getAngle($segundo);
 })->with([

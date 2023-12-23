@@ -19,9 +19,9 @@ class DetermineRotationDirection
         $vetor = VectorFactory::CreateFromPoints($origem, $p2);
         $resultado = $direcao->crossProduct($vetor);
         if (sbLessThan($resultado->z, 0)) {
-            return RotationDirectionEnum::CLOCKWISE;
+            return RotationDirectionEnum::COUNTERCLOCKWISE;
         }
 
-        return RotationDirectionEnum::COUNTERCLOCKWISE;
+        return RotationDirectionEnum::CLOCKWISE;
     }
 }
