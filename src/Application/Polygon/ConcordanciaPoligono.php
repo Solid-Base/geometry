@@ -15,7 +15,7 @@ class ConcordanciaPoligono
     public static function executar(PointOfPolygon $p1, PointOfPolygon $p2, PointOfPolygon $p3, float|int $raio): array
     {
         $sentido = DetermineRotationDirection::execute($p1, $p2, $p3);
-        if (RotationDirectionEnum::COLLINEAR == $sentido) {
+        if (RotationDirectionEnum::Collinear == $sentido) {
             throw new DomainException('Não é possível fazer concordancia de pontos alinhados!');
         }
         $v1 = VectorFactory::CreateFromPoints($p2, $p1)->getUnitary();

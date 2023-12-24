@@ -50,7 +50,7 @@ trait TransformTrait
     {
         if ($planoOuLinha instanceof Line) {
             $direcao = $planoOuLinha->direction;
-            $normal = $direcao->produtoVetorial(VectorFactory::CreateBaseZ());
+            $normal = $direcao->crossProduct(VectorFactory::CreateBaseZ());
             $planoOuLinha = new Plane($planoOuLinha->origin, $normal);
         }
         $transformacao = Transform::CreateReflection($planoOuLinha);

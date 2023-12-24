@@ -48,7 +48,7 @@ class OffsetPoligono
              */
             $p2 = $pontos[$i];
             $linha = LineFactory::CreateFromPoints($p2, $p1);
-            if (DirecaoOffsetPoligono::Interno == $direcao && sbLessThan($linha->distanceFromPoint($propriedade->center), $offset)) {
+            if (DirecaoOffsetPoligono::Internal == $direcao && sbLessThan($linha->distanceFromPoint($propriedade->center), $offset)) {
                 throw new DomainException('Não é possível gerar offset');
             }
             $linhaOffset = OffsetLine::Generate($offset, $linha, $offsetLinha);
@@ -71,7 +71,7 @@ class OffsetPoligono
     {
         $pontos = PolylineFactory::ClearPointsPolygon($polilinha->getPoints());
 
-        return PolylineFactory::CreateFromPoints($pontos, fechado: $polilinha->isPolygon());
+        return PolylineFactory::CreateFromPoints($pontos, close: $polilinha->isPolygon());
     }
 
     private static function GeneratePolygonOffset(array $linhas, bool $ePoligono, RotationDirectionEnum $rotacao): Polyline
@@ -118,10 +118,10 @@ class OffsetPoligono
             $primeiroPonto = LineIntersector::Calculate($linhas[0], $linhas[$numeroLinha - 1]);
             array_unshift($pontos, $primeiroPonto);
 
-            return PolylineFactory::CreateFromPoints($pontos, fechado: true);
+            return PolylineFactory::CreateFromPoints($pontos, close: true);
         }
-        $primeiroPonto = RotationDirectionEnum::CLOCKWISE == $rotacao ? $linhas[0]->origem : $linhas[0]->final;
-        $ultimoPonto = RotationDirectionEnum::CLOCKWISE == $rotacao ? $linhas[$numeroLinha - 1]->final : $linhas[$numeroLinha - 1]->origem;
+        $primeiroPonto = RotationDirectionEnum::Clockwise == $rotacao ? $linhas[0]->origem : $linhas[0]->final;
+        $ultimoPonto = RotationDirectionEnum::Clockwise == $rotacao ? $linhas[$numeroLinha - 1]->final : $linhas[$numeroLinha - 1]->origem;
         array_unshift($pontos, $primeiroPonto);
         $pontos[] = $ultimoPonto;
 
@@ -133,7 +133,7 @@ class OffsetPoligono
         if (sbIsZero($arco->radius)) {
             return null;
         }
-        [$p1] = LineArcIntersector::executar($linha, $arco);
+        [$p1] = LineArcIntersector::calculate($linha, $arco);
         $angulo = $arco->getAngleTotal();
 
         $bulge = abs(tan($angulo * 0.25));

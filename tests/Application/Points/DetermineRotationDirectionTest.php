@@ -17,8 +17,8 @@ test("Checa o sentido da rotação dos pontos", function (array $points, $expete
     expect($resultado)->toEqual($expeted);
 })
 ->with([
-    [[new Point(-2, 0), new Point(0, 2), new Point(2, 0)],RotationDirectionEnum::CLOCKWISE],
-    [[new Point(2, 0), new Point(0, 2),new Point(-2, 0)],RotationDirectionEnum::COUNTERCLOCKWISE],
-    [[new Point(0, 0), new Point(4, 4), new Point(1, 2)],RotationDirectionEnum::COUNTERCLOCKWISE],
-    [[new Point(0, 0), new Point(4, 4), new Point(1, 1)],RotationDirectionEnum::COLLINEAR],
+    [[new Point(-2, 0), new Point(0, 2), new Point(2, 0)],RotationDirectionEnum::Clockwise],
+    [[new Point(2, 0), new Point(0, 2),new Point(-2, 0)],RotationDirectionEnum::Counterclockwise],
+    [[new Point(0, 0), new Point(4, 4), new Point(1, 2)],RotationDirectionEnum::Counterclockwise],
+    [[new Point(0, 0), new Point(4, 4), new Point(1, 1)],RotationDirectionEnum::Collinear],
 ])->group("application-point");

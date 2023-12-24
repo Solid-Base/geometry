@@ -14,14 +14,14 @@ class PolylineFactory
 {
     /**
      * @param PointCollection|Point[] $pontos
-     * @param bool                  $fechado
+     * @param bool                  $close
      */
-    public static function CreateFromPoints(array|PointCollection $pontos, bool $limpar = false, $fechado = false): Polyline
+    public static function CreateFromPoints(array|PointCollection $pontos, bool $limpar = false, $close = false): Polyline
     {
-        $pointsNew = is_a($pontos, PointCollection::class) ? $pontos->toArray() : $pontos;
+        $pointsNew = is_a($pontos, PointCollection::class) ? $pontos->getValues() : $pontos;
         $pointsNew = array_map(fn(Point $p) => clone $p, $pointsNew);
         $pontos = new PointCollection($pointsNew);
-        $polilinha = new Polyline($fechado);
+        $polilinha = new Polyline($close);
         if ($limpar) {
             $pontos = self::ClearPointsPolygon($pontos);
         }
@@ -52,7 +52,7 @@ class PolylineFactory
         $pontos[] = new Point($lenght / 2, $width / 2);
         $pontos[] = new Point(-$lenght / 2, $width / 2);
 
-        return self::CreateFromPoints($pontos, fechado: true);
+        return self::CreateFromPoints($pontos, close: true);
     }
 
     public static function CreateLShapedPolygon(float $lenght, float $width, float $lenght1, float $width1): Polyline
@@ -64,7 +64,7 @@ class PolylineFactory
         $p4 = $p3->add(new Point(-$lenght1, 0));
         $p5 = $p4->difference(new Point(0, -$width1 + $width));
         $p6 = $p5->add(new Point($lenght1 - $lenght, 0));
-        $poligono = self::CreateFromPoints([$p1, $p2, $p3, $p4, $p5, $p6], fechado: true);
+        $poligono = self::CreateFromPoints([$p1, $p2, $p3, $p4, $p5, $p6], close: true);
         $propriedades = PolygonPropertiesCalculator::Calculate($poligono);
         $centro = $propriedades->center;
         $poligono->move(-$centro->x, -$centro->y, -$centro->z);
@@ -82,7 +82,7 @@ class PolylineFactory
         $p6 = $p5->difference(new Point(0, ($width - $offset)));
         $p7 = $p6->difference(new Point($lenght - 2 * $offset, 0));
         $p8 = $p7->add(new Point(0, $width - $offset));
-        $poligono = self::CreateFromPoints([$p1, $p2, $p3, $p4, $p5, $p6, $p7, $p8], fechado: true);
+        $poligono = self::CreateFromPoints([$p1, $p2, $p3, $p4, $p5, $p6, $p7, $p8], close: true);
         $propriedades = PolygonPropertiesCalculator::Calculate($poligono);
         $centro = $propriedades->center;
         $poligono->move(-$centro->x, -$centro->y, -$centro->z);
@@ -111,7 +111,7 @@ class PolylineFactory
             $y = $raioCirculo * sin($anguloCalculo);
             $pontos[] = new Point($x, $y);
         }
-        $poligono = self::CreateFromPoints($pontos, fechado: true);
+        $poligono = self::CreateFromPoints($pontos, close: true);
 
         $poligono->move($origem->x, $origem->y, $origem->z);
         $poligono->rotate($angulo);
@@ -131,7 +131,7 @@ class PolylineFactory
             $p3 = $pontos->get($i);
             if (PointsAlignmentChecker::Check($p1, $p2, $p3)) {
                 unset($pontos[$i - 1]);
-                $pontos = new PointCollection($pontos->toArray());
+                $pontos = new PointCollection($pontos->getValues());
 
                 return self::ClearPointsPolygon($pontos);
             }

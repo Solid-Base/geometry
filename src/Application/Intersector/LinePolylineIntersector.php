@@ -64,7 +64,7 @@ class LinePolylineIntersector
 
             $pontosPoligono[] = $p2;
         }
-        $poligonoNovo = PolylineFactory::CreateFromPoints($pontosPoligono, fechado: $poligono->isPolygon());
+        $poligonoNovo = PolylineFactory::CreateFromPoints($pontosPoligono, close: $poligono->isPolygon());
 
         return [$pontosRetorno, $poligonoNovo];
     }

@@ -18,7 +18,7 @@ class ConvexCalculator
     {
         $pontos = $pontos->unique();
         if (count($pontos) <= 3) {
-            return PolylineFactory::CreateFromPoints($pontos, fechado: true);
+            return PolylineFactory::CreateFromPoints($pontos, close: true);
         }
         $pontoInicial = self::pontoInferior($pontos);
         self::ordenarPontos($pontos, $pontoInicial);
@@ -29,7 +29,7 @@ class ConvexCalculator
             $p3 = $pontos->get($i);
 
             $sentido = DetermineRotationDirection::execute($p1, $p2, $p3);
-            if (RotationDirectionEnum::COUNTERCLOCKWISE == $sentido) {
+            if (RotationDirectionEnum::Counterclockwise == $sentido) {
                 continue;
             }
 
@@ -39,7 +39,7 @@ class ConvexCalculator
             --$total;
         }
 
-        return PolylineFactory::CreateFromPoints($pontos, fechado: true);
+        return PolylineFactory::CreateFromPoints($pontos, close: true);
     }
 
     private static function pontoInferior(PointCollection &$pontos): Point

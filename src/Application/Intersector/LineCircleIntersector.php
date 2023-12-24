@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Solidbase\Geometry\Application\Intersector;
 
+use DomainException;
+use Exception;
 use Solidbase\Geometry\Domain\Circle;
 use Solidbase\Geometry\Domain\Factory\VectorFactory;
 use Solidbase\Geometry\Domain\Line;
@@ -13,10 +15,19 @@ class LineCircleIntersector
 {
     private function __construct() {}
 
-    public static function Calculate(Line $linha, Circle $circulo): ?array
+    public static function tryCalculate(Line $line, Circle $circle): ?array
+    {
+        try {
+            return self::calculate($line, $circle);
+        } catch(Exception) {
+            return null;
+        }
+    }
+
+    public static function Calculate(Line $linha, Circle $circulo): array
     {
         if (!self::CheckLineCircleIntersection($linha, $circulo)) {
-            return null;
+            throw new DomainException("Line not intersect Circle");
         }
         $distancia = self::distanceCenterFromLine($linha, $circulo->center);
         $comprimento = sbIsZero($circulo->radius - $distancia) ?
@@ -25,11 +36,11 @@ class LineCircleIntersector
 
         $pontoIntersecao = self::GetIntersect($linha, $circulo);
         $direcaoLinha = $linha->direction;
-        $ponto1 = $pontoIntersecao->add($direcaoLinha->escalar($comprimento));
+        $ponto1 = $pontoIntersecao->add($direcaoLinha->scalar($comprimento));
         if (sbIsZero($comprimento)) {
             return [$ponto1];
         }
-        $ponto2 = $pontoIntersecao->add($direcaoLinha->escalar(-$comprimento));
+        $ponto2 = $pontoIntersecao->add($direcaoLinha->scalar(-$comprimento));
 
         return [$ponto1, $ponto2];
     }
@@ -41,21 +52,6 @@ class LineCircleIntersector
 
         return sbLessThan($distancia, $circulo->radius) || $igual;
     }
-
-    // public function executarOld(): ?Linha
-    // {
-    //     if (!$this->possuiInterseccao()) {
-    //         return null;
-    //     }
-    //     $distancia = $this->distanciaCentroLinha();
-    //     $comprimento = sqrt($this->circulo->raio ** 2 - $distancia ** 2);
-    //     $pontoIntersecao = $this->pontoIntersecao();
-    //     $direcaoLinha = $this->linha->direcao;
-    //     $ponto1 = $pontoIntersecao->somar($direcaoLinha->escalar($comprimento));
-    //     $ponto2 = $pontoIntersecao->somar($direcaoLinha->escalar(-$comprimento));
-
-    //     return LinhaFabrica::apartirDoisPonto($ponto1, $ponto2);
-    // }
 
     private static function GetIntersect(Line $linha, Circle $circulo): Point
     {

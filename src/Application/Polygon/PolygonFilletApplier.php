@@ -30,6 +30,6 @@ class PolygonFilletApplier
             $pontosNovos[] = $pontos[$i];
         }
 
-        return PolylineFactory::CreateFromPoints($pontosNovos, fechado: $polilinha->isPolygon());
+        return PolylineFactory::CreateFromPoints($pontosNovos, close: $polilinha->isPolygon());
     }
 }

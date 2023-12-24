@@ -114,11 +114,11 @@ class Transform
             $matriz = $matriz->scalar($this->scale);
         }
         $matriz->addRow([0, 0, 0]);
-        $matriz->addCol([[$this->origin->x], [$this->origin->y], [$this->origin->z], [1]]);
+        $matriz->addCol([$this->origin->x, $this->origin->y, $this->origin->z, 1]);
         $pontoM = new Matriz([[$ponto->x], [$ponto->y], [$ponto->z], [1]]);
         $pontoT = $matriz->multiply($pontoM);
 
-        return new Point($pontoT['1'], $pontoT['2'], $pontoT['3']);
+        return new Point($pontoT->item(0, 0), $pontoT->item(1, 0), $pontoT->item(2, 0));
     }
 
     public function applyToVector(Vector $vetor): Vector
@@ -127,7 +127,7 @@ class Transform
         $pontoM = new Matriz([[$vetor->x], [$vetor->y], [$vetor->z]]);
         $pontoT = $matriz->multiply($pontoM);
 
-        return new Vector($pontoT['1'], $pontoT['2'], $pontoT['3']);
+        return new Vector($pontoT->item(0, 0), $pontoT->item(1, 0), $pontoT->item(2, 0));
     }
 
     public function getMatriz(): Matriz
@@ -169,14 +169,14 @@ class Transform
         $matrizOriginal->addCol([[$this->origin->x], [$this->origin->y], [$this->origin->z], [1]]);
 
         $nova = $matriz->multiply($matrizOriginal);
-        $x = $nova['1,4'];
-        $y = $nova['2,4'];
-        $z = $nova['3,4'];
+        $x = $nova->item(0, 3);
+        $y = $nova->item(1, 3);
+        $z = $nova->item(2, 3);
         $origem = new Point($x, $y, $z);
 
-        $linha1 = [$nova['1,1'], $nova['1,2'], $nova['1,3']];
-        $linha2 = [$nova['2,1'], $nova['2,2'], $nova['2,3']];
-        $linha3 = [$nova['3,1'], $nova['3,2'], $nova['3,3']];
+        $linha1 = [$nova->item(0, 0),$nova->item(0, 1),$nova->item(0, 2)];
+        $linha2 = [$nova->item(1, 0), $nova->item(1, 1), $nova->item(1, 2)];
+        $linha3 = [$nova->item(2, 0), $nova->item(2, 1), $nova->item(2, 2)];
 
         $matrizNova = [$linha1, $linha2, $linha3];
         $matrizNova = new Matriz($matrizNova);

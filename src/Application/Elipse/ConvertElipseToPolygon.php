@@ -28,7 +28,7 @@ class ConvertElipseToPolygon
             $pontos[$i] = $ponto->add($elipse->center);
         }
 
-        $retorno = PolylineFactory::CreateFromPoints($pontos, fechado: true);
+        $retorno = PolylineFactory::CreateFromPoints($pontos, close: true);
         $angulo = $elipse->direction->getAbsoluteAngle();
         if (!sbIsZero($angulo)) {
             $retorno->rotate($angulo);

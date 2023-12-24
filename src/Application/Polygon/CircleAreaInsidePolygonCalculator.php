@@ -61,7 +61,7 @@ class CircleAreaInsidePolygonCalculator
         $pontoArco = PointInPolygonChecker::Check($polilinha, $origem) ? $origem : $final;
         $arco = CircleArchFactory::CreateArcFromThreePoint($primeiro, $pontoArco, $ultimo);
         $areaArco = $arco->area();
-        $poligonoNovo = PolylineFactory::CreateFromPoints($pontosIntersecao, true, fechado: true);
+        $poligonoNovo = PolylineFactory::CreateFromPoints($pontosIntersecao, true, close: true);
         if (count($poligonoNovo) <= 3) {
             return $areaArco;
         }

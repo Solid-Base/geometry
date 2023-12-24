@@ -28,8 +28,8 @@ class CircleArchFactory
 
         $rotacao = DetermineRotationDirection::execute($point, $point2, $point3);
 
-        $anguloInicial = RotationDirectionEnum::COUNTERCLOCKWISE == $rotacao ? $anguloP1 : $anguloP3;
-        $anguloFinal = RotationDirectionEnum::COUNTERCLOCKWISE == $rotacao ? $anguloP3 : $anguloP1;
+        $anguloInicial = RotationDirectionEnum::Counterclockwise == $rotacao ? $anguloP1 : $anguloP3;
+        $anguloFinal = RotationDirectionEnum::Counterclockwise == $rotacao ? $anguloP3 : $anguloP1;
 
         return new Arc($center, $radius, $anguloInicial, $anguloFinal);
     }

@@ -11,11 +11,11 @@ class OffsetArc
 {
     private function __construct() {}
 
-    public static function Generate(float|int $offset, Arc $arco, DirecaoOffsetPoligono $direcao): Arc
+    public static function Generate(float|int $offset, Arc $arc, DirecaoOffsetPoligono $direction): Arc
     {
-        $raio = DirecaoOffsetPoligono::Interno == $direcao ? $arco->radius - $offset : $arco->radius + $offset;
+        $raio = DirecaoOffsetPoligono::Internal == $direction ? $arc->radius - $offset : $arc->radius + $offset;
         $raio = sbLessThan($raio, 0) ? 0 : $raio;
 
-        return new Arc($arco->center, $raio, $arco->startAngle, $arco->endAngle);
+        return new Arc($arc->center, $raio, $arc->startAngle, $arc->endAngle);
     }
 }

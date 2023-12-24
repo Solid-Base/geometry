@@ -28,7 +28,7 @@ class PlaneIntersector
             return null;
         }
         $matrizPonto = $decomposicao->SolveSystem(new Matriz([[-$d1], [-$d2], [-$d3]]));
-        $ponto = new Point($matrizPonto['1'], $matrizPonto['2'], $matrizPonto['3']);
+        $ponto = new Point($matrizPonto->item(0, 0), $matrizPonto->item(1, 0), $matrizPonto->item(2, 0));
 
         return new Line($ponto, $direcaoReta, 1);
     }

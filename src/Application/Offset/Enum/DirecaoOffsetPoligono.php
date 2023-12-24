@@ -6,7 +6,7 @@ namespace Solidbase\Geometry\Application\Offset\Enum;
 
 enum DirecaoOffsetPoligono: int
 {
-    case Interno = 1;
+    case Internal = 1;
 
-    case Externo = -1;
+    case External = -1;
 }

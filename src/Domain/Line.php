@@ -126,6 +126,21 @@ class Line implements JsonSerializable, Transform
         return $this->pointAtLength($this->_length);
     }
 
+    public function getEquation(): array
+    {
+        $angle = $this->direction->getAbsoluteAngle();
+        $coeficienteAngular = tan($angle);
+        $point = $this->origin;
+        if($point->x == 0 && $point->y === 0) {
+            $point = $this->pointAtLength(1);
+        }
+
+        $coeficienteLinear = $point->y - ($coeficienteAngular * $point->x);
+
+        return [$coeficienteAngular,$coeficienteLinear];
+
+    }
+
     public static function CreateLineFromPoints(Point $point1, Point $point2): Line
     {
         $vetor = Vector::CreateFromPoints($point1, $point2);

@@ -19,17 +19,17 @@ class FactoryMatrizTranform
         $sen = sin($angulo);
         $unitario = $eixo->getUnitary();
         $umCos = 1 - $cos;
-        $retorno['1,1'] = $unitario->x ** 2 * $umCos + $cos;
-        $retorno['1,2'] = ($unitario->x * $unitario->y) * $umCos - $unitario->z * $sen;
-        $retorno['1,3'] = $unitario->x * $unitario->z * $umCos + $unitario->y * $sen;
+        $retorno->setItem(0, 0, $unitario->x ** 2 * $umCos + $cos)
+        ->setItem(0, 1, ($unitario->x * $unitario->y) * $umCos - $unitario->z * $sen)
+        ->setItem(0, 2, $unitario->x * $unitario->z * $umCos + $unitario->y * $sen);
 
-        $retorno['2,1'] = $unitario->x * $unitario->y * $umCos + $unitario->z * $sen;
-        $retorno['2,2'] = $unitario->y ** 2 * $umCos + $cos;
-        $retorno['2,3'] = $unitario->y * $unitario->z * $umCos - $unitario->x * $sen;
+        $retorno->setItem(1, 0, $unitario->x * $unitario->y * $umCos + $unitario->z * $sen)
+        ->setItem(1, 1, $unitario->y ** 2 * $umCos + $cos)
+        ->setItem(1, 2, $unitario->y * $unitario->z * $umCos - $unitario->x * $sen);
 
-        $retorno['3,1'] = $unitario->x * $unitario->z * $umCos - ($unitario->y * $sen);
-        $retorno['3,2'] = $unitario->y * $unitario->z * $umCos + ($unitario->x * $sen);
-        $retorno['3,3'] = ($unitario->z ** 2) * ($umCos) + ($cos);
+        $retorno->setItem(2, 0, $unitario->x * $unitario->z * $umCos - ($unitario->y * $sen))
+        ->setItem(2, 1, $unitario->y * $unitario->z * $umCos + ($unitario->x * $sen))
+        ->setItem(2, 2, ($unitario->z ** 2) * ($umCos) + ($cos));
 
         return $retorno;
     }

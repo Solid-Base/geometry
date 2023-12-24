@@ -6,9 +6,9 @@ namespace Solidbase\Geometry\Application\Points;
 
 enum RotationDirectionEnum: int
 {
-    case COUNTERCLOCKWISE = 1;
+    case Counterclockwise = 1;
 
-    case CLOCKWISE = -1;
+    case Clockwise = -1;
 
-    case COLLINEAR = 0;
+    case Collinear = 0;
 }

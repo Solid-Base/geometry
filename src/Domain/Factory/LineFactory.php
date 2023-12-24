@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Solidbase\Geometry\Domain\Factory;
 
+use DomainException;
 use Solidbase\Geometry\Domain\Line;
 use Solidbase\Geometry\Domain\Point;
 use Solidbase\Geometry\Domain\Vector;
@@ -38,5 +39,14 @@ class LineFactory
         $p2 = new Point(1, ($coeficienteAngular + $coeficienteLinear));
 
         return self::CreateFromPoints($p1, $p2);
+    }
+    public static function CreateFromLineEquationFull(float $coeficienteA, float $coeficienteB, float $coeficienteC): Line
+    {
+        if($coeficienteA === 0 || $coeficienteB === 0) {
+            throw new DomainException("Os coeficiente A e B deve ser diferente de 0");
+        }
+        $coeficienteAngular = -$coeficienteA / $coeficienteB;
+        $coeficienteLinear = -$coeficienteC / $coeficienteB;
+        return self::CreateFromLineEquation($coeficienteAngular, $coeficienteLinear);
     }
 }
